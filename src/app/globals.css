@@ -86,3 +86,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .main-container {
+    @apply  max-w-[1600px] mx-auto  min-h-screen;
+  }
+}
