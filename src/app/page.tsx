@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className=" bg-gray-50">
+    <div className="min-h-[calc(100vh-250px)] bg-gray-50">
       <Button>Hello</Button>
 
-      <p className="text-2xl  font-integral_cf ">Casual</p>
+      <p className="font-integral_cf text-2xl">Casual</p>
     </div>
   );
 }
