@@ -1,16 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import {
   FaFacebook,
   FaGithub,
-  FaGithubSquare,
   FaInstagram,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { MdEmail, MdOutlineMail } from "react-icons/md";
+import {  MdOutlineMail } from "react-icons/md";
 
 const companyLinks = [
   { label: "About", href: "/" },
@@ -45,21 +43,32 @@ const payments = ["visa", "mastercard", "paypal", "gpay", "applepay"];
 const Footer = () => {
   return (
     <div>
-      <div className="flex bg-black py-12 px-20 rounded-3xl  w-[90%] mx-auto justify-between">
-        <p className="text-white font-integral_cf text-5xl basis-2/4">STAY UPTO DATE ABOUT OUR LATEST OFFERS</p>
+      {/* subscribe  */}
 
-        <div className=" gap-4 grid">
-          <div className="flex w-80 items-center gap-3 rounded-full bg-white px-4 py-3">
-            <MdOutlineMail color="black" size={"26px"} />
-            <input
-              className="outline-none placeholder:text-black/40 max-w-52"
-              placeholder="Enter your email address  "
-            />
+      <div className="relative">
+        <div className="absolute inset-0 top-2/4 -z-10 bg-ceramic"></div>
+
+        <div className="mx-auto flex w-[90%] justify-between rounded-3xl bg-black px-20 py-12">
+          <p className="basis-2/4 font-integral_cf text-5xl text-white">
+            STAY UPTO DATE ABOUT OUR LATEST OFFERS
+          </p>
+
+          <div className="grid gap-4">
+            <div className="flex w-80 items-center gap-3 rounded-full bg-white px-4 py-3">
+              <MdOutlineMail color="black" size={"26px"} />
+              <input
+                className="max-w-52 outline-none placeholder:text-black/40"
+                placeholder="Enter your email address  "
+              />
+            </div>
+
+            <Button
+              className="h-[50px] w-80 rounded-full"
+              variant={"secondary"}
+            >
+              Subscrible to Newsletter
+            </Button>
           </div>
-
-          <Button className="w-80 h-[50px] rounded-full" variant={"secondary"}>
-            Subscrible to Newsletter
-          </Button>
         </div>
       </div>
 

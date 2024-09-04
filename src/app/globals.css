@@ -88,7 +88,11 @@
 }
 
 @layer components {
+  .contain {
+    @apply mx-auto max-w-[1600px];
+  }
+
   .main-container {
-    @apply  max-w-[1600px] mx-auto  min-h-screen;
+    @apply mx-auto min-h-screen max-w-[1600px];
   }
 }

@@ -8,8 +8,8 @@ import { FaRegUserCircle } from "react-icons/fa";
 
 const Header = () => {
   return (
-    <div className="flex items-center justify-between gap-10 py-6  mx-20">
-      <div className=" flex items-center gap-10 grow">
+    <div className="contain sticky top-0 z-50 px-20 flex items-center justify-between gap-10 py-6 bg-white">
+      <div className="flex grow items-center gap-10">
         <Image
           src="/logos/lanes.svg"
           height={1000}
@@ -25,7 +25,7 @@ const Header = () => {
           <Link href={"/"}>Brands</Link>
         </div>
 
-        <div className="flex grow items-center gap-4 rounded-3xl bg-slate-200 px-4 py-2.5 max-w-[600px]">
+        <div className="flex max-w-[600px] grow items-center gap-4 rounded-3xl bg-slate-200 px-4 py-2.5">
           <IoSearch />
 
           <input
