@@ -40,8 +40,8 @@ const HeroSection = () => {
 
       <div className="basis-1/2">
         <Image
-          src="/images/hero-img-2.svg"
-          height={1000}
+          src="/images/hero-img.svg"
+          height={760}
           width={1000}
           alt="patient"
           className="  object-cover h-full object-right"

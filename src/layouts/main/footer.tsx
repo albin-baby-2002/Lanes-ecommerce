@@ -2,13 +2,9 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import {
-  FaFacebook,
-  FaGithub,
-  FaInstagram,
-} from "react-icons/fa";
+import { FaFacebook, FaGithub, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import {  MdOutlineMail } from "react-icons/md";
+import { MdOutlineMail } from "react-icons/md";
 
 const companyLinks = [
   { label: "About", href: "/" },
@@ -76,6 +72,8 @@ const Footer = () => {
 
       <div className="bg-ceramic px-20">
         <div className="flex justify-between border-b py-10">
+          {/* socials */}
+
           <div className="basis-[20%] space-y-6">
             <Image
               src="/logos/lanes.svg"
@@ -97,6 +95,8 @@ const Footer = () => {
               <FaGithub />
             </div>
           </div>
+
+          {/* links */}
 
           <div className="basis-[10%]">
             <h3 className="mb-4 tracking-widest">COMPANY</h3>
@@ -154,7 +154,7 @@ const Footer = () => {
 
           <div className="flex">
             {payments.map((val, idx) => {
-              return <PaymentImg val={val} />;
+              return <PaymentImg key={idx} val={val} />;
             })}
           </div>
         </div>

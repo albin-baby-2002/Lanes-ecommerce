@@ -95,4 +95,8 @@
   .main-container {
     @apply mx-auto min-h-screen max-w-[1600px];
   }
+  
+  .carousel-btn {
+   @apply  absolute top-1/2 z-20 hidden -translate-y-1/2 rounded-full bg-gray-50 p-2 shadow-lg transition-all ease-in hover:scale-[110%] hover:bg-white group-hover:block
+  }
 }
