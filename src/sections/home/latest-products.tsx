@@ -1,10 +1,10 @@
-import ProductCarousel from "@/components/product-carousel";
+import ProductCard from "@/components/product-card";
 import React from "react";
 import { MdOutlineArrowCircleRight } from "react-icons/md";
 
 const LatestProducts = () => {
   return (
-    <div className="px-10 py-20 grid gap-10">
+    <div className="grid gap-10 px-10 py-16">
       <div className="flex items-end justify-between">
         <div>
           <p className="text-4xl font-bold">New Arrivals</p>
@@ -19,51 +19,10 @@ const LatestProducts = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-10   justify-center">
-        <ProductCarousel
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCarousel
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCarousel
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCarousel
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCarousel
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCarousel
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
+      <div className="grid grid-cols-4 justify-center gap-10">
+        <ProductCard />
+        <ProductCard />
       </div>
-      
     </div>
   );
 };

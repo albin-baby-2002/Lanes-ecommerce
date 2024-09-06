@@ -37,7 +37,7 @@ const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
   return (
     <div className="group relative">
       <div
-        className={cn("overflow-hidden border border-black", className)}
+        className={cn("overflow-hidden  rounded-[20px] ", className)}
         ref={emblaRef}
       >
         <div className="flex">

@@ -8,6 +8,7 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/sections/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/assets/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -28,6 +29,9 @@ const config: Config = {
       },
       backgroundColor: {
         ceramic: "#F0F0F0",
+      },
+      transitionProperty: {
+        "max-width": "max-width",
       },
       colors: {
         background: "hsl(var(--background))",
@@ -75,6 +79,7 @@ const config: Config = {
       },
     },
   },
+
   plugins: [require("tailwindcss-animate")],
 };
 export default config;
