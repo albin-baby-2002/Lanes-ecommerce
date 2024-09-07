@@ -6,9 +6,16 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
+
+
 interface TProps {
   className?: string;
-  images: { url: string; alt: string }[];
+  images: TImg[];
+}
+
+export interface TImg {
+  url: string;
+  alt: string;
 }
 
 const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
@@ -37,7 +44,7 @@ const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
   return (
     <div className="group relative">
       <div
-        className={cn("overflow-hidden  rounded-[20px] ", className)}
+        className={cn("overflow-hidden rounded-[20px]", className)}
         ref={emblaRef}
       >
         <div className="flex">
@@ -61,7 +68,7 @@ const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
       </div>
       {canScrollPrev && (
         <button
-          className="embla__next  left-[5%] carousel-btn "
+          className="embla__next carousel-btn left-[5%]"
           onClick={scrollPrev}
         >
           <IoIosArrowBack />
@@ -70,7 +77,7 @@ const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
 
       {canScrollNext && (
         <button
-          className="embla__next  right-[5%] carousel-btn "
+          className="embla__next carousel-btn right-[5%]"
           onClick={scrollNext}
         >
           <IoIosArrowForward />

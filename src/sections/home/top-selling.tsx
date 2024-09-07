@@ -2,16 +2,15 @@ import ProductCard from "@/components/product-card";
 import React from "react";
 import { MdOutlineArrowCircleRight } from "react-icons/md";
 
-const LatestProducts = () => {
+const TopSelling
+ = () => {
   return (
     <div className="grid gap-10 px-10 pt-16">
       <div className="flex items-end justify-between">
         <div>
-          <p className="font-integral_cf text-3xl tracking-widest">
-            New Arrivals
-          </p>
+          <p className="text-3xl tracking-widest font-integral_cf ">Top Selling</p>
           <p className="mt-2 text-black/60">
-            Get your hands on the latest fashion never miss the trend{" "}
+            Limited Stock Buy Now At Best Price
           </p>
         </div>
 
@@ -49,4 +48,5 @@ const LatestProducts = () => {
   );
 };
 
-export default LatestProducts;
+export default TopSelling
+;

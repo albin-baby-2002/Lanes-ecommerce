@@ -1,9 +1,17 @@
 import React from "react";
 
-const Star = () => {
-  const width = (19 * 40) / 100;
+const Star = ({ score }: { score: number }) => {
+  const width = 19 * score;
   return (
-    <div className={` w-[${width+""}px] overflow-hidden`} style={{width:width+'px'}}>
+    <div
+      className="overflow-hidden"
+      style={{
+        width:
+          score >= 0.8 && score !== 1
+            ? Math.min(13.3, width)
+            : Math.max(width, 8) + "px",
+      }}
+    >
       <svg
         width="19"
         height="17"

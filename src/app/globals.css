@@ -89,11 +89,11 @@
 
 @layer components {
   .contain {
-    @apply mx-auto max-w-[1600px];
+    @apply mx-auto max-w-[1300px];
   }
 
   .main-container {
-    @apply mx-auto min-h-screen max-w-[1600px];
+    @apply mx-auto min-h-screen max-w-[1300px];
   }
 
   .carousel-btn {

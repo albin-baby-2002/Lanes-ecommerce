@@ -49,8 +49,8 @@ const Footer = () => {
             STAY UPTO DATE ABOUT OUR LATEST OFFERS
           </p>
 
-          <div className="grid gap-4">
-            <div className="flex w-80 items-center gap-3 rounded-full bg-white px-4 py-3">
+          <div className="flex flex-col gap-4">
+            <div className="flex w-80 items-center gap-3 rounded-full bg-white px-4 p-3">
               <MdOutlineMail color="black" size={"26px"} />
               <input
                 className="max-w-52 outline-none placeholder:text-black/40"
