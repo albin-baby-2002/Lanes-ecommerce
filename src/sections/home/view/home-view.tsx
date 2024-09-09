@@ -3,6 +3,7 @@ import HeroSection from "../hero-section";
 import LatestProducts from "../latest-products";
 import TopSelling from "../top-selling";
 import BrowseByStyle from "../browse-by-style";
+import CustomerTestimonials from "../customer-testimonials";
 
 const HomeView = () => {
   return (
@@ -14,6 +15,8 @@ const HomeView = () => {
       <TopSelling />
       
       <BrowseByStyle/>
+      
+      <CustomerTestimonials/>
     </div>
   );
 };

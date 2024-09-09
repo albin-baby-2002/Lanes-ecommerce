@@ -1,4 +1,8 @@
 import type { Config } from "tailwindcss";
+const colors = require("tailwindcss/colors");
+const {
+  default: flattenColorPalette,
+} = require("tailwindcss/lib/util/flattenColorPalette");
 
 const config: Config = {
   darkMode: ["class"],
@@ -37,6 +41,7 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         ceramic: "#F0F0F0",
+        "green-450": "#01AB31",
 
         card: {
           DEFAULT: "hsl(var(--card))",
@@ -77,9 +82,33 @@ const config: Config = {
           "5": "hsl(var(--chart-5))",
         },
       },
+
+      animation: {
+        scroll:
+          "scroll var(--animation-duration, 20s) var(--animation-direction, forwards) linear infinite ",
+      },
+      keyframes: {
+        scroll: {
+          to: {
+            transform: "translate(calc(-100% - 0.5rem))",
+          },
+        },
+      },
     },
   },
 
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"),addVariablesForColors],
+  
 };
 export default config;
+
+function addVariablesForColors({ addBase, theme }: any) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val]),
+  );
+
+  addBase({
+    ":root": newVars,
+  });
+}

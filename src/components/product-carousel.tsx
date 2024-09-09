@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-
-
 
 interface TProps {
   className?: string;
@@ -20,26 +18,30 @@ export interface TImg {
 
 const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel();
-
-  const [scrollTrigger, setScrollTrigger] = useState(false);
+  const [scrollTrigger, setScrollTrigger] = useState(0);
+  const length = images.length;
 
   const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
-    setScrollTrigger((prev) => !prev);
+    if (emblaApi) {
+      emblaApi.scrollPrev();
+      setScrollTrigger((prev) => prev - 1);
+    }
   }, [emblaApi]);
 
   const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
-    setScrollTrigger((prev) => !prev);
+    if (emblaApi) {
+      emblaApi.scrollNext();
+      setScrollTrigger((prev) => prev + 1);
+    }
   }, [emblaApi]);
 
   const canScrollPrev = useMemo(() => {
-    return emblaApi?.canScrollPrev();
-  }, [emblaApi, scrollTrigger]);
+    return scrollTrigger <= length && emblaApi?.canScrollPrev();
+  }, [emblaApi, scrollTrigger, length]);
 
   const canScrollNext = useMemo(() => {
-    return emblaApi?.canScrollNext();
-  }, [emblaApi, scrollTrigger]);
+    return scrollTrigger <= length && emblaApi?.canScrollNext();
+  }, [emblaApi, scrollTrigger, length]);
 
   return (
     <div className="group relative">
