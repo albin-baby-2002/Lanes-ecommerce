@@ -1,14 +1,26 @@
+"use client";
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
 import { IoSearch } from "react-icons/io5";
-import { Input } from "@/components/ui/input";
 import { PiShoppingCart } from "react-icons/pi";
 import { FaRegUserCircle } from "react-icons/fa";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const Header = () => {
+  const pathname = usePathname();
+
+  const showBorderBottom = pathname !== "/";
+
+  console.log(pathname);
   return (
-    <div className="contain sticky top-0 z-50 px-20 flex items-center justify-between gap-10 py-6 bg-white">
+    <div
+      className={cn(
+        "contain sticky top-0 z-50 flex items-center justify-between gap-10 bg-white px-20 py-6",
+        showBorderBottom && "border-b",
+      )}
+    >
       <div className="flex grow items-center gap-10">
         <Image
           src="/logos/lanes.svg"
