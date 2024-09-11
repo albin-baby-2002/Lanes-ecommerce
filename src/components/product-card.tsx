@@ -48,7 +48,7 @@ export default ProductCard;
 
 // child component
 
-const Pricing = ({ price, discount }: { price: number; discount: number }) => {
+export const Pricing = ({ price, discount }: { price: number; discount: number }) => {
   const discountedPrice = useMemo(
     () => price - (price * discount) / 100,
     [price, discount],

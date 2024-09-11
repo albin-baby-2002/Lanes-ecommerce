@@ -22,7 +22,7 @@ const styles = ['Casual','Formal','Party','Gym']
 
 const SearchFilter = () => {
   return (
-    <div className="rounded-2xl border border-black/10 px-4 py-4">
+    <div className="rounded-2xl border border-black/10 px-4 py-4 h-max">
       <div>
         {/* heading  */}
 
@@ -39,7 +39,7 @@ const SearchFilter = () => {
         >
           {categories.map((val, idx) => {
             return (
-              <div className="flex items-center space-x-2">
+              <div key={idx} className="flex items-center space-x-2">
                 <RadioGroupItem value={val} id={val} />
                 <Label htmlFor={val} className="text-black/60">
                   {val}
@@ -63,7 +63,7 @@ const SearchFilter = () => {
               >
                 {prices.map((val, idx) => {
                   return (
-                    <div className="flex items-center space-x-2">
+                    <div key={idx} className="flex items-center space-x-2">
                       <RadioGroupItem value={val} id={val} />
                       <Label htmlFor={val} className="text-black/60">
                         {"$" + val}
