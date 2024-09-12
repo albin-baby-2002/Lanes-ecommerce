@@ -25,6 +25,7 @@ interface TProps {
   value: string;
   onChange: (value: string) => void;
   showSearch?: boolean;
+  className?:string
 }
 
 export const Combobox: React.FC<TProps> = ({
@@ -33,6 +34,7 @@ export const Combobox: React.FC<TProps> = ({
   value,
   onChange,
   showSearch = false,
+  className
 }) => {
   const [open, setOpen] = React.useState(false);
 
@@ -43,7 +45,7 @@ export const Combobox: React.FC<TProps> = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className={cn("w-[200px] justify-between",className)}
         >
           {value
             ? options.find((option) => option.value === value)?.label
