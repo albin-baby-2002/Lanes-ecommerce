@@ -16,7 +16,6 @@ const ProductsInCart = () => {
               alt=" product"
             />
           </div>
-
           <div>
             <p className="text-lg font-bold">Gradient Graphic T-shirt</p>
             <p className="pt-1 text-black/90">
