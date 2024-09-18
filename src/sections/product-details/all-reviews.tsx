@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 
 const AllReviews = () => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState("  ");
   return (
     <div className="my-8">
       <div className="flex justify-between">

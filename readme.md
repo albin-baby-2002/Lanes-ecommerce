@@ -14,15 +14,14 @@ esc = back to normal mode
 
 h - left arrow
 l - right arrow
-j - up arrow
-k - down arrow
+j - down arrow
+k - arrow
 
 any number with h,l,j,k etc will move it that time
 
 //---------------------------------------
 
 change to relative line numbers in vscode
-
 //---------------------------------------
 
 u - for undoing things
@@ -38,7 +37,9 @@ p - pasting
 
 dd - delete the whole line
 cc - delete the line and be in the same line in insert mode
-c - delete the selected and go in insert mode yy - copy the whole line
+c - delete the selected and go in insert mode
+yy - copy the whole line
+
 shift+d - delete the rest of the line
 
 shift+c - changes the rest of the line
@@ -64,9 +65,9 @@ e - moves to end of a word
 $ - goes to the end of the line
 
 do - everything from beginning is deleted
-d$ - everthing till end is deleted
+d$ - deletes everything in a group like {}, [],etc
 
-yiw - yank/copy inner word
+yiw - yank/c
 
 {
 
@@ -76,4 +77,16 @@ yiw - yank/copy inner word
 
 } - same can be done with [], {}, etc
 
-% - takes to the closing bracket of {}
+% - takes to the closing bracket of {} or any other group of symbols
+
+t* - takes cursor before the symbol
+f* - takes cursor to that symbol
+
+similarly
+T* - take backward to the before the symbol
+F* - take backward to the symbol
+
+dt( - delete till (
+df( - delete including ( )
+
+some things we need to talk (hello what you want hhhhh llll ll)
