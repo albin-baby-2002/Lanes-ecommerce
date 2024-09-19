@@ -1,14 +1,25 @@
 import Image from "next/image";
 import React from "react";
 import { FaRegUser } from "react-icons/fa";
+import { PiAddressBookBold } from "react-icons/pi";
 
+const Tabs = [
+  { label: "Profile", link: "" },
+  { label: "Address", link: "" },
+  { label: "Password", link: "" },
+];
 const Profile = () => {
   return (
-    <div className="flex min-h-screen w-full gap-7 bg-black/5 p-11">
+    <div className="flex h-[calc(100vh-90px)] w-full gap-7 bg-black/5 p-8">
       <div className="min-h-40 w-80 rounded-xl bg-white p-4 shadow-xl">
         <div className="m-2 flex gap-4 pb-4">
-          <div className=" w-16 h-[70px] relative rounded-xl">
-            <Image src={"/images/avatar.svg"} fill alt="avatar" className=" rounded-xl object-cover"/>
+          <div className="relative h-[70px] w-16 rounded-xl">
+            <Image
+              src={"/images/avatar.svg"}
+              fill
+              alt="avatar"
+              className="rounded-xl object-cover"
+            />
           </div>
 
           <div>
@@ -16,12 +27,17 @@ const Profile = () => {
             <p className="text-sm font-bold text-black/40">#LUSID24KJKJ</p>
           </div>
         </div>
-
-        <div className="">
-
-          <div className=" flex  border items-center gap-3 p-3 rounded-xl">
-            <FaRegUser/>
+        <p className="p-2 font-bold text-black/70">USER DETAILS</p>
+        <div className="grid gap-1">
+          <div className="flex items-center gap-3 rounded-lg bg-ceramic px-2 py-2">
+            {" "}
+            <FaRegUser />
             <p>Profile </p>
+          </div>
+
+          <div className="flex items-center gap-3 rounded-lg px-2 py-2">
+            <PiAddressBookBold />
+            <p>Address</p>
           </div>
         </div>
       </div>
