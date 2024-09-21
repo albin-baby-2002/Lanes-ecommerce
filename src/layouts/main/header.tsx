@@ -27,10 +27,10 @@ const Header = () => {
           height={1000}
           width={1000}
           alt="patient"
-          className="h-6 w-fit"
+          className="h-[22px] w-fit"
         />
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-8  text-sm">
           <Link href={"/"}>Shop</Link>
           <Link href={"/"}>On Sale</Link>
           <Link href={"/"}>New Arrivals</Link>
@@ -41,7 +41,7 @@ const Header = () => {
           <IoSearch />
 
           <input
-            className="bg-slate-200 outline-none"
+            className="bg-slate-200 outline-none text-sm placeholder:text-sm"
             placeholder="Search for products..."
           />
         </div>

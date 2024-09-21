@@ -4,10 +4,10 @@ import { MdOutlineArrowCircleRight } from "react-icons/md";
 
 const LatestProducts = () => {
   return (
-    <div className="grid gap-10 px-10 pt-16">
+    <div className="grid gap-8 px-10 pt-14">
       <div className="flex items-end justify-between">
         <div>
-          <p className="font-integral_cf text-3xl tracking-widest">
+          <p className="font-integral_cf text-2xl tracking-wide">
             New Arrivals
           </p>
           <p className="mt-2 text-black/60">
@@ -16,12 +16,12 @@ const LatestProducts = () => {
         </div>
 
         <div className="flex items-center gap-2 rounded-2xl bg-ceramic px-5 py-3.5">
-          <p className="pb-1">Explore now</p>
+          <p className="pb-[2px] text-sm">Explore now</p>
           <MdOutlineArrowCircleRight size={"24px"} />
         </div>
       </div>
 
-      <div className="grid grid-cols-4 justify-center gap-10">
+      <div className="grid grid-cols-5 justify-center gap-10">
         <ProductCard
           name="T-shirt with Tape Details of what we need"
           price={120}

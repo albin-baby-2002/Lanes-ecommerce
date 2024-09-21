@@ -28,7 +28,7 @@ const ProductsGrid = () => {
 
       {/* products  */}
 
-      <div className="my-6 grid grid-cols-3 justify-center gap-10">
+      <div className="my-6 grid grid-cols-4 justify-center gap-10">
         <ProductCard
           name="T-shirt with Tape Details of what we need"
           price={120}

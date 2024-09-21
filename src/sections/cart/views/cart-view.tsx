@@ -5,7 +5,7 @@ import OrderSummary from "../order-summary";
 
 const CartView = () => {
   return (
-    <div className="min-h-[calc(100vh-200px)]">
+    <div className="min-h-screen">
       <BreadCrumb routes={["Home", "Cart"]} />
 
       <p className="font-integral_cf text-3xl font-bold tracking-wide">

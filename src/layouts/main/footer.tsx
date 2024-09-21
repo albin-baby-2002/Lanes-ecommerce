@@ -38,28 +38,28 @@ const payments = ["visa", "mastercard", "paypal", "gpay", "applepay"];
 
 const Footer = () => {
   return (
-    <div>
+    <div className=" mt-10">
       {/* subscribe  */}
 
       <div className="relative">
         <div className="absolute inset-0 top-2/4 -z-10 bg-ceramic"></div>
 
-        <div className="mx-auto flex w-[90%] justify-between rounded-3xl bg-black px-20 py-12">
-          <p className="basis-2/4 font-integral_cf text-5xl text-white">
+        <div className="mx-auto flex w-[90%] justify-between rounded-3xl bg-black px-16 py-12">
+          <p className="basis-3/5 font-integral_cf text-[36px] text-white">
             STAY UPTO DATE ABOUT OUR LATEST OFFERS
           </p>
 
           <div className="flex flex-col gap-4">
-            <div className="flex w-80 items-center gap-3 rounded-full bg-white px-4 p-3">
-              <MdOutlineMail color="black" size={"26px"} />
+            <div className="flex w-72 items-center gap-3 rounded-full bg-white px-4 p-2">
+              <MdOutlineMail color="black" size={"22px"} />
               <input
-                className="max-w-52 outline-none placeholder:text-black/40"
+                className="max-w-52 outline-none placeholder:text-black/40 text-sm"
                 placeholder="Enter your email address  "
               />
             </div>
 
             <Button
-              className="h-[50px] w-80 rounded-full"
+              className="h-[42px] w-72 rounded-full"
               variant={"secondary"}
             >
               Subscrible to Newsletter

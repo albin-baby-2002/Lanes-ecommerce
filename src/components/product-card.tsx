@@ -24,7 +24,7 @@ const ProductCard: React.FC<TProps> = ({
 
       {/* product details */}
 
-      <div className="my-3 grid">
+      <div className="my-3 grid text-sm">
         {/* text with animation */}
 
         <div className="group relative max-w-full overflow-hidden hover:mb-1 hover:overflow-visible">
@@ -32,7 +32,7 @@ const ProductCard: React.FC<TProps> = ({
             {name}
           </p>
 
-          <p className="absolute top-0 z-50 max-w-0 overflow-hidden overflow-ellipsis text-nowrap bg-black py-2 font-bold text-white transition-all duration-200 ease-linear group-hover:max-w-[120%] group-hover:px-3">
+          <p className="absolute top-0 z-50 max-w-0 overflow-hidden overflow-ellipsis text-nowrap  py-2 font-bold bg-white transition-all duration-200 ease-linear group-hover:max-w-[120%]  ">
             {name}
           </p>
         </div>
@@ -55,13 +55,13 @@ export const Pricing = ({ price, discount }: { price: number; discount: number }
   );
 
   return (
-    <div className="mt-2 flex items-center gap-3">
+    <div className="mt-2 text-base flex items-center gap-3">
       <p className="font-bold">${discount ? discountedPrice : price}</p>
       {discount && (
         <>
           <p className="font-bold text-black/40 line-through">${price}</p>
-          <div className="flex items-center rounded-xl bg-red-100 px-2 py-[2px] text-red-500">
-            <p className="mt-[1px] text-[8px]">-{discount}%</p>
+          <div className="flex items-center rounded-xl  bg-red-100 px-2  text-red-500">
+            <p className=" text-[10px] leading-5">-{discount}%</p>
           </div>
         </>
       )}

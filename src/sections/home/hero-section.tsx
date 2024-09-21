@@ -4,13 +4,13 @@ import React from "react";
 
 const HeroSection = () => {
   return (
-    <div className="relative flex ps-20 bg-ceramic">
+    <div className="relative flex ps-20  rounded-xl bg-ceramic">
       <div className="basis-1/2 py-28">
         <p className="absolute max-w-[60%] font-integral_cf text-6xl font-bold">
           FIND CLOTHES THAT MATCHES YOUR STYLE
         </p>
 
-        <div className="mt-[160px] grid gap-10">
+        <div className="mt-[150px] grid gap-10">
           <p className="text-black/60">
             Browse through our diverse range of meticulously crafted garments,
             designed to bring out your individuality and cater to your sense of
@@ -38,13 +38,13 @@ const HeroSection = () => {
         </div>
       </div>
 
-      <div className="basis-1/2">
+      <div className="basis-1/2  ">
         <Image
           src="/images/hero-img.svg"
           height={760}
           width={1000}
           alt="patient"
-          className="  object-cover h-full object-right"
+          className="  object-cover h-full object-right rounded-tr-xl rounded-br-xl"
         />
       </div>
     </div>
