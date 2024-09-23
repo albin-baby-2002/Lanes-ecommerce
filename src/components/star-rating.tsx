@@ -5,9 +5,11 @@ import React from "react";
 const StarRating = ({
   rating,
   className,
+  size = "small",
 }: {
   rating: number;
   className?: string;
+  size?: "small" | "medium";
 }) => {
   const Whole = Math.floor(rating);
 
@@ -17,9 +19,9 @@ const StarRating = ({
     <div className={cn("flex items-center gap-2", className)}>
       <div className="flex">
         {new Array(Whole).fill(0).map((val, idx) => {
-          return <Star key={idx} score={1} />;
+          return <Star size={size} key={idx} score={1} />;
         })}
-        {fraction > 0 && <Star score={fraction} />}
+        {fraction > 0 && <Star size={size} score={fraction} />}
       </div>
 
       <p className="text-sm tracking-widest">

@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import ProductCarousel, { TImg } from "./product-carousel";
 import StarRating from "./star-rating";
 import { Divide } from "lucide-react";
+import { Pricing } from "./pricing";
 
 interface TProps {
   name: string;
@@ -45,26 +46,3 @@ const ProductCard: React.FC<TProps> = ({
 };
 
 export default ProductCard;
-
-// child component
-
-export const Pricing = ({ price, discount }: { price: number; discount: number }) => {
-  const discountedPrice = useMemo(
-    () => price - (price * discount) / 100,
-    [price, discount],
-  );
-
-  return (
-    <div className="mt-2 text-base flex items-center gap-3">
-      <p className="font-bold">${discount ? discountedPrice : price}</p>
-      {discount && (
-        <>
-          <p className="font-bold text-black/40 line-through">${price}</p>
-          <div className="flex items-center rounded-xl  bg-red-100 px-2  text-red-500">
-            <p className=" text-[10px] leading-5">-{discount}%</p>
-          </div>
-        </>
-      )}
-    </div>
-  );
-};

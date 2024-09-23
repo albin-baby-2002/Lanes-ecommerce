@@ -19,7 +19,7 @@ export default function RootLayout({
       <body
         className={cn("font-satoshi", satoshi.variable, integral_cf.variable)}
       >
-        <MainLayout>{children}</MainLayout>
+        {children}
       </body>
     </html>
   );

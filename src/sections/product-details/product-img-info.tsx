@@ -1,10 +1,12 @@
 import React from "react";
-import  { Pricing } from "@/components/product-card";
 import StarRating from "@/components/star-rating";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { IoMdCheckmark } from "react-icons/io";
+import { Pricing } from "@/components/pricing";
+import MinusIcon from "@/assets/icons/minus-icon";
+import PlusIcon from "@/assets/icons/plus-icon";
 
 const ProductImgInfo = () => {
   return (
@@ -41,58 +43,61 @@ const ProductImgInfo = () => {
           className="h-full rounded-2xl object-cover"
         />
       </div>
-      <div className="my-2">
-        <p className="mb-3 font-integral_cf text-4xl font-bold tracking-wide">
+      <div className="flex flex-col justify-between">
+        <p className="mb-3 font-integral_cf text-[40px] font-bold">
           ONE LIFE GRAPHIC T SHIRT
         </p>
 
-        <StarRating rating={4.5} />
+        <StarRating size={"medium"} rating={4.5} />
 
-        <Pricing price={200} discount={10} />
+        <Pricing price={200} discount={10} className="mt-4 text-[28px]" />
 
-        <p className="mt-3 border-b pb-4 text-sm text-black/60">
+        <p className="mt-3 border-b pb-4 text-lg text-black/60">
           This graphic t-shirt which is perfect for any occasion. Crafted from a
           soft and breathable fabric, it offers superior comfort and style.
         </p>
 
-        <div className="border-b py-4 text-sm text-black/60">
+        <div className="border-b py-4 text-lg text-black/60">
           <p>Select colors</p>
           <div className="mt-2 flex gap-3">
-            <div className="flex size-5 items-center justify-center rounded-[50%] bg-black p-1">
+            <div className="flex size-8 items-center justify-center rounded-[50%] bg-black p-1">
               <IoMdCheckmark className="rounded-full" size={16} color="#FFFF" />
             </div>
-            <div className="flex size-5 items-center justify-center rounded-[50%] bg-slate-500 p-1">
+            <div className="flex size-8 items-center justify-center rounded-[50%] bg-slate-500 p-1">
               <IoMdCheckmark className="rounded-full" size={16} color="#FFFF" />
             </div>
-            <div className="flex size-5 items-center justify-center rounded-[50%] bg-red-800 p-1">
+            <div className="flex size-8 items-center justify-center rounded-[50%] bg-red-800 p-1">
               <IoMdCheckmark className="rounded-full" size={16} color="#FFFF" />
             </div>
           </div>
         </div>
 
-        <div className="border-b py-4 text-sm text-black/60">
+        <div className="border-b py-4 text-lg text-black/60">
           <p>Choose Size</p>
 
-          <div className="mt-2 flex gap-3">
-            <div className="rounded-3xl bg-ceramic px-4 py-2 text-sm text-black/70">
+          <div className="mt-4 flex gap-3">
+            <div className="rounded-3xl bg-ceramic px-6 py-2 text-lg text-black/70">
               Small
             </div>
           </div>
         </div>
 
-        <div className="flex gap-5 py-4 text-sm text-black/60">
+        <div className="flex gap-5 pt-6  text-lg text-black/60">
           <div className="flex items-center gap-3 rounded-full bg-ceramic px-3">
             <Button size={"icon"} variant={"ghost"}>
-              <FaMinus size={16} />
+              <MinusIcon />
             </Button>
+
             <p>1</p>
 
             <Button size={"icon"} variant={"ghost"}>
-              <FaPlus size={16} />
+              <PlusIcon />
             </Button>
           </div>
 
-          <Button className="max-w-96 grow rounded-full">Add to Cart</Button>
+          <Button className="max-w-96 grow rounded-full py-[28px] text-lg">
+            Add to Cart
+          </Button>
         </div>
       </div>
     </div>

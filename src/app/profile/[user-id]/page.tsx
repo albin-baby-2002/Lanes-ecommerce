@@ -10,8 +10,8 @@ const Tabs = [
 ];
 const Profile = () => {
   return (
-    <div className="flex h-[calc(100vh-90px)] w-full gap-7 bg-black/5 p-8">
-      <div className="min-h-40 w-80 rounded-xl bg-white p-4 shadow-xl">
+    <div className="flex  h-[calc(100vh-90px)] w-full gap-7 p-8">
+      <div className="min-h-40 w-80 rounded-xl bg-white p-4">
         <div className="m-2 flex gap-4 pb-4">
           <div className="relative h-[70px] w-16 rounded-xl">
             <Image
@@ -41,7 +41,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <div className="grow bg-white shadow-xl">asdfs</div>
+      <div className= " border-l   px-4 grow bg-white ">asdfs</div>
     </div>
   );
 };
