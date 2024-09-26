@@ -18,11 +18,11 @@ const prices = ["500-1000", "1000-1500", "1500-2000"];
 
 const sizes = ["XX-Small", "X-Small", "Small", "Medium", "Large"];
 
-const styles = ['Casual','Formal','Party','Gym']
+const styles = ["Casual", "Formal", "Party", "Gym"];
 
 const SearchFilter = () => {
   return (
-    <div className="rounded-2xl border border-black/10 px-4 py-4 h-max">
+    <div className="h-max rounded-2xl border border-black/10 px-4 py-4">
       <div>
         {/* heading  */}
 
@@ -48,6 +48,32 @@ const SearchFilter = () => {
             );
           })}
         </RadioGroup>
+
+        {/* gender select */}
+        <Accordion type="single"  collapsible>
+          <AccordionItem value="item-1">
+            <AccordionTrigger className="font-bold hover:no-underline">
+            Gender
+            </AccordionTrigger>
+            <AccordionContent>
+              <RadioGroup
+                defaultValue="comfortable "
+                className="space-y-2 pb-4"
+              >
+                {prices.map((val, idx) => {
+                  return (
+                    <div key={idx} className="flex items-center space-x-2">
+                      <RadioGroupItem value={val} id={val} />
+                      <Label htmlFor={val} className="text-black/60">
+                        {"$" + val}
+                      </Label>
+                    </div>
+                  );
+                })}
+              </RadioGroup>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
 
         {/* price select */}
 
@@ -105,14 +131,14 @@ const SearchFilter = () => {
             <AccordionTrigger className="font-bold hover:no-underline">
               Dress Style
             </AccordionTrigger>
-            <AccordionContent className="Grid space-y-4 gap-3">
+            <AccordionContent className="Grid gap-3 space-y-4">
               {styles.map((val, idx) => {
                 return (
                   <div key={idx} className="flex items-center space-x-2">
-                    <Checkbox id={val}  />
+                    <Checkbox id={val} />
                     <label
                       htmlFor={val}
-                      className=" font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       {val}
                     </label>
@@ -122,9 +148,9 @@ const SearchFilter = () => {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-        
-        <div className=" pt-6 pb-2 flex justify-center">
-            <Button className=" w-full rounded-full">Apply Filters</Button>
+
+        <div className="flex justify-center pb-2 pt-6">
+          <Button className="w-full rounded-full">Apply Filters</Button>
         </div>
       </div>
     </div>

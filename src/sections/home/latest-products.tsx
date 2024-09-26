@@ -1,6 +1,7 @@
 import ProductCard from "@/components/product-card";
 import React from "react";
 import { MdOutlineArrowCircleRight } from "react-icons/md";
+import ExploreNow from "./components/explore-now-btn";
 
 const LatestProducts = () => {
   return (
@@ -15,10 +16,7 @@ const LatestProducts = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 rounded-2xl bg-ceramic px-5 py-3.5">
-          <p className="pb-[2px] text-sm">Explore now</p>
-          <MdOutlineArrowCircleRight size={"24px"} />
-        </div>
+        <ExploreNow  href={'/search'}/>
       </div>
 
       <div className="grid grid-cols-5 justify-center gap-10">

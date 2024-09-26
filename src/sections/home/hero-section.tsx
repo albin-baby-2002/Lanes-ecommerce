@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const HeroSection = () => {
   return (
-    <div className="relative flex ps-20  rounded-xl bg-ceramic">
+    <div className="relative flex rounded-xl bg-ceramic ps-20">
       <div className="basis-1/2 py-28">
         <p className="absolute max-w-[60%] font-integral_cf text-6xl font-bold">
           FIND CLOTHES THAT MATCHES YOUR STYLE
@@ -17,9 +18,9 @@ const HeroSection = () => {
             style.
           </p>
 
-          <Button className="h-[50px] w-min rounded-full px-16">
-            Shop Now
-          </Button>
+          <Link href={"/search"}>
+            <div className="bg-black text-white w-max py-[14px] px-16 rounded-full text-sm  ">Shop Now</div>
+          </Link>
 
           <div className="flex divide-x">
             <div className="pr-5">
@@ -38,13 +39,13 @@ const HeroSection = () => {
         </div>
       </div>
 
-      <div className="basis-1/2  ">
+      <div className="basis-1/2">
         <Image
           src="/images/hero-img.svg"
           height={760}
           width={1000}
           alt="patient"
-          className="  object-cover h-full object-right rounded-tr-xl rounded-br-xl"
+          className="h-full rounded-br-xl rounded-tr-xl object-cover object-right"
         />
       </div>
     </div>

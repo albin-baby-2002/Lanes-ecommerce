@@ -38,7 +38,7 @@ const payments = ["visa", "mastercard", "paypal", "gpay", "applepay"];
 
 const Footer = () => {
   return (
-    <div className=" mt-10">
+    <div className="mt-10">
       {/* subscribe  */}
 
       <div className="relative">
@@ -50,10 +50,10 @@ const Footer = () => {
           </p>
 
           <div className="flex flex-col gap-4">
-            <div className="flex w-72 items-center gap-3 rounded-full bg-white px-4 p-2">
+            <div className="flex w-72 items-center gap-3 rounded-full bg-white p-2 px-4">
               <MdOutlineMail color="black" size={"22px"} />
               <input
-                className="max-w-52 outline-none placeholder:text-black/40 text-sm"
+                className="max-w-52 text-sm outline-none placeholder:text-black/40"
                 placeholder="Enter your email address  "
               />
             </div>
@@ -75,14 +75,15 @@ const Footer = () => {
           {/* socials */}
 
           <div className="basis-[20%] space-y-6">
-            <Image
-              src="/logos/lanes.svg"
-              height={1000}
-              width={1000}
-              alt="lanes"
-              className="h-6 w-fit"
-            />
-
+            <Link href={'/'}>
+              <Image
+                src="/logos/lanes.svg"
+                height={1000}
+                width={1000}
+                alt="lanes"
+                className="h-6 w-fit"
+              />
+            </Link>
             <p className="font-normal text-black/60">
               We have clothes that suits your style and which you’re proud to
               wear. From women to men.
