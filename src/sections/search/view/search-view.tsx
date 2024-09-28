@@ -11,7 +11,7 @@ const SearchView = () => {
 
       <div className="min-h-[calc(100vh-200px)] grid grid-cols-[2.5fr_9.5fr] gap-10">
         <SearchFilter />
-        <ProductsGrid  totalPageSize={10}/>
+        <ProductsGrid  totalPageSize={20}/>
       </div>
     </>
   );
