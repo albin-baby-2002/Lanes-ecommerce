@@ -1,31 +1,12 @@
-"use client";
-
 import ProductCard from "@/components/product-card";
-import { Button } from "@/components/ui/button";
-import { Combobox } from "@/components/ui/combobox";
 import React from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import ProductGridHeader from "./product-grid-header";
+import ProductPagination from "./products-pagination";
 
-const ProductsGrid = () => {
-  const [value, setValue] = React.useState("");
-
+const ProductsGrid = ({ totalPageSize }: { totalPageSize: number }) => {
   return (
     <div className="mt-2">
-      <div className="flex items-center justify-between">
-        <p>Showing 1-10 of 100 products</p>
-        <div>
-          <Combobox
-            label="Sort By"
-            options={[
-              { value: "High to low", label: "high to low" },
-              { value: "Low to High", label: "Low to high" },
-            ]}
-            value={value}
-            onChange={(value) => setValue(value)}
-          />
-        </div>
-      </div>
-
+      <ProductGridHeader />
       {/* products  */}
 
       <div className="my-6 grid grid-cols-4 justify-center gap-10">
@@ -130,23 +111,7 @@ const ProductsGrid = () => {
         />
       </div>
 
-      {/* pagination */}
-
-      <div className="mb-16 mt-6 flex justify-between border-t pt-6">
-        <Button variant={"outline"} className="flex gap-2">
-          <FaArrowLeft /> Previous
-        </Button>
-
-        <div>
-          <Button size={"icon"} className="bg-ceramic text-black">
-            1
-          </Button>
-        </div>
-
-        <Button variant={"outline"} className="flex gap-2">
-          Next <FaArrowRight />
-        </Button>
-      </div>
+      <ProductPagination totalPageSize={totalPageSize} />
     </div>
   );
 };
