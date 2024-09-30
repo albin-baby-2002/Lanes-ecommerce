@@ -3,6 +3,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { integral_cf, satoshi } from "@/lib/fonts";
 import MainLayout from "@/layouts/main/layout";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Lanes",
@@ -20,6 +21,7 @@ export default function RootLayout({
         className={cn("font-satoshi", satoshi.variable, integral_cf.variable)}
       >
         {children}
+        <Toaster/>
       </body>
     </html>
   );
