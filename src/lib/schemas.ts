@@ -12,3 +12,14 @@ export const BillingAddressSchema = z.object({
     .string()
     .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
 });
+
+export const UserProfileSchema = z.object({
+  first_name: z.string().min(2, {
+    message: "first_name should be alteast 2 char long",
+  }),
+  last_name: z.string(),
+  email: z.string().email("Enter a valid email address"),
+  phone: z
+    .string()
+    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+});

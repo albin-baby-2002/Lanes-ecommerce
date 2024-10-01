@@ -2,6 +2,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -11,6 +12,7 @@ import { TextareaWithLabel } from "@/components/ui/textarea-with-label";
 import React, { ChangeEvent, useState } from "react";
 import RatinInput from "./components/rating-input";
 import RatingInput from "./components/rating-input";
+import { Button } from "@/components/ui/button";
 
 interface TProps {
   open: boolean;
@@ -36,16 +38,22 @@ const AddReview: React.FC<TProps> = ({ open, handleClose }) => {
           <DialogDescription>
             Your Review Will Be Posted Publicily
           </DialogDescription>
-          <div className=" pt-3">
-            <RatingInput rating={rating} setRating={handleRatingChange} />
-            <Textarea
-            className=" mt-4"
-              value={review}
-              onChange={onChange}
-              placeholder="write your review here........"
-            />
-          </div>
         </DialogHeader>
+        <div className="pt-3">
+          <RatingInput rating={rating} setRating={handleRatingChange} />
+          <Textarea
+            className="mt-4"
+            value={review}
+            onChange={onChange}
+            placeholder="write your review here........"
+          />
+        </div>
+        <DialogFooter >
+        <div className=" w-full mt-2">
+
+          <Button className=" bg-ceramic text-black">Add Review</Button>
+        </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

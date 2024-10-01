@@ -6,7 +6,7 @@ import { FaMinus, FaPlus, FaTrashAlt } from "react-icons/fa";
 const ProductsInCart = () => {
   return (
     <div className="h-max basis-3/5 rounded-3xl border border-black/10 p-6">
-      <div className="flex justify-between border-black/10 [&:not(:last-of-type)]:pb-8 [&:not(:last-of-type)]:border-b [&:not(:first-of-type)]:pt-8">
+      <div className="flex justify-between border-black/10 [&:not(:first-of-type)]:pt-8 [&:not(:last-of-type)]:border-b [&:not(:last-of-type)]:pb-8">
         <div className="flex gap-4">
           <div className="relative size-32 rounded-2xl">
             <Image
@@ -43,7 +43,7 @@ const ProductsInCart = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-between border-black/10 [&:not(:last-of-type)]:pb-8 [&:not(:last-of-type)]:border-b [&:not(:first-of-type)]:pt-8">
+      <div className="flex justify-between border-black/10 [&:not(:first-of-type)]:pt-8 [&:not(:last-of-type)]:border-b [&:not(:last-of-type)]:pb-8">
         <div className="flex gap-4">
           <div className="relative size-32 rounded-2xl">
             <Image
