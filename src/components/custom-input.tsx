@@ -67,7 +67,9 @@ const RenderField = ({
           )}
 
           <FormControl>
+
             <Input
+
               placeholder={props.placeholder}
               {...field}
               className="shad-input border-0"
@@ -169,7 +171,7 @@ const CustomInputField: React.FC<TCustomFormFieldProps> = (props) => {
       render={({ field }) => (
         <FormItem className="flex-1">
           {fieldType !== FormFieldType.CHECKBOX && label && (
-            <FormLabel>{label}</FormLabel>
+            <FormLabel className=" text-[15px]">{label}</FormLabel>
           )}
 
           <RenderField field={field} props={props} />

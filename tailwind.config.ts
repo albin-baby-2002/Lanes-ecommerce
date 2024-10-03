@@ -20,6 +20,7 @@ const config: Config = {
         satoshi: ["var(--font-satoshi)"],
         integral_cf: ["var(--font-integral-cf)"],
         Sen: ["var(--sen)"],
+        Inter: ["var(--Inter)"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

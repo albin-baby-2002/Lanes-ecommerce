@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { integral_cf, satoshi } from "@/lib/fonts";
-import { Sen } from "next/font/google";
+import { Inter, Sen } from "next/font/google";
 import MainLayout from "@/layouts/main/layout";
 import { Toaster } from "sonner";
 
@@ -11,9 +11,8 @@ export const metadata: Metadata = {
   description: "Build Your Style Today",
 };
 
-const sen = Sen({ subsets: ["latin"],
-  variable:"--sen"
- });
+const sen = Sen({ subsets: ["latin"], variable: "--sen" });
+const InterFont = Inter({ subsets: ["latin"], variable: "--Inter" });
 
 export default function RootLayout({
   children,
@@ -23,7 +22,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={cn("font-satoshi", satoshi.variable, integral_cf.variable,sen.variable)}
+        className={cn(
+          "font-satoshi",
+          satoshi.variable,
+          integral_cf.variable,
+          InterFont.variable,
+        )}
       >
         {children}
         <Toaster />
