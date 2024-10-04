@@ -1,7 +1,7 @@
 
 import React from "react";
 
-const Profile = () => {
+const Settings = () => {
   return (
     <div>
       <p> User id not found</p>
@@ -9,4 +9,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Settings;

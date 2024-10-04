@@ -1,12 +1,16 @@
 import { z } from "zod";
 
 export const BillingAddressSchema = z.object({
-  name: z
+  name: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+  address_line: z
     .string()
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(50, { message: "Username must be at most 50 characters" }),
+    .min(5, { message: "Street address must be at least 5 characters long" }),
+  city: z.string().min(2, { message: "City is required" }),
+  district: z.string().min(2, { message: "District is required" }),
+  state: z.string().min(2, { message: "State is required" }),
+  postal_code: z.string().min(3, { message: "Postal code is required" }),
   email: z.string().email("Enter a valid email address"),
   phone: z
     .string()
@@ -23,3 +27,18 @@ export const UserProfileSchema = z.object({
     .string()
     .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
 });
+
+export const ResetPasswordSchema = z
+  .object({
+    current_password: z.string().min(2, {
+      message: "Enter your current password",
+    }),
+    new_password: z.string().min(8, {
+      message: "New Password Should be atleast 8 char long",
+    }),
+    confirm_new_password: z.string(),
+  })
+  .refine((data) => data.new_password === data.confirm_new_password, {
+    message: "New password and confirm password must match",
+    path: ["confirm_new_password"],
+  });
