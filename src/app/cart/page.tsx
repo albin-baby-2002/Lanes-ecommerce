@@ -4,13 +4,14 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 const Cart = async () => {
-  const { isAuthenticated ,getUser} = getKindeServerSession();
+  const { isAuthenticated, getUser } = getKindeServerSession();
 
   const isLoggedIn = await isAuthenticated();
-  const user = await getUser()
+  const user = await getUser();
+  console.log(user, "user");
 
   if (!isLoggedIn) {
-    console.log('not logged in',isLoggedIn,user)
+    console.log("not logged in", isLoggedIn, user);
     redirect("/api/auth/login");
   }
   return <CartView />;

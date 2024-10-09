@@ -1,3 +1,4 @@
+"use client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +13,12 @@ import { PiShoppingCart } from "react-icons/pi";
 import { FaRegUserCircle } from "react-icons/fa";
 import HeaderContainer from "./components/header-container";
 import Search from "./components/header-search";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import {
+  LoginLink,
+  LogoutLink,
+  RegisterLink,
+} from "@kinde-oss/kinde-auth-nextjs/components";
 
 //--------------------------------------------------------------------------------
 
@@ -23,6 +30,7 @@ const links = [
 ];
 
 const Header = () => {
+  const { user, isAuthenticated } = useKindeBrowserClient();
   return (
     <HeaderContainer>
       <div className="flex grow items-center gap-10">
@@ -50,11 +58,11 @@ const Header = () => {
       </div>
 
       <div className="flex items-center gap-5">
-        <Link href={'/cart'}>
+        <Link href={"/cart"}>
           <PiShoppingCart size={"24px"} color="black" />
         </Link>
 
-        <AccountDropDown />
+        <AccountDropDown authenticated={isAuthenticated!} />
       </div>
     </HeaderContainer>
   );
@@ -64,14 +72,40 @@ export default Header;
 
 //child components
 
-const AccountDropDown = () => {
+const AccountDropDown = ({ authenticated }: { authenticated: boolean }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <FaRegUserCircle size={"22px"} color="black" />
       </DropdownMenuTrigger>
+
       <DropdownMenuContent>
-        <DropdownMenuItem>Profile</DropdownMenuItem>
+        {authenticated ? (
+          <>
+            {/* profile */}
+
+            <DropdownMenuItem>Profile</DropdownMenuItem>
+
+            {/* logout */}
+
+            <DropdownMenuItem>
+              <LogoutLink>Logout</LogoutLink>
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <>
+            {/* login */}
+            <DropdownMenuItem>
+              <LoginLink>Login</LoginLink>
+            </DropdownMenuItem>
+
+            {/* signUp */}
+
+            <DropdownMenuItem>
+              <RegisterLink>SignUp</RegisterLink>
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
