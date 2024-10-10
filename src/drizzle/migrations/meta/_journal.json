@@ -8,6 +8,13 @@
       "when": 1728440088796,
       "tag": "0000_fearless_silver_sable",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1728526510150,
+      "tag": "0001_fresh_maximus",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { db } from "@/drizzle/db";
+import { users } from "@/drizzle/schema";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -7,7 +9,7 @@ const HeroSection = () => {
   return (
     <div className="relative flex rounded-xl bg-ceramic ps-20">
       <div className="basis-1/2 py-28">
-        <p className="absolute max-w-[60%] font-integral_cf text-6xl font-bold">
+        <p  className="absolute max-w-[60%] font-integral_cf text-6xl font-bold">
           FIND CLOTHES THAT MATCHES YOUR STYLE
         </p>
 
