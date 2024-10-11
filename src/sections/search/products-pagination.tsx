@@ -17,7 +17,7 @@ const ProductPagination = ({ totalPageSize }: { totalPageSize: number }) => {
 
   const router = useRouter();
 
-  const currentPage = Number(searchParams.get("page"));
+  const currentPage = Number(searchParams.get("page")) || 1;
 
   const pageButtonsToRender = useMemo(() => {
     let AllPages = new Array(totalPageSize).fill(0).map((_, i) => i + 1);
