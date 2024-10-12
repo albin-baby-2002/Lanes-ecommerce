@@ -85,7 +85,15 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  button:focus-visible {
+    @apply outline-none bg-ceramic
+  }
 }
+
 
 @layer components {
   .contain {

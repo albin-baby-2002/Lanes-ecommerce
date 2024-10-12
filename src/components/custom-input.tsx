@@ -171,7 +171,7 @@ const CustomInputField: React.FC<TCustomFormFieldProps> = (props) => {
       render={({ field }) => (
         <FormItem className="flex-1">
           {fieldType !== FormFieldType.CHECKBOX && label && (
-            <FormLabel className=" text-[15px]">{label}</FormLabel>
+            <FormLabel className=" text-black/80 text-[15px]">{label}</FormLabel>
           )}
 
           <RenderField field={field} props={props} />

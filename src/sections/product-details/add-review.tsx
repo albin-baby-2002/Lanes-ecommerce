@@ -5,12 +5,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { TextareaWithLabel } from "@/components/ui/textarea-with-label";
 import React, { ChangeEvent, useState } from "react";
-import RatinInput from "./components/rating-input";
 import RatingInput from "./components/rating-input";
 import { Button } from "@/components/ui/button";
 
