@@ -16,8 +16,6 @@ export async function GET() {
 
   let dbUser = await db.select().from(users).where(eq(users.kindeId, user.id));
 
-  console.log("/n", dbUser, "db user /n");
-
   if (dbUser.length === 0) {
     dbUser = await db.insert(users).values({
       kindeId: user.id,
@@ -25,8 +23,6 @@ export async function GET() {
       lastName: user.family_name ?? "",
       email: user.email ?? "",
     });
-
-    console.log("/n created user /n");
   }
   return NextResponse.redirect(process.env.KINDE_SITE_URL!);
 }

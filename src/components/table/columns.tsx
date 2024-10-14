@@ -1,27 +1,44 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef } from "@tanstack/react-table";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
+export type TColumns = {
+  categoryId: number;
+  name: string;
+  description: string;
+  onOffer: boolean;
+  offerName: string;
+  offerDiscount: number;
+};
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<TColumns>[] = [
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "categoryId",
+    header: "Id",
+    cell:({row})=>{
+
+      return "#CAT"+row.getValue("categoryId")
+    }
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: "name",
+    header: "Category Name",
   },
   {
-    accessorKey: "amount",
-    header: "Amount",
+    accessorKey: "description",
+    header: "Description",
   },
-]
+
+  {
+    accessorKey: "onOffer",
+    header: "On Offer",
+  },
+  {
+    accessorKey: "offerName",
+    header: "Offer Name",
+  },
+  {
+    accessorKey: "offerDiscount",
+    header: "Offer Discount",
+  },
+];

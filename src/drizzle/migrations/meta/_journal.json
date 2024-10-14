@@ -15,6 +15,27 @@
       "when": 1728526510150,
       "tag": "0001_fresh_maximus",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1728875907847,
+      "tag": "0002_famous_swarm",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1728877871840,
+      "tag": "0003_perpetual_albert_cleary",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1728878139654,
+      "tag": "0004_grey_wolfpack",
+      "breakpoints": true
     }
   ]
 }

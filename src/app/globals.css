@@ -88,12 +88,10 @@
 
   input:focus-visible,
   select:focus-visible,
-  textarea:focus-visible,
-  button:focus-visible {
-    @apply outline-none bg-ceramic
+  textarea:focus-visible {
+    @apply bg-ceramic outline-none;
   }
 }
-
 
 @layer components {
   .contain {

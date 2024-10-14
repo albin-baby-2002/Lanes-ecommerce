@@ -2,7 +2,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -17,9 +16,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AddEditCategoryForm from "@/components/forms/add-edit-category";
 import { useFormStatus } from "react-dom";
 import { createCategory } from "@/lib/actions/admin-actions";
-import { Circle } from "lucide-react";
-import CircularLoader from "@/assets/loaders/circular-loader";
 import Image from "next/image";
+import { toast } from "sonner";
 
 //-----------------------------------------------------------------------------------
 
@@ -65,17 +63,24 @@ const AddOrEditCategoryModal: React.FC<TProps> = ({ type }) => {
 
       const resp = await createCategory(values);
 
-      console.log("resp", resp);
-      setSubmitting(false)
+      if (!resp.success) {
+        setSubmitting(false);
+        return toast.error(resp.message);
+      }
+
+      toast.success("Successfully Created Category");
+      toggleOpen();
+
+      setSubmitting(false);
     } catch (error) {
-      setSubmitting(false)
+      setSubmitting(false);
       console.log(error);
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={toggleOpen}>
-      <DialogTrigger className="h-auto bg-black text-white rounded-md min-h-full px-5">
+      <DialogTrigger className="h-auto min-h-full rounded-md bg-black px-5 text-white">
         {LABELS[type]}
       </DialogTrigger>
       <DialogContent>
