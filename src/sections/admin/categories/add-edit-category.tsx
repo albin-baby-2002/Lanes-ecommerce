@@ -23,6 +23,8 @@ import { toast } from "sonner";
 
 interface TProps {
   type: "add" | "edit";
+  hideTrigger?: boolean;// to hide trigger btn
+  open?:boolean; // need to pass when hidding trigger
 }
 
 export type TCategoryData = z.infer<typeof CategorySchema>;
@@ -39,14 +41,18 @@ const H1 = {
 
 //-----------------------------------------------------------------------------------
 
-const AddOrEditCategoryModal: React.FC<TProps> = ({ type }) => {
-  const [open, setOpen] = useState(false);
+const AddOrEditCategoryModal: React.FC<TProps> = ({
+  type,
+  hideTrigger = false,
+  open = false
+}) => {
+  const [show, setShow] = useState(open);
 
   const [submitting, setSubmitting] = useState(false);
   const { pending } = useFormStatus();
 
-  const toggleOpen = () => {
-    setOpen((prev) => !prev);
+  const toggleShow = () => {
+    setShow((prev) => !prev);
   };
 
   const form = useForm<TCategoryData>({
@@ -69,7 +75,7 @@ const AddOrEditCategoryModal: React.FC<TProps> = ({ type }) => {
       }
 
       toast.success("Successfully Created Category");
-      toggleOpen();
+      toggleShow();
 
       setSubmitting(false);
     } catch (error) {
@@ -79,10 +85,12 @@ const AddOrEditCategoryModal: React.FC<TProps> = ({ type }) => {
   }
 
   return (
-    <Dialog open={open} onOpenChange={toggleOpen}>
-      <DialogTrigger className="h-auto min-h-full rounded-md bg-black px-5 text-white">
-        {LABELS[type]}
-      </DialogTrigger>
+    <Dialog open={show} onOpenChange={toggleShow}>
+      {!hideTrigger && (
+        <DialogTrigger className="h-auto min-h-full rounded-md bg-black px-5 text-white">
+          {LABELS[type]}
+        </DialogTrigger>
+      )}
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-xl">{H1[type]}</DialogTitle>

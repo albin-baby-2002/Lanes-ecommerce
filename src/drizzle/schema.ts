@@ -13,6 +13,7 @@ export const categories = pgTable("categories", {
   categoryId: integer("categoryId")
     .generatedAlwaysAsIdentity({
       startWith: 1000,
+      increment:1,
     })
     .unique(),
   name: varchar({ length: 256 }).notNull().unique(),

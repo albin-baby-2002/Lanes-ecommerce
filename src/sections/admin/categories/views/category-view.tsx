@@ -1,19 +1,14 @@
-import { columns } from "@/components/table/columns";
-import { DataTable } from "@/components/table/data-table";
 import React from "react";
 import SearchAndActions from "../search-and-actions";
+import { columns } from "../columns";
+import CategoryTable from "../data-table";
 import { db } from "@/drizzle/db";
 import { categories } from "@/drizzle/schema";
 
 const CategoryView = async () => {
+
   const categoriesData = await db.select().from(categories);
 
-  console.log(
-    `data
-
-    `,
-    categoriesData,
-  );
   return (
     <div className="h-full bg-slate-50 p-8">
       <div className="mb-8">
@@ -22,11 +17,8 @@ const CategoryView = async () => {
 
       <SearchAndActions />
 
-      {/* table */}
+      <CategoryTable columns={columns} data={categoriesData} />
 
-      <div className="mt-6">
-        <DataTable columns={columns} data={categoriesData} />
-      </div>
     </div>
   );
 };
