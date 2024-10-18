@@ -24,6 +24,7 @@ const SearchAndActions = () => {
           Export Data
         </Button>
       </div>
+      
     </>
   );
 };

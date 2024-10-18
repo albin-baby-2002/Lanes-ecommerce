@@ -1,12 +1,12 @@
 import React from "react";
 import SearchAndActions from "../search-and-actions";
-import { columns } from "../columns";
-import CategoryTable from "../data-table";
 import { db } from "@/drizzle/db";
 import { categories } from "@/drizzle/schema";
+import { DataTable } from "@/components/table/data-table";
+import { cateogriesColumns } from "../columns";
+import EditModal from "../edit-modal";
 
 const CategoryView = async () => {
-
   const categoriesData = await db.select().from(categories);
 
   return (
@@ -17,8 +17,15 @@ const CategoryView = async () => {
 
       <SearchAndActions />
 
-      <CategoryTable columns={columns} data={categoriesData} />
+      <div className="mt-8">
+        <DataTable
+          columns={cateogriesColumns}
+          data={categoriesData}
+          columnVisibility={{ id: false }}
+        />
+      </div>
 
+      <EditModal categoriesData={categoriesData}/>
     </div>
   );
 };

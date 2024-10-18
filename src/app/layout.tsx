@@ -3,8 +3,8 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { integral_cf, satoshi } from "@/lib/fonts";
 import { Inter, Sen } from "next/font/google";
-import MainLayout from "@/layouts/main/layout";
 import { Toaster } from "sonner";
+import ProviderLayout from "@/store/providerLayout";
 
 export const metadata: Metadata = {
   title: "Lanes",
@@ -29,7 +29,7 @@ export default function RootLayout({
           InterFont.variable,
         )}
       >
-        {children}
+        <ProviderLayout>{children}</ProviderLayout>
         <Toaster />
       </body>
     </html>

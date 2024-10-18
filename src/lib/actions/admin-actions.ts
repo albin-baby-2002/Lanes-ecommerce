@@ -53,6 +53,7 @@ export const createCategory = async (category: TCategoryData) => {
     response.message = "Successfully created new category";
 
     return response;
+
   } catch (error: any) {
     console.log(error, "error");
 

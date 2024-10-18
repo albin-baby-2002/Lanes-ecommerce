@@ -7,9 +7,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useForm, useFormState } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { CategorySchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,16 +18,28 @@ import { useFormStatus } from "react-dom";
 import { createCategory } from "@/lib/actions/admin-actions";
 import Image from "next/image";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { TCategory } from "./edit-modal";
 
 //-----------------------------------------------------------------------------------
 
 interface TProps {
-  type: "add" | "edit";
-  hideTrigger?: boolean;// to hide trigger btn
-  open?:boolean; // need to pass when hidding trigger
+  type: "add";
+  open?: boolean; // need to pass when hidding trigger
+  toggleClose?: () => void; // close when trigger is not used
+  categoryToEdit?: TCategory;
+}
+
+interface TEditProps {
+  type: "edit";
+  open: boolean; // need to pass when hidding trigger
+  toggleClose: () => void; // close when trigger is not used
+  categoryToEdit: TCategory | undefined;
 }
 
 export type TCategoryData = z.infer<typeof CategorySchema>;
+
+//-----------------------------------------------------------------------------------
 
 const LABELS = {
   add: "Add Category",
@@ -36,24 +48,26 @@ const LABELS = {
 
 const H1 = {
   add: "Create A New Category",
-  edit: "Create A New Category",
+  edit: "Edit Category",
 };
 
 //-----------------------------------------------------------------------------------
 
-const AddOrEditCategoryModal: React.FC<TProps> = ({
+const AddOrEditCategoryModal: React.FC<TProps | TEditProps> = ({
   type,
-  hideTrigger = false,
-  open = false
+  open = false,
+  toggleClose,
+  categoryToEdit,
 }) => {
-  const [show, setShow] = useState(open);
+  //-----------------------------------------------------------------------------------
 
+  const router = useRouter();
+
+  //local states
+
+  const [show, setShow] = useState(open);
   const [submitting, setSubmitting] = useState(false);
   const { pending } = useFormStatus();
-
-  const toggleShow = () => {
-    setShow((prev) => !prev);
-  };
 
   const form = useForm<TCategoryData>({
     mode: "onChange",
@@ -62,6 +76,24 @@ const AddOrEditCategoryModal: React.FC<TProps> = ({
       onOffer: "False",
     },
   });
+
+  //-----------------------------------------------------------------------------------
+
+  useEffect(() => {
+    setShow(open);
+  }, [open]);
+
+  //-----------------------------------------------------------------------------------
+
+  const toggleShow = () => {
+    if (type == "edit" && toggleClose) {
+      toggleClose();
+      return;
+    }
+    setShow((prev) => !prev);
+  };
+
+  // fn to handle submit form edit or add
 
   async function onSubmit(values: TCategoryData) {
     try {
@@ -75,18 +107,26 @@ const AddOrEditCategoryModal: React.FC<TProps> = ({
       }
 
       toast.success("Successfully Created Category");
+
       toggleShow();
 
       setSubmitting(false);
+
+      router.refresh();
     } catch (error) {
       setSubmitting(false);
       console.log(error);
     }
   }
 
+  //-----------------------------------------------------------------------------------
+
   return (
-    <Dialog open={show} onOpenChange={toggleShow}>
-      {!hideTrigger && (
+    <Dialog
+      open={show}
+      onOpenChange={type === "edit" ? toggleClose : toggleShow}
+    >
+      {type === "add" && (
         <DialogTrigger className="h-auto min-h-full rounded-md bg-black px-5 text-white">
           {LABELS[type]}
         </DialogTrigger>
