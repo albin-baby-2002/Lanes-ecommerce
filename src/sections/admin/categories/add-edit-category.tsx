@@ -15,7 +15,7 @@ import { CategorySchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AddEditCategoryForm from "@/components/forms/add-edit-category";
 import { useFormStatus } from "react-dom";
-import { createCategory } from "@/lib/actions/admin-actions";
+import { createCategory, EditCategory } from "@/lib/actions/admin-actions";
 import Image from "next/image";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -23,17 +23,20 @@ import { TCategory } from "./edit-modal";
 
 //-----------------------------------------------------------------------------------
 
+// optional types are not needed for "add" and adding it might cause some bug
+// those are added to avoid conflict
+
 interface TProps {
   type: "add";
-  open?: boolean; // need to pass when hidding trigger
-  toggleClose?: () => void; // close when trigger is not used
+  open?: boolean;
+  toggleClose?: () => void;
   categoryToEdit?: TCategory;
 }
 
 interface TEditProps {
   type: "edit";
-  open: boolean; // need to pass when hidding trigger
-  toggleClose: () => void; // close when trigger is not used
+  open: boolean;
+  toggleClose: () => void; // to close when trigger is not used
   categoryToEdit: TCategory | undefined;
 }
 
@@ -79,11 +82,33 @@ const AddOrEditCategoryModal: React.FC<TProps | TEditProps> = ({
 
   //-----------------------------------------------------------------------------------
 
+  // useEffect to set show based on open if modal don't have trigger
+
   useEffect(() => {
-    setShow(open);
+    if (open !== undefined) {
+      setShow(open);
+    }
   }, [open]);
 
+  // useEffect to set the initial state for edit modal
+
+  useEffect(() => {
+    if (categoryToEdit && type === "edit") {
+      const existingCategory: TCategoryData = {
+        name: categoryToEdit.name,
+        description: categoryToEdit.description,
+        onOffer: categoryToEdit.onOffer ? "True" : "False",
+        offerName: categoryToEdit.offerName,
+        offerDiscount: categoryToEdit.offerDiscount + "",
+      };
+
+      form.reset(existingCategory);
+    }
+  }, [categoryToEdit, type,form]);
+
   //-----------------------------------------------------------------------------------
+
+  // fn to toggle based on the modal have trigger or not
 
   const toggleShow = () => {
     if (type == "edit" && toggleClose) {
@@ -99,21 +124,51 @@ const AddOrEditCategoryModal: React.FC<TProps | TEditProps> = ({
     try {
       setSubmitting(true);
 
-      const resp = await createCategory(values);
+      switch (type) {
+        case "add": {
+          // submit logic for adding new category
+          let resp = await createCategory(values);
 
-      if (!resp.success) {
-        setSubmitting(false);
-        return toast.error(resp.message);
+          if (!resp.success) {
+            setSubmitting(false);
+            return toast.error(resp.message);
+          }
+
+          toast.success("Successfully Created Category");
+          break;
+        }
+
+        case "edit": {
+          // submit logic for editing existing category
+          if (!categoryToEdit) {
+            return toast.error("Unexpected error: category data not found");
+          }
+
+          let resp = await EditCategory(categoryToEdit?.id, values);
+
+          if (!resp.success) {
+            setSubmitting(false);
+            return toast.error(resp.message);
+          }
+
+          toast.success("Successfully Updated Category");
+          break;
+        }
+
+        default: {
+          return toast.error("Invalid operation type");
+        }
       }
 
-      toast.success("Successfully Created Category");
-
+      // Refresh the page and toggle the modal after the operation is successful
+      router.refresh();
       toggleShow();
 
       setSubmitting(false);
 
       router.refresh();
     } catch (error) {
+      toast.error("Unexpected error! Try Again !");
       setSubmitting(false);
       console.log(error);
     }
@@ -151,7 +206,7 @@ const AddOrEditCategoryModal: React.FC<TProps | TEditProps> = ({
                   src={"/loaders/circular-loader.svg"}
                 />
               )}
-              Add Category
+              {LABELS[type]}
             </Button>
           </div>
         </DialogFooter>

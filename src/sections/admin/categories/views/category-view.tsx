@@ -5,6 +5,7 @@ import { categories } from "@/drizzle/schema";
 import { DataTable } from "@/components/table/data-table";
 import { cateogriesColumns } from "../columns";
 import EditModal from "../edit-modal";
+import ConfirmationModal from "@/components/ui/confirmation-modal";
 
 const CategoryView = async () => {
   const categoriesData = await db.select().from(categories);
@@ -25,7 +26,8 @@ const CategoryView = async () => {
         />
       </div>
 
-      <EditModal categoriesData={categoriesData}/>
+      <EditModal categoriesData={categoriesData} />
+
     </div>
   );
 };

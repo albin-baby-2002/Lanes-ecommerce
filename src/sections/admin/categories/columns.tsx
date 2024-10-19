@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { categoriesReducers } from "@/store/slices/admin/categories";
 import { AppDispatch } from "@/store/store";
 import { ColumnDef, Row } from "@tanstack/react-table";
+import { FaTrashAlt } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { useDispatch } from "react-redux";
 
@@ -42,6 +43,9 @@ export const cateogriesColumns: ColumnDef<TColumns>[] = [
   {
     accessorKey: "onOffer",
     header: "On Offer",
+    cell: ({ row }) => {
+      return row.getValue("onOffer") ? "True" : "False";
+    },
   },
   {
     accessorKey: "offerName",
@@ -73,14 +77,24 @@ const ActionsCell = ({ row }: { row: Row<TColumns> }) => {
     dispatch(categoriesReducers.setCategoryToEdit(row.getValue("id")));
   };
 
+  const showDeleteCategoryConfirmation = () => {};
+
   return (
     <div className="flex justify-center">
       <Button
-        onClick={showEdit} // Call the dispatch function on click
+        onClick={showEdit}
         className="size-[26px] bg-black/10 hover:bg-black/15"
         size={"icon"}
       >
         <MdEdit className="text-black" />
+      </Button>
+
+      <Button
+        onClick={showDeleteCategoryConfirmation}
+        className="size-[26px] bg-black/10 hover:bg-black/15"
+        size={"icon"}
+      >
+        <FaTrashAlt className="text-black" />
       </Button>
     </div>
   );
