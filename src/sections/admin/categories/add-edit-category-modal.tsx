@@ -11,11 +11,14 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { CategorySchema } from "@/lib/schemas";
+import { CategorySchema } from "@/lib/zod-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AddEditCategoryForm from "@/components/forms/add-edit-category";
 import { useFormStatus } from "react-dom";
-import { createCategory, EditCategory } from "@/lib/actions/admin-actions";
+import {
+  createCategory,
+  EditCategory,
+} from "@/lib/actions/admin/category-actions";
 import Image from "next/image";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -104,7 +107,7 @@ const AddOrEditCategoryModal: React.FC<TProps | TEditProps> = ({
 
       form.reset(existingCategory);
     }
-  }, [categoryToEdit, type,form]);
+  }, [categoryToEdit, type, form]);
 
   //-----------------------------------------------------------------------------------
 

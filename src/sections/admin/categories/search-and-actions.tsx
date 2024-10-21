@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import AddOrEditCategoryModal from "./add-edit-category";
+import AddOrEditCategoryModal from "./add-edit-category-modal";
 import { FaSearch } from "react-icons/fa";
 
 const SearchAndActions = () => {
@@ -16,7 +16,7 @@ const SearchAndActions = () => {
             placeholder="Search Categories "
           />
         </div>
-        <AddOrEditCategoryModal  type="add"/>
+        <AddOrEditCategoryModal type="add" />
         <Button
           variant={"outline"}
           className="h-auto min-h-full border-2 border-black px-5"
@@ -24,7 +24,6 @@ const SearchAndActions = () => {
           Export Data
         </Button>
       </div>
-      
     </>
   );
 };

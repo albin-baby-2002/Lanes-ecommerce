@@ -1,7 +1,7 @@
 "use client";
 import CustomInputField, { FormFieldType } from "@/components/custom-input";
 import { Form } from "@/components/ui/form";
-import { UserProfileSchema } from "@/lib/schemas";
+import { UserProfileSchema } from "@/lib/zod-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";

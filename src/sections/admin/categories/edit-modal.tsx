@@ -1,11 +1,14 @@
 "use client";
-import React, { useEffect } from "react";
-import AddOrEditCategoryModal from "./add-edit-category";
+import React, { useMemo } from "react";
+import AddOrEditCategoryModal from "./add-edit-category-modal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { categoriesReducers } from "@/store/slices/admin/categories";
 import { categories } from "@/drizzle/schema";
 import ConfirmationModal from "@/components/ui/confirmation-modal";
+import { deleteCategory } from "@/lib/actions/admin/category-actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export type TCategory = typeof categories.$inferSelect;
 
@@ -13,12 +16,54 @@ interface TProps {
   categoriesData: TCategory[];
 }
 
-const EditModal: React.FC<TProps> = ({ categoriesData }) => {
-  const { categoryToEdit, showEditCategory } = useSelector(
-    (state: RootState) => state.categories,
-  );
+const CategoryActionModals: React.FC<TProps> = ({ categoriesData }) => {
+  const router = useRouter();
 
+  // redux states and hooks
   const dispatch = useDispatch<AppDispatch>();
+
+  const {
+    categoryToEdit,
+    showEditCategory,
+    pendingDeleting,
+    showDeleteCategoryConfirmation,
+    categoryToDelete,
+  } = useSelector((state: RootState) => state.categories);
+
+  // data
+
+  const categoryToDeleteInfo = useMemo(() => {
+    return categoriesData.find((cat) => cat.id === categoryToDelete);
+  }, [categoryToDelete, categoriesData]);
+
+  // fns
+
+  const closeDeleteConfirmation = () => {
+    dispatch(categoriesReducers.toggleDeleteCategoryConfirmation());
+    dispatch(categoriesReducers.setCategoryToDelete(null));
+  };
+
+  // handle delete
+
+  const handleDelete = async () => {
+    dispatch(categoriesReducers.togglePendingDeleting());
+
+    if (!categoryToDelete) return toast.error("Unexpected error try again");
+
+    const resp = await deleteCategory(categoryToDelete);
+
+    if (resp.success) {
+      toast.success("Successfully deleted the category");
+      router.refresh();
+      dispatch(categoriesReducers.togglePendingDeleting());
+      return closeDeleteConfirmation();
+    }
+
+    toast.error(resp.message);
+    dispatch(categoriesReducers.togglePendingDeleting());
+  };
+
+  //------------------------------------------------------------------------------------
 
   return (
     <>
@@ -30,19 +75,23 @@ const EditModal: React.FC<TProps> = ({ categoriesData }) => {
         )}
         toggleClose={() => {
           dispatch(categoriesReducers.toggleShowEditCategory());
+          dispatch(categoriesReducers.setCategoryToEdit(null));
         }}
       />
 
       <ConfirmationModal
-        open
-        onClose={(open) => null}
-        title="Delete Category "
-        description="Arwe you sure you wanna delete the category"
-        primaryAction={() => null}
+        open={showDeleteCategoryConfirmation}
+        title="Delete Category"
+        description={`Are you sure you wanna delete the "${categoryToDeleteInfo?.name}" category`}
+        secondaryAction={closeDeleteConfirmation}
+        secondaryActionLabel="Cancel"
+        primaryAction={handleDelete}
         primaryActionLabel="Delete"
+        primaryActionPending={pendingDeleting}
+        color="error"
       />
     </>
   );
 };
 
-export default EditModal;
+export default CategoryActionModals;

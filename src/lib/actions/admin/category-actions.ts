@@ -1,10 +1,14 @@
 "use server";
 
-import { TCategoryData } from "@/sections/admin/categories/add-edit-category";
-import { CategorySchema } from "../schemas";
-import { db } from "@/drizzle/db";
-import { categories } from "@/drizzle/schema";
-import { and, eq, ne } from "drizzle-orm";
+import { TCategoryData } from "@/sections/admin/categories/add-edit-category-modal";
+import {
+  deleteCategoryById,
+  findCategoryById,
+  findCategoryByName,
+  insertCategory,
+  updateCategoryById,
+} from "@/lib/db-services/category";
+import { parseCatgoryData } from "@/lib/helpers/data-validation";
 
 //-----------------------------------------------------------------------------------------
 
@@ -14,54 +18,30 @@ import { and, eq, ne } from "drizzle-orm";
 
 export const createCategory = async (category: TCategoryData) => {
   try {
-    // validate the data using zod
-
-    const result = CategorySchema.safeParse(category);
-
     // create a resp obj
 
     const response = { success: false, message: "" };
 
-    // check for errors after parsing and give error resp
+    let parsedCategory: TCategoryData;
 
-    const errors = result.error?.errors;
-
-    if (errors) {
-      const firstError = errors[0].message;
-
-      const errorRespMessage =
-        firstError === "Required"
-          ? firstError + " - " + errors[0].path[0]
-          : firstError;
-
-      response.message = errorRespMessage;
+    try {
+      parsedCategory = await parseCatgoryData(category);
+    } catch (error: any) {
+      response.message = error.message;
       return response;
     }
-
-    // check for parsed data and error if data not found
-
-    const parsedCategory = result.data;
-
-    if (!parsedCategory) {
-      response.message = "Unexpected Error. Failed to Parse Data";
-      return response;
-    }
-
     // check a category with same name exist if return an error resp
 
-    const existingCategory = await db
-      .select()
-      .from(categories)
-      .where(eq(categories.name, parsedCategory.name));
+    const existingCategory = await findCategoryByName(parsedCategory.name);
 
-    if (existingCategory.length > 0) {
+    if (existingCategory?.length > 0) {
       response.message = `Category with name ${parsedCategory.name} already exist`;
       return response;
     }
 
     // insert the data to db if all checks are done
 
-    await db.insert(categories).values({
+    await insertCategory({
       ...parsedCategory,
       onOffer: parsedCategory.onOffer === "True",
       offerDiscount: Number(parsedCategory.offerDiscount),
@@ -94,62 +74,37 @@ export const createCategory = async (category: TCategoryData) => {
 
 export const EditCategory = async (id: string, category: TCategoryData) => {
   try {
-
-    // validate the data using zod
-
-    const result = CategorySchema.safeParse(category);
-
     // create a resp obj
 
     const response = { success: false, message: "" };
 
-    // check for errors after parsing and give error resp
+    let parsedCategory: TCategoryData;
 
-    const errors = result.error?.errors;
-
-    if (errors) {
-      const firstError = errors[0].message;
-
-      const errorRespMessage =
-        firstError === "Required"
-          ? firstError + " - " + errors[0].path[0]
-          : firstError;
-
-      response.message = errorRespMessage;
+    try {
+      parsedCategory = await parseCatgoryData(category);
+    } catch (error: any) {
+      response.message = error.message;
       return response;
     }
-
-    // check for parsed data and error if data not found
-
-    const parsedCategory = result.data;
-
-    if (!parsedCategory) {
-      response.message = "Unexpected Error. Failed to Parse Data";
-      return response;
-    }
-
     //check the category to edit exist
 
-    const existingCategory = await db
-      .select()
-      .from(categories)
-      .where(eq(categories.id, id));
+    const existingCategory = await findCategoryById(id);
 
     if (existingCategory.length <= 0) {
       response.message = ` ${parsedCategory.name} category not found `;
       return response;
     }
 
-    // check a category with same name exist if return an error resp
+    // check a category with same name exist and if it is not the category to edit return an error resp
 
-    const categoryWithMatchingName = await db
-      .select()
-      .from(categories)
-      .where(
-        and(eq(categories.name, parsedCategory.name), ne(categories.id, id)),
-      );
+    const categoryWithMatchingName = await findCategoryByName(
+      parsedCategory.name,
+    );
 
-    if (categoryWithMatchingName.length > 0) {
+    if (
+      categoryWithMatchingName.length > 0 &&
+      categoryWithMatchingName[0].id !== id
+    ) {
       response.message = `Category with name ${parsedCategory.name} already exist choose a different name`;
       return response;
     }
@@ -163,11 +118,7 @@ export const EditCategory = async (id: string, category: TCategoryData) => {
       offerDiscount: Number(parsedCategory.offerDiscount),
     };
 
-
-    await db
-    .update(categories)
-    .set(updatedCategory)
-    .where(eq(categories.id, id));
+    await updateCategoryById(id, updatedCategory);
 
     // if update success end success repsonse
 
@@ -176,6 +127,48 @@ export const EditCategory = async (id: string, category: TCategoryData) => {
 
     return response;
   } catch (error: any) {
+    console.log(error, "error");
+
+    return {
+      success: false,
+      message: "Sorry,Something went wrong. Please try again later.",
+      details: error.message,
+    };
+  }
+};
+
+//-----------------------------------------------------------------------------------------
+
+// server action to delete a category
+
+// todo - authenticate to protect server action
+
+export const deleteCategory = async (id: string) => {
+  try {
+    // create a resp obj
+
+    const response = { success: false, message: "" };
+
+    // check that the category exist
+
+    const existingCategory = await findCategoryById(id);
+
+    if (existingCategory.length <= 0) {
+      response.message = "Unexpected error ! Failed to find the category";
+      return response;
+    }
+
+    //  delete the category
+
+    await deleteCategoryById(id);
+
+    response.success = true;
+    response.message = "Successfully Deleted The Category";
+
+    return response;
+  } catch (error: any) {
+    // if any unexpected error occur return error resp
+
     console.log(error, "error");
 
     return {

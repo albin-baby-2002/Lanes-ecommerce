@@ -1,6 +1,6 @@
 import CustomInputField, { FormFieldType } from "@/components/custom-input";
 import { Form } from "@/components/ui/form";
-import { BillingAddressSchema } from "@/lib/schemas";
+import { BillingAddressSchema } from "@/lib/zod-schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";

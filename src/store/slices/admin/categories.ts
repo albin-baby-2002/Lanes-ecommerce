@@ -5,6 +5,7 @@ interface TIntialState {
   categoryToEdit: null | string;
   showDeleteCategoryConfirmation: boolean;
   categoryToDelete: null | string;
+  pendingDeleting: boolean;
 }
 
 const initialState: TIntialState = {
@@ -12,6 +13,7 @@ const initialState: TIntialState = {
   categoryToEdit: null,
   showDeleteCategoryConfirmation: false,
   categoryToDelete: null,
+  pendingDeleting: false,
 };
 
 const categoriesSlice = createSlice({
@@ -19,19 +21,21 @@ const categoriesSlice = createSlice({
   initialState: initialState,
   reducers: {
     toggleShowEditCategory: (state) => {
-      console.log("toggled");
       state.showEditCategory = !state.showEditCategory;
     },
-    setCategoryToEdit: (state, action: PayloadAction<string>) => {
+    setCategoryToEdit: (state, action: PayloadAction<string | null>) => {
       state.categoryToEdit = action.payload;
     },
     toggleDeleteCategoryConfirmation: (state) => {
-      console.log("toggled");
+      console.log("toggled", state.showDeleteCategoryConfirmation);
       state.showDeleteCategoryConfirmation =
         !state.showDeleteCategoryConfirmation;
     },
-    setCategoryToDelete: (state, action: PayloadAction<string>) => {
+    setCategoryToDelete: (state, action: PayloadAction<string | null>) => {
       state.categoryToDelete = action.payload;
+    },
+    togglePendingDeleting: (state) => {
+      state.pendingDeleting = !state.pendingDeleting;
     },
   },
 });

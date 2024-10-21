@@ -9,48 +9,65 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 //----------------------------------------------------------------------------
 
 interface TProps {
   open: boolean;
-  onClose: (open: boolean) => void;
   title: string;
   description: string;
   primaryActionLabel: string;
   secondaryActionLabel?: string;
   primaryAction: () => void;
   secondaryAction?: () => void;
+  color?: "error" | "success";
+  primaryActionPending?: boolean;
 }
 
 //----------------------------------------------------------------------------
 
 const ConfirmationModal: React.FC<TProps> = ({
   open,
-  onClose,
   title,
   description,
   primaryAction,
   primaryActionLabel,
   secondaryAction,
   secondaryActionLabel,
+  color,
+  primaryActionPending,
 }) => {
   return (
-    <AlertDialog open={open} onOpenChange={onClose}>
-      <AlertDialogContent>
+    <AlertDialog open={open}>
+      <AlertDialogContent className="max-w-md">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className="mt-2">
           {secondaryActionLabel && secondaryAction && (
             <AlertDialogCancel onClick={secondaryAction}>
               {secondaryActionLabel}
             </AlertDialogCancel>
           )}
-          <AlertDialogAction onClick={primaryAction}>
+          <AlertDialogAction
+            className={cn({
+              "bg-red-600": color === "error",
+            })}
+            onClick={primaryAction}
+          >
+            {primaryActionPending && (
+              <Image
+                height={24}
+                width={24}
+                className="mr-2"
+                alt="svg"
+                src={"/loaders/circular-loader.svg"}
+              />
+            )}
             {primaryActionLabel}
           </AlertDialogAction>
         </AlertDialogFooter>

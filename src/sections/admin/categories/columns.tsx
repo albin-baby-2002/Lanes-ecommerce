@@ -73,28 +73,31 @@ const ActionsCell = ({ row }: { row: Row<TColumns> }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const showEdit = () => {
-    dispatch(categoriesReducers.toggleShowEditCategory());
     dispatch(categoriesReducers.setCategoryToEdit(row.getValue("id")));
+    dispatch(categoriesReducers.toggleShowEditCategory());
   };
 
-  const showDeleteCategoryConfirmation = () => {};
+  const showDeleteCategoryConfirmation = () => {
+    dispatch(categoriesReducers.setCategoryToDelete(row.getValue("id")));
+    dispatch(categoriesReducers.toggleDeleteCategoryConfirmation());
+  };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center gap-4">
       <Button
         onClick={showEdit}
-        className="size-[26px] bg-black/10 hover:bg-black/15"
+        className="size-[26px] bg-black/10 text-black hover:bg-black/15 hover:text-green-600"
         size={"icon"}
       >
-        <MdEdit className="text-black" />
+        <MdEdit />
       </Button>
 
       <Button
         onClick={showDeleteCategoryConfirmation}
-        className="size-[26px] bg-black/10 hover:bg-black/15"
+        className="size-[26px] bg-black/10 text-black hover:bg-black/15 hover:text-red-600"
         size={"icon"}
       >
-        <FaTrashAlt className="text-black" />
+        <FaTrashAlt />
       </Button>
     </div>
   );
