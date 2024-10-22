@@ -9,7 +9,12 @@ import {
   updateCategoryById,
 } from "@/lib/db-services/category";
 import { parseCatgoryData } from "@/lib/helpers/data-validation";
+import { checkIsAdmin } from "../auth-actions";
 
+//-----------------------------------------------------------------------------------------
+
+const NOT_ADMIN_ERR_MESSAGE =
+  "You are not authorised to perform these operations";
 //-----------------------------------------------------------------------------------------
 
 // server action to create a new catgory on admin req
@@ -21,6 +26,16 @@ export const createCategory = async (category: TCategoryData) => {
     // create a resp obj
 
     const response = { success: false, message: "" };
+
+    // check is admin
+
+    const isAdmin = await checkIsAdmin();
+
+    if (!isAdmin) {
+      response.message = NOT_ADMIN_ERR_MESSAGE;
+
+      return response;
+    }
 
     let parsedCategory: TCategoryData;
 
@@ -78,6 +93,15 @@ export const EditCategory = async (id: string, category: TCategoryData) => {
 
     const response = { success: false, message: "" };
 
+    // check is admin
+
+    const isAdmin = await checkIsAdmin();
+
+    if (!isAdmin) {
+      response.message = NOT_ADMIN_ERR_MESSAGE;
+
+      return response;
+    }
     let parsedCategory: TCategoryData;
 
     try {
@@ -148,6 +172,16 @@ export const deleteCategory = async (id: string) => {
     // create a resp obj
 
     const response = { success: false, message: "" };
+
+    // check is admin
+
+    const isAdmin = await checkIsAdmin();
+
+    if (!isAdmin) {
+      response.message = NOT_ADMIN_ERR_MESSAGE;
+
+      return response;
+    }
 
     // check that the category exist
 

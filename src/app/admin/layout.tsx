@@ -5,9 +5,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <AdminLayout>
-      {children}
-    </AdminLayout>
-  );
+  return <AdminLayout>{children}</AdminLayout>;
 }

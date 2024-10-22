@@ -4,8 +4,6 @@ import { db } from "@/drizzle/db";
 import { categories } from "@/drizzle/schema";
 import { DataTable } from "@/components/table/data-table";
 import { cateogriesColumns } from "../columns";
-import EditModal from "../edit-modal";
-import ConfirmationModal from "@/components/ui/confirmation-modal";
 import CategoryActionModals from "../edit-modal";
 
 const CategoryView = async () => {
@@ -28,7 +26,6 @@ const CategoryView = async () => {
       </div>
 
       <CategoryActionModals categoriesData={categoriesData} />
-
     </div>
   );
 };
