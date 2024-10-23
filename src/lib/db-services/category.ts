@@ -10,7 +10,10 @@ export const findCategoryByName = async (name: string) => {
 };
 
 export const findCategoryById = async (id: string) => {
-  return await db.select().from(categories).where(eq(categories.id, id));
+  return await db
+    .select()
+    .from(categories)
+    .where(eq(categories.categoryId, id));
 };
 
 export const insertCategory = async (category: TCategory) => {
@@ -18,9 +21,12 @@ export const insertCategory = async (category: TCategory) => {
 };
 
 export const updateCategoryById = async (id: string, category: TCategory) => {
-  return await db.update(categories).set(category).where(eq(categories.id, id));
+  return await db
+    .update(categories)
+    .set(category)
+    .where(eq(categories.categoryId, id));
 };
 
 export const deleteCategoryById = async (id: string) => {
-  return await db.delete(categories).where(eq(categories.id, id));
+  return await db.delete(categories).where(eq(categories.categoryId, id));
 };
