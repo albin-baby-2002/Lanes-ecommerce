@@ -9,7 +9,8 @@ import { MdEdit } from "react-icons/md";
 import { useDispatch } from "react-redux";
 
 export type TColumns = {
-  categoryId: number;
+  categoryId:string;
+  categoryInternalId: number;
   name: string;
   description: string;
   onOffer: boolean;
@@ -19,15 +20,15 @@ export type TColumns = {
 
 export const cateogriesColumns: ColumnDef<TColumns>[] = [
   {
-    accessorKey: "id",
+    accessorKey: "categoryId",
     header: "ID",
     enableHiding: true,
   },
   {
-    accessorKey: "categoryId",
+    accessorKey: "categoryInternalId",
     header: "Id",
     cell: ({ row }) => {
-      return "#CAT" + row.getValue("categoryId");
+      return "#CAT" + row.getValue("categoryInternalId");
     },
   },
   {
@@ -73,12 +74,12 @@ const ActionsCell = ({ row }: { row: Row<TColumns> }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const showEdit = () => {
-    dispatch(categoriesReducers.setCategoryToEdit(row.getValue("id")));
+    dispatch(categoriesReducers.setCategoryToEdit(row.getValue("categoryInternalId")));
     dispatch(categoriesReducers.toggleShowEditCategory());
   };
 
   const showDeleteCategoryConfirmation = () => {
-    dispatch(categoriesReducers.setCategoryToDelete(row.getValue("id")));
+    dispatch(categoriesReducers.setCategoryToDelete(row.getValue("categoryInternalId")));
     dispatch(categoriesReducers.toggleDeleteCategoryConfirmation());
   };
 

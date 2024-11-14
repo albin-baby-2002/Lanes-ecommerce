@@ -57,6 +57,41 @@
       "when": 1729652718778,
       "tag": "0007_rename_user_id_col",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1731552257324,
+      "tag": "0008_gray_zeigeist",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1731552535542,
+      "tag": "0009_noisy_queen_noir",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1731552621978,
+      "tag": "0010_brave_prism",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1731552789498,
+      "tag": "0011_kind_sabra",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1731552942929,
+      "tag": "0012_petite_yellowjacket",
+      "breakpoints": true
     }
   ]
 }

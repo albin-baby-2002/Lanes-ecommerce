@@ -93,7 +93,7 @@ const AdminLayout: React.FC<TProps> = ({ children }) => {
 
         <div className="px-4">
           <p className="px-2 text-[15px] font-bold text-gray-400">MANAGEMENT</p>
-          <div className="mt-3">
+          <div className="mt-3 flex flex-col gap-1">
             {Links.map((link, idx) => (
               <NavItem key={idx} link={link} />
             ))}
@@ -101,7 +101,7 @@ const AdminLayout: React.FC<TProps> = ({ children }) => {
         </div>
         <div className="mt-4 px-4">
           <p className="px-2 text-[15px] font-bold text-gray-400">NAVIGATION</p>
-          <div className="mt-3">
+          <div className="mt-3 flex flex-col gap-1">
             {Navigation.map((link, idx) => (
               <NavItem key={idx} link={link} />
             ))}

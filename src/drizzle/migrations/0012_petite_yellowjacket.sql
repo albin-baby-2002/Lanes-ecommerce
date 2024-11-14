@@ -1,0 +1,1 @@
+ALTER TABLE "productVariants" RENAME COLUMN "onOffer" TO "onSale";

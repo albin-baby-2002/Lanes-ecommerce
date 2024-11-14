@@ -9,7 +9,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
-  userId: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("userId").defaultRandom().primaryKey(),
   kindeId: varchar({ length: 256 }).notNull().unique(),
   email: varchar({ length: 256 }).notNull().unique(),
   firstName: varchar({ length: 256 }),
@@ -19,7 +19,7 @@ export const users = pgTable("users", {
 });
 
 export const categories = pgTable("categories", {
-  categoryId: uuid("id").defaultRandom().primaryKey(),
+  categoryId: uuid("categoryId").defaultRandom().primaryKey(),
   categoryInternalId: integer("categoryInternalId")
     .generatedAlwaysAsIdentity({
       startWith: 1000,
@@ -36,7 +36,7 @@ export const categories = pgTable("categories", {
 });
 
 export const products = pgTable("products", {
-  productId: uuid("id").defaultRandom().primaryKey(),
+  productId: uuid("productId").defaultRandom().primaryKey(),
   productInternalId: integer("productInternalId")
     .generatedAlwaysAsIdentity({
       startWith: 1000,
@@ -70,7 +70,7 @@ export const productCategories = pgTable(
 );
 
 export const productVariants = pgTable("productVariants", {
-  productVariantId: uuid("id").defaultRandom().primaryKey(),
+  productVariantId: uuid("productVariantId").defaultRandom().primaryKey(),
   productVariantInternalId: integer("productVariantInternalId")
     .generatedAlwaysAsIdentity({
       startWith: 1000,
@@ -84,17 +84,19 @@ export const productVariants = pgTable("productVariants", {
   size: varchar({ length: 256 }).notNull(),
   inventoryCount: integer("inventoryCount").notNull().default(0),
   price: integer("price").notNull().default(0),
-  onSale: boolean("onOffer").default(false).notNull(),
+  onSale: boolean("onSale").default(false).notNull(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
 
 export const productVariantImages = pgTable("productVariantImages", {
-  productVariantImageId: uuid("id").defaultRandom().primaryKey(),
+  productVariantImageId: uuid("productVariantImageId").defaultRandom().primaryKey(),
   imgUrl: varchar({ length: 256 }).notNull(),
-  productId: uuid("productId")
+  productVariantId: uuid("productVariantId")
     .notNull()
-    .references(() => products.productId),
+    .references(() => productVariants.productVariantId),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
+
+

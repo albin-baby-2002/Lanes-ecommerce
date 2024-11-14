@@ -1,0 +1,1 @@
+ALTER TABLE "productVariantImages" RENAME COLUMN "id" TO "productVariantImageId";--> statement-breakpoint

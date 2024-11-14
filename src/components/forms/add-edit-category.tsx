@@ -26,8 +26,8 @@ const AddEditCategoryForm:React.FC<TProps> = ({
           control={form.control}
           fieldType={FormFieldType.INPUT}
           name="name"
-          placeholder="Enter Category Name"
-          label="Category Name"
+          placeholder="Enter Product Name"
+          label="Product Name"
         />
 
         <CustomInputField
@@ -42,9 +42,9 @@ const AddEditCategoryForm:React.FC<TProps> = ({
           <CustomInputField
             control={form.control}
             fieldType={FormFieldType.SELECT}
-            name="onOffer"
+            name="categories"
             placeholder="Select"
-            label="On Offer"
+            label="Categories"
           >
             {ON_DISCOUNT_OPTIONS.map((item) => (
               <SelectItem

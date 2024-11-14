@@ -21,7 +21,7 @@ const CategoryView = async () => {
         <DataTable
           columns={cateogriesColumns}
           data={categoriesData}
-          columnVisibility={{ id: false }}
+          columnVisibility={{ categoryId: false }}
         />
       </div>
 

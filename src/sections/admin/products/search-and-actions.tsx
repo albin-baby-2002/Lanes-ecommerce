@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { FaSearch } from "react-icons/fa";
+import AddOrEditProductModal from "./add-edit-product-modal";
 
 const SearchAndActions = () => {
   return (
@@ -14,6 +15,8 @@ const SearchAndActions = () => {
             placeholder="Search Categories "
           />
         </div>
+
+        <AddOrEditProductModal type="add" />
 
         <Button
           variant={"outline"}

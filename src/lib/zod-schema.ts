@@ -1,3 +1,4 @@
+import { categories, productVariantImages } from "@/drizzle/schema";
 import { z } from "zod";
 
 const validateDigits = (val: string) => {
@@ -83,3 +84,32 @@ export const CategorySchema = z.object({
       "Discount should be number greater than equal to 0",
     ),
 });
+
+export const ProductVariantSchema = z.object({
+  color: z.string().min(3, {
+    message: "Color must be atleast 3 char long.",
+  }),
+  size: z.string().min(1, {
+    message: "Size must be atleast 1 char long.",
+  }),
+  inventoryCount: z.number().default(0),
+  price: z.number().default(0),
+  onSale: z.boolean().default(false),
+  productVariantImages: z.array(z.string()).min(1, {
+    message: "There should be min 1 image",
+  }),
+});
+
+export const ProductSchema = z.object({
+  name: z.string().min(4, {
+    message: "Name must be atleast 4 char long.",
+  }),
+  description: z.string().min(8, {
+    message: "Description must be alteast 8 char long",
+  }),
+  categories: z
+    .array(z.number())
+    .min(1, "Atleast one category should be selected"),
+  productVariants: z.array(ProductVariantSchema),
+});
+
