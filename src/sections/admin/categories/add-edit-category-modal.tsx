@@ -22,7 +22,7 @@ import {
 import Image from "next/image";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { TCategory } from "./edit-modal";
+import { TCategory } from "./category-action-modals";
 
 //-----------------------------------------------------------------------------------
 
@@ -147,7 +147,7 @@ const AddOrEditCategoryModal: React.FC<TProps | TEditProps> = ({
             return toast.error("Unexpected error: category data not found");
           }
 
-          let resp = await EditCategory(categoryToEdit?.id, values);
+          let resp = await EditCategory(categoryToEdit?.categoryId, values);
 
           if (!resp.success) {
             setSubmitting(false);

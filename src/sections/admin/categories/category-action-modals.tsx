@@ -33,7 +33,7 @@ const CategoryActionModals: React.FC<TProps> = ({ categoriesData }) => {
   // data
 
   const categoryToDeleteInfo = useMemo(() => {
-    return categoriesData.find((cat) => cat.id === categoryToDelete);
+    return categoriesData.find((cat) => cat.categoryId === categoryToDelete);
   }, [categoryToDelete, categoriesData]);
 
   // fns
@@ -71,7 +71,7 @@ const CategoryActionModals: React.FC<TProps> = ({ categoriesData }) => {
         type="edit"
         open={showEditCategory}
         categoryToEdit={categoriesData.find(
-          (item) => item.id === categoryToEdit,
+          (item) => item.categoryId === categoryToEdit,
         )}
         toggleClose={() => {
           dispatch(categoriesReducers.toggleShowEditCategory());

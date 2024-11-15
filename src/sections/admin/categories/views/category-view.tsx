@@ -4,10 +4,11 @@ import { db } from "@/drizzle/db";
 import { categories } from "@/drizzle/schema";
 import { DataTable } from "@/components/table/data-table";
 import { cateogriesColumns } from "../columns";
-import CategoryActionModals from "../edit-modal";
+import { getAllCategories } from "@/lib/db-services/category";
+import CategoryActionModals from "../category-action-modals";
 
 const CategoryView = async () => {
-  const categoriesData = await db.select().from(categories);
+  const categoriesData = await getAllCategories();
 
   return (
     <div className="h-full bg-slate-50 p-8">

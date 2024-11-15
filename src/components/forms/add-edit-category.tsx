@@ -4,9 +4,8 @@ import CustomInputField, { FormFieldType } from "../custom-input";
 import { SelectItem } from "../ui/select";
 import { UseFormReturn } from "react-hook-form";
 
-
-interface TProps{
-  form:UseFormReturn<any>
+interface TProps {
+  form: UseFormReturn<any>;
 }
 
 const ON_DISCOUNT_OPTIONS = [
@@ -14,11 +13,7 @@ const ON_DISCOUNT_OPTIONS = [
   { label: "False", Value: "False" },
 ];
 
-const AddEditCategoryForm:React.FC<TProps> = ({
-  form
-}) => {
-
-
+const AddEditCategoryForm: React.FC<TProps> = ({ form }) => {
   return (
     <Form {...form}>
       <form className="grid w-full gap-4">

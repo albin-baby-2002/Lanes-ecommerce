@@ -16,7 +16,9 @@ const SearchAndActions = () => {
           />
         </div>
 
-        <AddOrEditProductModal type="add" />
+        <Button className="h-auto min-h-full rounded-md bg-black px-5 text-white">
+          Add Product
+        </Button>
 
         <Button
           variant={"outline"}

@@ -22,6 +22,9 @@ import {
 import Image from "next/image";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import AddEditProductForm from "@/components/forms/add-edit-product";
+import { getAllCategories } from "@/lib/db-services/category";
+import { categories } from "@/drizzle/schema";
 
 //-----------------------------------------------------------------------------------
 
@@ -63,6 +66,7 @@ const AddOrEditProductModal: React.FC<TProps | TEditProps> = ({
 }) => {
   //-----------------------------------------------------------------------------------
 
+
   const router = useRouter();
 
   //local states
@@ -74,7 +78,9 @@ const AddOrEditProductModal: React.FC<TProps | TEditProps> = ({
   const form = useForm<TProductData>({
     mode: "onChange",
     resolver: zodResolver(ProductSchema),
-    defaultValues: {},
+    defaultValues: {
+      categories: [],
+    },
   });
 
   //-----------------------------------------------------------------------------------
@@ -122,12 +128,12 @@ const AddOrEditProductModal: React.FC<TProps | TEditProps> = ({
       switch (type) {
         case "add": {
           // submit logic for adding new category
-          let resp = await createCategory(values);
+          // let resp = await createCategory(values);
 
-          if (!resp.success) {
-            setSubmitting(false);
-            return toast.error(resp.message);
-          }
+          // if (!resp.success) {
+          //   setSubmitting(false);
+          //   return toast.error(resp.message);
+          // }
 
           toast.success("Successfully Created Category");
           break;
@@ -186,7 +192,7 @@ const AddOrEditProductModal: React.FC<TProps | TEditProps> = ({
           <DialogTitle className="text-xl">{H1[type]}</DialogTitle>
         </DialogHeader>
         <div className="pt-2">
-          <AddEditCategoryForm form={form} />
+          <AddEditProductForm form={form} />
         </div>
 
         <DialogFooter>

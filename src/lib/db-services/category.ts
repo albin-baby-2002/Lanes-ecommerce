@@ -1,9 +1,13 @@
 "use server";
 import { db } from "@/drizzle/db";
 import { categories } from "@/drizzle/schema";
-import { eq } from "drizzle-orm";
+import { Column, eq,  Table } from "drizzle-orm";
 
 type TCategory = typeof categories.$inferInsert;
+
+export const getAllCategories = async (filter:SelectedFields) => {
+  return await db.select(filter).from(categories);
+};
 
 export const findCategoryByName = async (name: string) => {
   return await db.select().from(categories).where(eq(categories.name, name));

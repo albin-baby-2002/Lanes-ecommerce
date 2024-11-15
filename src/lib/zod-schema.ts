@@ -108,8 +108,8 @@ export const ProductSchema = z.object({
     message: "Description must be alteast 8 char long",
   }),
   categories: z
-    .array(z.number())
-    .min(1, "Atleast one category should be selected"),
+    .array(z.string())
+    .min(1, "Select a category "),
   productVariants: z.array(ProductVariantSchema),
 });
 

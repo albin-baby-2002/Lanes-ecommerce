@@ -9,8 +9,15 @@ import {
   productVariants,
 } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
+import { getAllCategories } from "@/lib/db-services/category";
 
 const ProductsView = async () => {
+
+  const categoriesOptions = await getAllCategories({
+    name: categories.name,
+    value: categories.categoryId,
+  });
+
   const productsData = await db
     .select()
     .from(products)
