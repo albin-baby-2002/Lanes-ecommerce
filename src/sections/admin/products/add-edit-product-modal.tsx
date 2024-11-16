@@ -28,19 +28,10 @@ import { categories } from "@/drizzle/schema";
 
 //-----------------------------------------------------------------------------------
 
-// optional types are not needed for "add" and adding it might cause some bug
-// those are added to avoid conflict
-
 interface TProps {
-  type: "add";
-  open?: boolean;
-  toggleClose?: () => void;
-}
-
-interface TEditProps {
-  type: "edit";
+  type: "add" | "edit";
   open: boolean;
-  toggleClose: () => void; // to close when trigger is not used
+  toggleClose: () => void;
 }
 
 export type TProductData = z.infer<typeof ProductSchema>;
@@ -59,13 +50,12 @@ const H1 = {
 
 //-----------------------------------------------------------------------------------
 
-const AddOrEditProductModal: React.FC<TProps | TEditProps> = ({
+const AddOrEditProductModal: React.FC<TProps> = ({
   type,
   open = false,
   toggleClose,
 }) => {
   //-----------------------------------------------------------------------------------
-
 
   const router = useRouter();
 
@@ -88,9 +78,7 @@ const AddOrEditProductModal: React.FC<TProps | TEditProps> = ({
   // useEffect to set show based on open if modal don't have trigger
 
   useEffect(() => {
-    if (open !== undefined) {
-      setShow(open);
-    }
+    setShow(open);
   }, [open]);
 
   // useEffect to set the initial state for edit modal
@@ -113,10 +101,8 @@ const AddOrEditProductModal: React.FC<TProps | TEditProps> = ({
   // fn to toggle based on the modal have trigger or not
 
   const toggleShow = () => {
-    if (type == "edit" && toggleClose) {
-      toggleClose();
-      return;
-    }
+    toggleClose();
+
     setShow((prev) => !prev);
   };
 
@@ -182,11 +168,12 @@ const AddOrEditProductModal: React.FC<TProps | TEditProps> = ({
       open={show}
       onOpenChange={type === "edit" ? toggleClose : toggleShow}
     >
-      {type === "add" && (
+      {false && type === "add" && (
         <DialogTrigger className="h-auto min-h-full rounded-md bg-black px-5 text-white">
           {LABELS[type]}
         </DialogTrigger>
       )}
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-xl">{H1[type]}</DialogTitle>

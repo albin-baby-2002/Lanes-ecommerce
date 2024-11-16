@@ -9,12 +9,16 @@ import {
   productVariants,
 } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
-import { getAllCategories } from "@/lib/db-services/category";
+import {
+  getAllCategories,
+  getAllCategoriesWithSpecificFields,
+} from "@/lib/db-services/category";
+import ProductActionsModals from "../products-action-modals";
 
 const ProductsView = async () => {
 
-  const categoriesOptions = await getAllCategories({
-    name: categories.name,
+  const categoriesOptions = await getAllCategoriesWithSpecificFields({
+    label: categories.name,
     value: categories.categoryId,
   });
 
@@ -45,8 +49,11 @@ const ProductsView = async () => {
     <div className="h-full bg-slate-50 p-8">
       <div className="mb-8">
         <p className="font-Inter text-2xl font-bold">Products</p>
-      </div>{" "}
-      <SearchAndActions />{" "}
+      </div>
+
+      <SearchAndActions />
+
+      <ProductActionsModals  categoryOptions={categoriesOptions}/>
     </div>
   );
 };

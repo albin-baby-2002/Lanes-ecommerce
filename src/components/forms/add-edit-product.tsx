@@ -1,18 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form } from "../ui/form";
 import CustomInputField, { FormFieldType } from "../custom-input";
 import { UseFormReturn } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
 
 interface TProps {
   form: UseFormReturn<any>;
 }
 
-const ON_DISCOUNT_OPTIONS = [
-  { label: "True", value: "True" },
-  { label: "False", value: "False" },
-];
-
 const AddEditProductForm: React.FC<TProps> = ({ form }) => {
+
+  // redux states and hooks
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { categoryOptions } = useSelector((state: RootState) => state.products);
+
   return (
     <Form {...form}>
       <form className="grid w-full gap-4">
@@ -33,10 +37,10 @@ const AddEditProductForm: React.FC<TProps> = ({ form }) => {
         />
 
         <div className="flex gap-3">
-          <CustomInputField
+          <CustomInputField<string>
             control={form.control}
             fieldType={FormFieldType.MULTI_SELECT}
-            options={ON_DISCOUNT_OPTIONS}
+            options={categoryOptions}
             name="categories"
             placeholder="Select Category"
             label="Categories"

@@ -1,10 +1,13 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import { FaSearch } from "react-icons/fa";
-import AddOrEditProductModal from "./add-edit-product-modal";
+import { AppDispatch } from "@/store/store";
+import { useDispatch } from "react-redux";
+import { productsReducers } from "@/store/slices/admin/products";
 
 const SearchAndActions = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
   return (
     <>
       <div className="flex justify-between gap-6">
@@ -16,7 +19,12 @@ const SearchAndActions = () => {
           />
         </div>
 
-        <Button className="h-auto min-h-full rounded-md bg-black px-5 text-white">
+        <Button
+          onClick={() => {
+            dispatch(productsReducers.toggleShowAddProduct());
+          }}
+          className="h-auto min-h-full rounded-md bg-black px-5 text-white"
+        >
           Add Product
         </Button>
 

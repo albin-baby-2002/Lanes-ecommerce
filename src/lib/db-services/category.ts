@@ -5,7 +5,12 @@ import { Column, eq,  Table } from "drizzle-orm";
 
 type TCategory = typeof categories.$inferInsert;
 
-export const getAllCategories = async (filter:SelectedFields) => {
+export const getAllCategories = async () => {
+  return await db.select().from(categories);
+};
+
+
+export const getAllCategoriesWithSpecificFields = async (filter?:SelectedFields) => {
   return await db.select(filter).from(categories);
 };
 

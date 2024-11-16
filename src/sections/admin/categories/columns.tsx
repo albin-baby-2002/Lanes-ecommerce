@@ -9,7 +9,7 @@ import { MdEdit } from "react-icons/md";
 import { useDispatch } from "react-redux";
 
 export type TColumns = {
-  categoryId:string;
+  categoryId: string;
   categoryInternalId: number;
   name: string;
   description: string;
@@ -74,12 +74,19 @@ const ActionsCell = ({ row }: { row: Row<TColumns> }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const showEdit = () => {
-    dispatch(categoriesReducers.setCategoryToEdit(row.getValue("categoryInternalId")));
+    dispatch(
+      categoriesReducers.setCategoryToEdit(row.getValue("categoryId")),
+    );
     dispatch(categoriesReducers.toggleShowEditCategory());
   };
 
   const showDeleteCategoryConfirmation = () => {
-    dispatch(categoriesReducers.setCategoryToDelete(row.getValue("categoryInternalId")));
+    console.log(row.getValue("categoryId"))
+    dispatch(
+      categoriesReducers.setCategoryToDelete(
+        row.getValue("categoryId"),
+      ),
+    );
     dispatch(categoriesReducers.toggleDeleteCategoryConfirmation());
   };
 
