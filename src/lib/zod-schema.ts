@@ -94,7 +94,7 @@ export const ProductVariantSchema = z.object({
   }),
   inventoryCount: z.number().default(0),
   price: z.number().default(0),
-  onSale: z.boolean().default(false),
+  onSale: z.enum(["True", "False"]),
   productVariantImages: z.array(z.string()).min(1, {
     message: "There should be min 1 image",
   }),
@@ -107,9 +107,8 @@ export const ProductSchema = z.object({
   description: z.string().min(8, {
     message: "Description must be alteast 8 char long",
   }),
-  categories: z
-    .array(z.string())
-    .min(1, "Select a category "),
+  categories: z.array(z.string()).min(1, "Select a category "),
+  discount: z.number().default(0),
+  onDiscount: z.enum(["True", "False"]),
   productVariants: z.array(ProductVariantSchema),
 });
-

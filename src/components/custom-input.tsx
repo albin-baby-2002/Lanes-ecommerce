@@ -53,6 +53,7 @@ interface TCustomFormFieldProps<T> {
   showTimeSelect?: boolean;
   options?: { label: string; value: T }[] | null;
   children?: React.ReactNode;
+  dataType?: "text" | "number"; // for input field
   renderSkeleton?: (
     field: ControllerRenderProps<any, string>,
   ) => React.ReactNode;
@@ -85,6 +86,13 @@ const RenderField = <T,>({
             <Input
               placeholder={props.placeholder}
               {...field}
+              onChange={(e) => {
+                if (props.dataType === "number") {
+                  field.onChange(Number(e.target.value) || 0);
+                  return;
+                }
+                field.onChange(e.target.value);
+              }}
               className="shad-input border-0"
             />
           </FormControl>

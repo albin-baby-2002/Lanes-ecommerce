@@ -45,6 +45,8 @@ export const products = pgTable("products", {
     .unique(),
   name: varchar({ length: 256 }).notNull().unique(),
   description: varchar({ length: 256 }).notNull(),
+  discount: integer("discount").default(0),
+  onDiscount: boolean("onDiscount").default(false),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
@@ -90,7 +92,9 @@ export const productVariants = pgTable("productVariants", {
 });
 
 export const productVariantImages = pgTable("productVariantImages", {
-  productVariantImageId: uuid("productVariantImageId").defaultRandom().primaryKey(),
+  productVariantImageId: uuid("productVariantImageId")
+    .defaultRandom()
+    .primaryKey(),
   imgUrl: varchar({ length: 256 }).notNull(),
   productVariantId: uuid("productVariantId")
     .notNull()
@@ -98,5 +102,3 @@ export const productVariantImages = pgTable("productVariantImages", {
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
-
-

@@ -9,22 +9,16 @@ import {
 } from "@/components/ui/dialog";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
-import { CategorySchema, ProductSchema } from "@/lib/zod-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import AddEditCategoryForm from "@/components/forms/add-edit-category";
 import { useFormStatus } from "react-dom";
-import {
-  createCategory,
-  EditCategory,
-} from "@/lib/actions/admin/category-actions";
 import Image from "next/image";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import AddEditProductForm from "@/components/forms/add-edit-product";
-import { getAllCategories } from "@/lib/db-services/category";
-import { categories } from "@/drizzle/schema";
+import { ProductSchema } from "@/lib/zod-schema";
+import { cn } from "@/lib/utils";
 
 //-----------------------------------------------------------------------------------
 
@@ -63,6 +57,10 @@ const AddOrEditProductModal: React.FC<TProps> = ({
 
   const [show, setShow] = useState(open);
   const [submitting, setSubmitting] = useState(false);
+
+  const [page, setPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
+
   const { pending } = useFormStatus();
 
   const form = useForm<TProductData>({
@@ -70,7 +68,33 @@ const AddOrEditProductModal: React.FC<TProps> = ({
     resolver: zodResolver(ProductSchema),
     defaultValues: {
       categories: [],
+      productVariants: [
+        {
+          color: "",
+          size: "",
+          inventoryCount: 0,
+          price: 0,
+          onSale: "False",
+          productVariantImages: [],
+        },
+      ],
     },
+  });
+
+  const values = form.watch();
+
+  useEffect(() => {
+    console.log(values);
+    setTotalPage(values.productVariants.length);
+  }, [values]);
+
+  const {
+    fields: productVariantFields,
+    append,
+    remove,
+  } = useFieldArray({
+    control: form.control,
+    name: "productVariants",
   });
 
   //-----------------------------------------------------------------------------------
@@ -179,23 +203,41 @@ const AddOrEditProductModal: React.FC<TProps> = ({
           <DialogTitle className="text-xl">{H1[type]}</DialogTitle>
         </DialogHeader>
         <div className="pt-2">
-          <AddEditProductForm form={form} />
+          <AddEditProductForm
+            productVariantFields={productVariantFields}
+            form={form}
+          />
         </div>
 
         <DialogFooter>
-          <div className="mt-2 w-full">
-            <Button onClick={form.handleSubmit(onSubmit)} className="">
-              {(submitting || pending) && (
-                <Image
-                  height={24}
-                  width={24}
-                  className="mr-2"
-                  alt="svg"
-                  src={"/loaders/circular-loader.svg"}
-                />
-              )}
-              {LABELS[type]}
-            </Button>
+          <div className={cn("mt-2 flex w-full justify-between",{
+            "justify-end":page ===0
+          })}>
+            {page > 0 && (
+              <Button
+                variant={"outline"}
+                // onClick={form.handleSubmit(onSubmit)}
+                className=""
+              >
+                Previous
+              </Button>
+            )}
+            {page === totalPage ? (
+              <Button onClick={form.handleSubmit(onSubmit)} className="">
+                {(submitting || pending) && (
+                  <Image
+                    height={24}
+                    width={24}
+                    className="mr-2"
+                    alt="svg"
+                    src={"/loaders/circular-loader.svg"}
+                  />
+                )}
+                {LABELS[type]}
+              </Button>
+            ) : (
+              <Button className="">Next</Button>
+            )}
           </div>
         </DialogFooter>
       </DialogContent>

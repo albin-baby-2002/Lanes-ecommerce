@@ -8,7 +8,7 @@ interface TProps {
   form: UseFormReturn<any>;
 }
 
-const ON_DISCOUNT_OPTIONS = [
+export const ON_DISCOUNT_OPTIONS = [
   { label: "True", Value: "True" },
   { label: "False", Value: "False" },
 ];
@@ -37,9 +37,9 @@ const AddEditCategoryForm: React.FC<TProps> = ({ form }) => {
           <CustomInputField
             control={form.control}
             fieldType={FormFieldType.SELECT}
-            name="categories"
+            name="onOffer"
             placeholder="Select"
-            label="Categories"
+            label="On Offer"
           >
             {ON_DISCOUNT_OPTIONS.map((item) => (
               <SelectItem
