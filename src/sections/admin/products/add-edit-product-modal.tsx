@@ -83,6 +83,16 @@ const AddOrEditProductModal: React.FC<TProps> = ({
 
   const values = form.watch();
 
+  const goBack = () => {
+    if (page <= 0) return;
+    setPage((prev) => prev - 1);
+  };
+
+  const goNext = () => {
+    if (page >= totalPage) return;
+    setPage((prev) => prev + 1);
+  };
+
   useEffect(() => {
     console.log(values);
     setTotalPage(values.productVariants.length);
@@ -189,6 +199,7 @@ const AddOrEditProductModal: React.FC<TProps> = ({
 
   return (
     <Dialog
+
       open={show}
       onOpenChange={type === "edit" ? toggleClose : toggleShow}
     >
@@ -198,30 +209,30 @@ const AddOrEditProductModal: React.FC<TProps> = ({
         </DialogTrigger>
       )}
 
-      <DialogContent>
+      <DialogContent className=" max-w-[650px]">
         <DialogHeader>
           <DialogTitle className="text-xl">{H1[type]}</DialogTitle>
         </DialogHeader>
-        <div className="pt-2">
+        <div className=" px-2  overflow-hidden overflow-y-auto pt-2">
           <AddEditProductForm
             productVariantFields={productVariantFields}
+            currentPage={page}
             form={form}
           />
         </div>
 
         <DialogFooter>
-          <div className={cn("mt-2 flex w-full justify-between",{
-            "justify-end":page ===0
-          })}>
+          <div
+            className={cn("mt-2 flex w-full justify-between", {
+              "justify-end": page === 0,
+            })}
+          >
             {page > 0 && (
-              <Button
-                variant={"outline"}
-                // onClick={form.handleSubmit(onSubmit)}
-                className=""
-              >
+              <Button variant={"outline"} onClick={goBack}>
                 Previous
               </Button>
             )}
+
             {page === totalPage ? (
               <Button onClick={form.handleSubmit(onSubmit)} className="">
                 {(submitting || pending) && (
@@ -236,7 +247,7 @@ const AddOrEditProductModal: React.FC<TProps> = ({
                 {LABELS[type]}
               </Button>
             ) : (
-              <Button className="">Next</Button>
+              <Button onClick={goNext}>Next</Button>
             )}
           </div>
         </DialogFooter>

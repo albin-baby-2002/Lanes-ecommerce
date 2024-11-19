@@ -5,6 +5,7 @@ import { integral_cf, satoshi } from "@/lib/fonts";
 import { Inter, Sen } from "next/font/google";
 import { Toaster } from "sonner";
 import ProviderLayout from "@/store/providerLayout";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Lanes",
@@ -31,6 +32,10 @@ export default function RootLayout({
       >
         <ProviderLayout>{children}</ProviderLayout>
         <Toaster />
+        <Script
+          type="text/javascript"
+          src="https://upload-widget.cloudinary.com/latest/global/all.js"
+        />
       </body>
     </html>
   );
