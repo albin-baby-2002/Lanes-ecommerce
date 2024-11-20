@@ -15,7 +15,14 @@ import { AppDispatch, RootState } from "@/store/store";
 import { ON_DISCOUNT_OPTIONS } from "./add-edit-category";
 import { SelectItem } from "../ui/select";
 import { Input } from "../ui/input";
-import FileUploader from "../file-uploader";
+import ileUploader from "../image-uploader";
+import { LuPlus } from "react-icons/lu";
+import { TbCameraPlus } from "react-icons/tb";
+import { FaPlus } from "react-icons/fa";
+import ImageUploader from "../image-uploader";
+import { TProductData } from "@/sections/admin/products/add-edit-product-modal";
+import { productVariantImages } from "@/drizzle/schema";
+import { productsReducers } from "@/store/slices/admin/products";
 
 interface TProps {
   form: UseFormReturn<any>;
@@ -136,8 +143,55 @@ const ProductVariant = ({
   form,
 }: {
   currentPage: number;
-  form: UseFormReturn<any>;
+  form: UseFormReturn<TProductData>;
 }) => {
+  const values = form.watch();
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleImage = (
+    type: "add" | "delete",
+    image?: string,
+    imageIdx?: number,
+  ) => {
+    const productVariants = values.productVariants;
+    const currentVariant = productVariants[currentPage - 1];
+
+    let updatedImages;
+
+    if (type === "delete" && imageIdx) {
+      updatedImages =
+        currentVariant?.productVariantImages?.filter(
+          (val, idx) => idx !== imageIdx,
+        ) || [];
+    } else if (type === "add") {
+      if (image && imageIdx !== undefined) {
+        updatedImages = currentVariant?.productVariantImages?.map(
+          (val, idx) => {
+            return idx === imageIdx ? image : val;
+          },
+        );
+      } else {
+        updatedImages = [...currentVariant.productVariantImages, ""];
+      }
+    }
+
+    const updatedVariant = {
+      ...currentVariant,
+      productVariantImages: updatedImages || [],
+    };
+
+    const updatedVariants = productVariants.map((val, idx) => {
+      return idx === currentPage - 1 ? updatedVariant : val;
+    });
+
+    form.setValue("productVariants", updatedVariants);
+
+    if (image) {
+      dispatch(productsReducers.toggleShowAddProduct());
+    }
+  };
+
   return (
     <>
       <div className="mb-4 font-medium">Base Variant Details</div>
@@ -201,7 +255,42 @@ const ProductVariant = ({
         </CustomInputField>
       </div>
 
-      <FileUploader />
+      <div className="text-[15px] text-black/80">Product Images</div>
+
+      <div className="grid grid-cols-3 gap-y-4 gap-2">
+        {values?.productVariants?.[currentPage - 1].productVariantImages?.map(
+          (img, idx) => {
+            return (
+              <ImageUploader
+                key={idx}
+                imageUrl={img}
+                handleDelete={() => {
+                  handleImage("delete", "", idx);
+                }}
+                onSuccessfullUpload={(image) => handleImage("add", image, idx)}
+                toggleModal={() =>
+                  dispatch(productsReducers.toggleShowAddProduct())
+                }
+              />
+            );
+          },
+        )}
+
+        <AddImage onClick={() => handleImage("add")} />
+      </div>
     </>
+  );
+};
+
+const AddImage = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <div
+      onClick={onClick}
+      className={`relative h-[185px] w-[135px] cursor-pointer rounded-[4px] border-[1px] border-input`}
+    >
+      <div className="flex h-full w-full items-center justify-center">
+        <LuPlus className="cursor-pointer text-4xl text-gray-400" />
+      </div>
+    </div>
   );
 };

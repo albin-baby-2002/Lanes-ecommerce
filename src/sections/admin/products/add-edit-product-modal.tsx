@@ -209,11 +209,11 @@ const AddOrEditProductModal: React.FC<TProps> = ({
         </DialogTrigger>
       )}
 
-      <DialogContent className=" max-w-[650px]">
+      <DialogContent className=" max-w-[600px]">
         <DialogHeader>
           <DialogTitle className="text-xl">{H1[type]}</DialogTitle>
         </DialogHeader>
-        <div className=" px-2  overflow-hidden overflow-y-auto pt-2">
+        <div className=" px-2  max-h-[500px] overflow-hidden overflow-y-auto pt-2">
           <AddEditProductForm
             productVariantFields={productVariantFields}
             currentPage={page}
