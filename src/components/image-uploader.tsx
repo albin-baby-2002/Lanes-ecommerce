@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { FaTrashCan } from "react-icons/fa6";
 import { TbCameraPlus } from "react-icons/tb";
@@ -59,12 +60,14 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
     >
       {imageUrl ? (
         <>
-          <img
-            className="h-full w-full object-cover"
-            src={` https://res.cloudinary.com/dfm8vhuea/image/upload/${imageUrl}`}
-            alt=""
-          />
-
+          <div className="relative h-full w-full">
+            <Image
+              fill
+              className="h-full w-full object-cover"
+              src={` https://res.cloudinary.com/dfm8vhuea/image/upload/${imageUrl}`}
+              alt=""
+            />
+          </div>
           <div
             onClick={handleDelete}
             className="absolute right-2 top-2 cursor-pointer rounded-lg bg-black px-[6px] py-[6px] text-white"

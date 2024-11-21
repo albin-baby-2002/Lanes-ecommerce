@@ -5,7 +5,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -63,6 +62,8 @@ const AddOrEditProductModal: React.FC<TProps> = ({
 
   const { pending } = useFormStatus();
 
+  // react-hook form
+
   const form = useForm<TProductData>({
     mode: "onChange",
     resolver: zodResolver(ProductSchema),
@@ -81,7 +82,11 @@ const AddOrEditProductModal: React.FC<TProps> = ({
     },
   });
 
+  // watch value of form
+
   const values = form.watch();
+
+  // navigation fns
 
   const goBack = () => {
     if (page <= 0) return;
@@ -94,15 +99,10 @@ const AddOrEditProductModal: React.FC<TProps> = ({
   };
 
   useEffect(() => {
-    console.log(values);
     setTotalPage(values.productVariants.length);
   }, [values]);
 
-  const {
-    fields: productVariantFields,
-    append,
-    remove,
-  } = useFieldArray({
+  const productVariantFields = useFieldArray({
     control: form.control,
     name: "productVariants",
   });
@@ -115,24 +115,9 @@ const AddOrEditProductModal: React.FC<TProps> = ({
     setShow(open);
   }, [open]);
 
-  // useEffect to set the initial state for edit modal
-
-  // useEffect(() => {
-  //   if (categoryToEdit && type === "edit") {
-  //     const existingCategory: TCategoryData = {
-  //       name: categoryToEdit.name,
-  //       description: categoryToEdit.description,
-  //       onOffer: categoryToEdit.onOffer ? "True" : "False",
-  //       offerName: categoryToEdit.offerName,
-  //       offerDiscount: categoryToEdit.offerDiscount + "",
-  //     };
-  //     form.reset(existingCategory);
-  //   }
-  // }, [categoryToEdit, type, form]);
-
   //-----------------------------------------------------------------------------------
 
-  // fn to toggle based on the modal have trigger or not
+  // fn to toggle  the modal
 
   const toggleShow = () => {
     toggleClose();
@@ -199,27 +184,28 @@ const AddOrEditProductModal: React.FC<TProps> = ({
 
   return (
     <Dialog
-
       open={show}
       onOpenChange={type === "edit" ? toggleClose : toggleShow}
     >
-      {false && type === "add" && (
-        <DialogTrigger className="h-auto min-h-full rounded-md bg-black px-5 text-white">
-          {LABELS[type]}
-        </DialogTrigger>
-      )}
+      <DialogContent className="max-w-[600px]">
+        {/* header */}
 
-      <DialogContent className=" max-w-[600px]">
         <DialogHeader>
           <DialogTitle className="text-xl">{H1[type]}</DialogTitle>
         </DialogHeader>
-        <div className=" px-2  max-h-[500px] overflow-hidden overflow-y-auto pt-2">
+
+        {/* form */}
+
+        <div className="max-h-[600px] overflow-hidden overflow-y-auto px-2 pt-2">
           <AddEditProductForm
             productVariantFields={productVariantFields}
             currentPage={page}
+            setCurrentPage={setPage}
             form={form}
           />
         </div>
+
+        {/* footer with actions */}
 
         <DialogFooter>
           <div
@@ -227,28 +213,32 @@ const AddOrEditProductModal: React.FC<TProps> = ({
               "justify-end": page === 0,
             })}
           >
+            {/* previous btn */}
+
             {page > 0 && (
               <Button variant={"outline"} onClick={goBack}>
                 Previous
               </Button>
             )}
 
-            {page === totalPage ? (
-              <Button onClick={form.handleSubmit(onSubmit)} className="">
-                {(submitting || pending) && (
-                  <Image
-                    height={24}
-                    width={24}
-                    className="mr-2"
-                    alt="svg"
-                    src={"/loaders/circular-loader.svg"}
-                  />
-                )}
-                {LABELS[type]}
-              </Button>
-            ) : (
-              <Button onClick={goNext}>Next</Button>
-            )}
+            <div className="flex gap-2">
+              {page === totalPage ? (
+                <Button onClick={form.handleSubmit(onSubmit)} className="">
+                  {(submitting || pending) && (
+                    <Image
+                      height={24}
+                      width={24}
+                      className="mr-2"
+                      alt="svg"
+                      src={"/loaders/circular-loader.svg"}
+                    />
+                  )}
+                  {LABELS[type]}
+                </Button>
+              ) : (
+                <Button onClick={goNext}>Continue</Button>
+              )}
+            </div>
           </div>
         </DialogFooter>
       </DialogContent>

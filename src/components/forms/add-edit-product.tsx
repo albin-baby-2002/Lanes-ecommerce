@@ -1,45 +1,38 @@
-import React, { useEffect } from "react";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import React from "react";
+import { Form } from "../ui/form";
 import CustomInputField, { FormFieldType } from "../custom-input";
-import { FieldArrayWithId, UseFormReturn } from "react-hook-form";
+import { UseFieldArrayReturn, UseFormReturn } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { ON_DISCOUNT_OPTIONS } from "./add-edit-category";
 import { SelectItem } from "../ui/select";
-import { Input } from "../ui/input";
-import ileUploader from "../image-uploader";
 import { LuPlus } from "react-icons/lu";
-import { TbCameraPlus } from "react-icons/tb";
-import { FaPlus } from "react-icons/fa";
 import ImageUploader from "../image-uploader";
 import { TProductData } from "@/sections/admin/products/add-edit-product-modal";
-import { productVariantImages } from "@/drizzle/schema";
 import { productsReducers } from "@/store/slices/admin/products";
+import { MdAdd } from "react-icons/md";
+import { Button } from "../ui/button";
+import { FaRegTrashCan } from "react-icons/fa6";
+
+//----------------------------------------------------------------------------------------------------
 
 interface TProps {
   form: UseFormReturn<any>;
   productVariantFields: TProductVariantField;
   currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-type TProductVariantField = FieldArrayWithId<
+type TProductVariantField = UseFieldArrayReturn<
   {
-    categories: string[];
-    description: string;
     name: string;
+    description: string;
+    categories: string[];
     discount: number;
     onDiscount: "True" | "False";
     productVariants: {
-      size: string;
       color: string;
+      size: string;
       inventoryCount: number;
       price: number;
       onSale: "True" | "False";
@@ -48,22 +41,41 @@ type TProductVariantField = FieldArrayWithId<
   },
   "productVariants",
   "id"
->[];
+>;
+
+//----------------------------------------------------------------------------------------------------
 
 const AddEditProductForm: React.FC<TProps> = ({
   form,
   productVariantFields,
   currentPage,
+  setCurrentPage,
 }) => {
   // redux states and hooks
 
-  const dispatch = useDispatch<AppDispatch>();
-
   const { categoryOptions } = useSelector((state: RootState) => state.products);
 
-  useEffect(() => {
-    console.log(productVariantFields, "prdvar");
-  }, [productVariantFields]);
+  const HandleVariant = (type: "add" | "delete") => {
+    // add a new variant
+
+    if (type === "add") {
+      return productVariantFields.append({
+        color: "",
+        inventoryCount: 0,
+        onSale: "False",
+        price: 0,
+        productVariantImages: [],
+        size: "",
+      });
+    }
+
+    if (type === "delete") {
+      productVariantFields.remove(currentPage - 1);
+      return setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  //----------------------------------------------------------------------------------------------------
 
   return (
     <Form {...form}>
@@ -128,8 +140,14 @@ const AddEditProductForm: React.FC<TProps> = ({
           </>
         )}
 
+        {/*  product variant form  */}
+
         {currentPage >= 1 && (
-          <ProductVariant form={form} currentPage={currentPage} />
+          <ProductVariant
+            HandleVariant={HandleVariant}
+            form={form}
+            currentPage={currentPage}
+          />
         )}
       </form>
     </Form>
@@ -138,64 +156,107 @@ const AddEditProductForm: React.FC<TProps> = ({
 
 export default AddEditProductForm;
 
+//----------------------------------------------------------------------------------------------------
+
+interface HandleImageParams {
+  type: "add" | "delete";
+  image?: string;
+  imageIdx?: number;
+}
+
+interface TProductVariantProps {
+  currentPage: number;
+  HandleVariant: (type: "add" | "delete") => void;
+  form: UseFormReturn<TProductData>;
+}
+
+//----------------------------------------------------------------------------------------------------
+
 const ProductVariant = ({
   currentPage,
   form,
-}: {
-  currentPage: number;
-  form: UseFormReturn<TProductData>;
-}) => {
+  HandleVariant,
+}: TProductVariantProps) => {
+  // react hooks
+
   const values = form.watch();
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleImage = (
-    type: "add" | "delete",
-    image?: string,
-    imageIdx?: number,
-  ) => {
-    const productVariants = values.productVariants;
+  const productVariants = values.productVariants;
+
+  //----------------------------------------------------------------------------------------------------
+
+  // fn to handle image add or delete
+
+  const handleImage = ({ type, image, imageIdx }: HandleImageParams) => {
     const currentVariant = productVariants[currentPage - 1];
 
-    let updatedImages;
+    if (!currentVariant) return;
 
-    if (type === "delete" && imageIdx) {
-      updatedImages =
-        currentVariant?.productVariantImages?.filter(
-          (val, idx) => idx !== imageIdx,
-        ) || [];
-    } else if (type === "add") {
-      if (image && imageIdx !== undefined) {
-        updatedImages = currentVariant?.productVariantImages?.map(
-          (val, idx) => {
-            return idx === imageIdx ? image : val;
-          },
+    const updateImages = () => {
+      if (type === "delete" && imageIdx !== undefined) {
+        // Remove image by index
+        return (
+          currentVariant.productVariantImages?.filter(
+            (_, idx) => idx !== imageIdx,
+          ) || []
         );
-      } else {
-        updatedImages = [...currentVariant.productVariantImages, ""];
       }
-    }
+
+      if (type === "add") {
+        if (image && imageIdx !== undefined) {
+          // Replace existing image by index
+          return currentVariant.productVariantImages?.map((val, idx) =>
+            idx === imageIdx ? image : val,
+          );
+        }
+        // Add new empty image
+        return [...(currentVariant.productVariantImages || []), ""];
+      }
+
+      return currentVariant.productVariantImages || [];
+    };
 
     const updatedVariant = {
       ...currentVariant,
-      productVariantImages: updatedImages || [],
+      productVariantImages: updateImages(),
     };
 
-    const updatedVariants = productVariants.map((val, idx) => {
-      return idx === currentPage - 1 ? updatedVariant : val;
-    });
+    const updatedVariants = productVariants.map((variant, idx) =>
+      idx === currentPage - 1 ? updatedVariant : variant,
+    );
 
     form.setValue("productVariants", updatedVariants);
 
-    if (image) {
+    if (image && type === "add") {
       dispatch(productsReducers.toggleShowAddProduct());
     }
   };
 
+  //----------------------------------------------------------------------------------------------------
+
   return (
     <>
-      <div className="mb-4 font-medium">Base Variant Details</div>
+      <div className="flex items-center justify-between">
+        <p className="font-bold text-black/70">
+          {" "}
+          Product Variant : {currentPage}
+        </p>
 
+        {productVariants?.length === currentPage && (
+          <div className="flex gap-1">
+            <IconButton onClick={() => HandleVariant("add")}>
+              <MdAdd size={"18px"} className="leading-[0]" />
+            </IconButton>
+            {currentPage !== 1 && (
+              <IconButton onClick={() => HandleVariant("delete")}>
+                <FaRegTrashCan />
+              </IconButton>
+            )}
+          </div>
+        )}
+      </div>
       <div className="flex gap-3">
         <CustomInputField
           control={form.control}
@@ -255,9 +316,11 @@ const ProductVariant = ({
         </CustomInputField>
       </div>
 
+      {/* images  */}
+
       <div className="text-[15px] text-black/80">Product Images</div>
 
-      <div className="grid grid-cols-3 gap-y-4 gap-2">
+      <div className="grid grid-cols-3 gap-2 gap-y-4">
         {values?.productVariants?.[currentPage - 1].productVariantImages?.map(
           (img, idx) => {
             return (
@@ -265,9 +328,11 @@ const ProductVariant = ({
                 key={idx}
                 imageUrl={img}
                 handleDelete={() => {
-                  handleImage("delete", "", idx);
+                  handleImage({ type: "delete", image: "", imageIdx: idx });
                 }}
-                onSuccessfullUpload={(image) => handleImage("add", image, idx)}
+                onSuccessfullUpload={(image) =>
+                  handleImage({ type: "add", image, imageIdx: idx })
+                }
                 toggleModal={() =>
                   dispatch(productsReducers.toggleShowAddProduct())
                 }
@@ -276,11 +341,13 @@ const ProductVariant = ({
           },
         )}
 
-        <AddImage onClick={() => handleImage("add")} />
+        <AddImage onClick={() => handleImage({ type: "add" })} />
       </div>
     </>
   );
 };
+
+//----------------------------------------------------------------------------------------------------
 
 const AddImage = ({ onClick }: { onClick: () => void }) => {
   return (
@@ -292,5 +359,23 @@ const AddImage = ({ onClick }: { onClick: () => void }) => {
         <LuPlus className="cursor-pointer text-4xl text-gray-400" />
       </div>
     </div>
+  );
+};
+
+const IconButton = ({
+  onClick,
+  children,
+}: {
+  onClick: () => void;
+  children: React.ReactNode;
+}) => {
+  return (
+    <Button
+      className="flex min-h-0 min-w-0 gap-1 bg-ceramic px-2 font-Sen font-semibold leading-[0] text-black/60 hover:bg-black/20"
+      onClick={onClick}
+      size={"sm"}
+    >
+      {children}
+    </Button>
   );
 };
