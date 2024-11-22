@@ -93,8 +93,25 @@ const AddOrEditProductModal: React.FC<TProps> = ({
     setPage((prev) => prev - 1);
   };
 
-  const goNext = () => {
+  const goNext = async () => {
     if (page >= totalPage) return;
+
+    if (page === 0) {
+      const isValid = await form.trigger([
+        "name",
+        "description",
+        "categories",
+        "onDiscount",
+        "discount",
+      ]);
+
+      if (!isValid) return;
+    } else {
+      const isValid = await form.trigger(`productVariants.${page - 1}`);
+
+      if(!isValid) return
+    }
+
     setPage((prev) => prev + 1);
   };
 

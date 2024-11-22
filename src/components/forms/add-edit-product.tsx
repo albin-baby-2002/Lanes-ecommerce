@@ -12,7 +12,10 @@ import { TProductData } from "@/sections/admin/products/add-edit-product-modal";
 import { productsReducers } from "@/store/slices/admin/products";
 import { MdAdd } from "react-icons/md";
 import { Button } from "../ui/button";
+import { SketchPicker } from "react-color";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { FaTrash } from "react-icons/fa";
+import { PiTrash, PiTrashBold } from "react-icons/pi";
 
 //----------------------------------------------------------------------------------------------------
 
@@ -185,6 +188,10 @@ const ProductVariant = ({
 
   const productVariants = values.productVariants;
 
+  const imageError =
+    form?.formState?.errors?.productVariants?.[currentPage - 1]
+      ?.productVariantImages?.message;
+
   //----------------------------------------------------------------------------------------------------
 
   // fn to handle image add or delete
@@ -238,39 +245,43 @@ const ProductVariant = ({
 
   return (
     <>
-      <div className="flex items-center justify-between">
+      <div className="flex min-h-9 items-center justify-between rounded-sm bg-ceramic px-3">
         <p className="font-bold text-black/70">
           {" "}
           Product Variant : {currentPage}
         </p>
 
         {productVariants?.length === currentPage && (
-          <div className="flex gap-1">
+          <div className="flex gap-3">
             <IconButton onClick={() => HandleVariant("add")}>
-              <MdAdd size={"18px"} className="leading-[0]" />
+              <MdAdd size={"22px"} className="leading-[0]" />
             </IconButton>
             {currentPage !== 1 && (
               <IconButton onClick={() => HandleVariant("delete")}>
-                <FaRegTrashCan />
+                <PiTrashBold size={"18px"} />
               </IconButton>
             )}
           </div>
         )}
       </div>
+
       <div className="flex gap-3">
-        <CustomInputField
-          control={form.control}
-          fieldType={FormFieldType.INPUT}
-          name={`productVariants.${currentPage - 1}.color`}
-          placeholder="#2fas1"
-          label="Color"
-        />
+          <CustomInputField
+            control={form.control}
+            fieldType={FormFieldType.COLOR}
+            name={`productVariants.${currentPage - 1}.color`}
+            placeholder="#2fas1"
+            label="Color"
+            className=" basis-1/2 flex-grow-0"
+          />
+
         <CustomInputField
           control={form.control}
           fieldType={FormFieldType.INPUT}
           name={`productVariants.${currentPage - 1}.size`}
           placeholder="M/XL/L"
           label="Size"
+          className=" basis-1/2 flex-grow-0"
         />
       </div>
 
@@ -300,7 +311,7 @@ const ProductVariant = ({
           fieldType={FormFieldType.SELECT}
           name={`productVariants.${currentPage - 1}.onSale`}
           placeholder="Select"
-          label="On Discount"
+          label="On Sale"
         >
           {ON_DISCOUNT_OPTIONS.map((item) => (
             <SelectItem
@@ -319,6 +330,12 @@ const ProductVariant = ({
       {/* images  */}
 
       <div className="text-[15px] text-black/80">Product Images</div>
+
+      {/* image error */}
+
+      {imageError && (
+        <p className="text-sm font-medium text-destructive">{imageError}</p>
+      )}
 
       <div className="grid grid-cols-3 gap-2 gap-y-4">
         {values?.productVariants?.[currentPage - 1].productVariantImages?.map(
@@ -371,7 +388,7 @@ const IconButton = ({
 }) => {
   return (
     <Button
-      className="flex min-h-0 min-w-0 gap-1 bg-ceramic px-2 font-Sen font-semibold leading-[0] text-black/60 hover:bg-black/20"
+      className="flex min-h-0 min-w-0 gap-1 bg-ceramic p-0 font-Sen font-semibold leading-[0] text-black/60 hover:bg-ceramic"
       onClick={onClick}
       size={"sm"}
     >

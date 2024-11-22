@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "./ui/form";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Input } from "./ui/input";
 import DatePicker from "react-datepicker";
@@ -26,11 +26,16 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import "react-datepicker/dist/react-datepicker.css";
 import { Control, ControllerRenderProps } from "react-hook-form";
+import { SketchPicker } from "react-color";
+import { cn } from "@/lib/utils";
+import { TbColorPicker } from "react-icons/tb";
+import { IoClose } from "react-icons/io5";
 
 //-------------------------------------------------------------------------------
 
 export enum FormFieldType {
   INPUT = "input",
+  COLOR = "color",
   TEXTAREA = "textarea",
   PHONE_INPUT = "phoneInput",
   CHECKBOX = "checkbox",
@@ -42,6 +47,7 @@ export enum FormFieldType {
 
 interface TCustomFormFieldProps<T> {
   control: Control<any>;
+  className?: string;
   fieldType: FormFieldType;
   name: string;
   label?: string;
@@ -65,9 +71,19 @@ const RenderField = <T,>({
   field,
   props,
 }: {
-  field: any;
+  field: ControllerRenderProps<any>;
   props: TCustomFormFieldProps<T>;
 }) => {
+  const [showColorPicker, setShowColorPicker] = useState(false);
+
+  const handleShowColorPicker = () => {
+    setShowColorPicker(true);
+  };
+
+  const handleHideColorPicker = () => {
+    setShowColorPicker(false);
+  };
+
   switch (props.fieldType) {
     case FormFieldType.INPUT:
       return (
@@ -96,6 +112,58 @@ const RenderField = <T,>({
               className="shad-input border-0"
             />
           </FormControl>
+        </div>
+      );
+
+    case FormFieldType.COLOR:
+      return (
+        <div className="border-dark-500 bg-dark-400 relative flex h-[42px] items-center justify-between rounded-md border focus-within:ring-2 focus-within:ring-ring">
+          {" "}
+          <FormControl>
+            <input
+              onFocus={handleShowColorPicker}
+              placeholder={props.placeholder}
+              {...field}
+              onChange={(e) => {
+                if (props.dataType === "number") {
+                  field.onChange(Number(e.target.value) || 0);
+                  return;
+                }
+
+                ;
+              }}
+              className="w-32 border-0 ps-3 text-sm focus:bg-white"
+            />
+          </FormControl>
+          <div className="mr-3 flex items-center gap-3">
+            {showColorPicker ? (
+              <IoClose
+                className="cursor-pointer"
+                size={18}
+                onClick={handleHideColorPicker}
+              />
+            ) : (
+              <TbColorPicker
+                className="cursor-pointer"
+                onClick={handleShowColorPicker}
+                size={18}
+              />
+            )}
+            <div
+              className={`bg-[${field.value}] size-5 rounded-sm border border-black`}
+              style={{ background: field.value }}
+            ></div>
+          </div>
+          {showColorPicker && (
+            <SketchPicker
+              color={field.value}
+              onChange={(color) => {
+                console.log(field)
+                field.onChange(color.hex,0);
+              }}
+              className="absolute z-50 top-[46px]"
+            />
+          )}
         </div>
       );
     case FormFieldType.TEXTAREA:
@@ -241,7 +309,7 @@ const CustomInputField = <T,>(props: TCustomFormFieldProps<T>) => {
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className="flex-1">
+        <FormItem  className={cn("flex-1", props.className)}>
           {fieldType !== FormFieldType.CHECKBOX && label && (
             <FormLabel className="text-[15px] text-black/80">{label}</FormLabel>
           )}
