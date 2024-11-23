@@ -10,11 +10,8 @@ import {
 } from "@/lib/db-services/category";
 import { parseCatgoryData } from "@/lib/helpers/data-validation";
 import { checkIsAdmin } from "../auth-actions";
+import { NOT_ADMIN_ERR_MESSAGE } from "../constants";
 
-//-----------------------------------------------------------------------------------------
-
-const NOT_ADMIN_ERR_MESSAGE =
-  "You are not authorised to perform these operations";
 //-----------------------------------------------------------------------------------------
 
 // server action to create a new catgory on admin req
@@ -58,7 +55,6 @@ export const createCategory = async (category: TCategoryData) => {
 
     await insertCategory({
       ...parsedCategory,
-      onOffer: parsedCategory.onOffer === "True",
       offerDiscount: Number(parsedCategory.offerDiscount),
     });
 
@@ -127,7 +123,7 @@ export const EditCategory = async (id: string, category: TCategoryData) => {
 
     if (
       categoryWithMatchingName.length > 0 &&
-      categoryWithMatchingName[0].id !== id
+      categoryWithMatchingName[0].categoryId !== id
     ) {
       response.message = `Category with name ${parsedCategory.name} already exist choose a different name`;
       return response;
@@ -138,8 +134,6 @@ export const EditCategory = async (id: string, category: TCategoryData) => {
     const updatedCategory = {
       ...existingCategory,
       ...parsedCategory,
-      onOffer: parsedCategory.onOffer === "True",
-      offerDiscount: Number(parsedCategory.offerDiscount),
     };
 
     await updateCategoryById(id, updatedCategory);

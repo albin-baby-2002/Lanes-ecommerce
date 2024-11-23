@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/drizzle/db";
 import { categories } from "@/drizzle/schema";
-import { Column, eq,  Table } from "drizzle-orm";
+import { Column, eq,  SelectedFields,  Table } from "drizzle-orm";
 
 type TCategory = typeof categories.$inferInsert;
 
@@ -10,7 +10,7 @@ export const getAllCategories = async () => {
 };
 
 
-export const getAllCategoriesWithSpecificFields = async (filter?:SelectedFields) => {
+export const getAllCategoriesWithSpecificFields = async (filter?:any) => {
   return await db.select(filter).from(categories);
 };
 

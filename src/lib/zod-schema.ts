@@ -71,18 +71,12 @@ export const CategorySchema = z.object({
     message: "Description must be alteast 8 char long",
   }),
 
-  onOffer: z.enum(["True", "False"]),
-
+  onOffer: z.boolean().default(false),
   offerName: z.string().min(4, {
     message: "Offer Name Should min 4 char long",
   }),
 
-  offerDiscount: z
-    .string()
-    .refine(
-      validateDiscount,
-      "Discount should be number greater than equal to 0",
-    ),
+  offerDiscount: z.number().default(0),
 });
 
 export const ProductVariantSchema = z.object({
@@ -94,7 +88,7 @@ export const ProductVariantSchema = z.object({
   }),
   inventoryCount: z.number().default(0),
   price: z.number().default(0),
-  onSale: z.enum(["True", "False"]),
+  onSale: z.boolean().default(false),
   productVariantImages: z
     .array(z.string().min(1, { message: "There should be min 1 image" }))
     .min(1, {
@@ -111,6 +105,6 @@ export const ProductSchema = z.object({
   }),
   categories: z.array(z.string()).min(1, "Select a category "),
   discount: z.number(),
-  onDiscount: z.enum(["True", "False"]),
+  onDiscount: z.boolean().default(false),
   productVariants: z.array(ProductVariantSchema),
 });

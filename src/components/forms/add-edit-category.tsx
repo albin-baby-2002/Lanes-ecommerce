@@ -39,6 +39,7 @@ const AddEditCategoryForm: React.FC<TProps> = ({ form }) => {
             fieldType={FormFieldType.SELECT}
             name="onOffer"
             placeholder="Select"
+            dataType="boolean"
             label="On Offer"
           >
             {ON_DISCOUNT_OPTIONS.map((item) => (

@@ -59,7 +59,7 @@ interface TCustomFormFieldProps<T> {
   showTimeSelect?: boolean;
   options?: { label: string; value: T }[] | null;
   children?: React.ReactNode;
-  dataType?: "text" | "number"; // for input field
+  dataType?: "text" | "number" | "boolean"; // for input field
   renderSkeleton?: (
     field: ControllerRenderProps<any, string>,
   ) => React.ReactNode;
@@ -83,6 +83,11 @@ const RenderField = <T,>({
   const handleHideColorPicker = () => {
     setShowColorPicker(false);
   };
+
+  const isBoolean = props?.dataType === "boolean";
+
+  const fieldValueWhenBoolean =
+    field.value !== undefined ? (field.value ? "True" : "False") : "";
 
   switch (props.fieldType) {
     case FormFieldType.INPUT:
@@ -118,19 +123,21 @@ const RenderField = <T,>({
     case FormFieldType.COLOR:
       return (
         <div className="border-dark-500 bg-dark-400 relative flex h-[42px] items-center justify-between rounded-md border focus-within:ring-2 focus-within:ring-ring">
-          {" "}
           <FormControl>
             <input
               onFocus={handleShowColorPicker}
               placeholder={props.placeholder}
               {...field}
+              onBlur={() => {
+                handleHideColorPicker();
+                // field.onBlur()
+              }}
               onChange={(e) => {
-                if (props.dataType === "number") {
+                if (props.dataType && props.dataType === "number") {
                   field.onChange(Number(e.target.value) || 0);
                   return;
                 }
-
-                ;
+                field.onChange(e);
               }}
               className="w-32 border-0 ps-3 text-sm focus:bg-white"
             />
@@ -158,10 +165,10 @@ const RenderField = <T,>({
             <SketchPicker
               color={field.value}
               onChange={(color) => {
-                console.log(field)
-                field.onChange(color.hex,0);
+                console.log(field);
+                field.onChange(color.hex, 0);
               }}
-              className="absolute z-50 top-[46px]"
+              className="absolute top-[46px] z-50"
             />
           )}
         </div>
@@ -229,7 +236,6 @@ const RenderField = <T,>({
             onCheckedChange={field.onChange}
           />
           <label htmlFor={props.name} className="checkbox-label">
-            {" "}
             {props.label}
           </label>
         </div>
@@ -238,7 +244,15 @@ const RenderField = <T,>({
     case FormFieldType.SELECT:
       return (
         <FormControl>
-          <Select defaultValue={field.value} onValueChange={field.onChange}>
+          <Select
+            defaultValue={isBoolean ? fieldValueWhenBoolean : field.value}
+            onValueChange={(e) => {
+              if (isBoolean) {
+                return field.onChange(e === "True" ? true : false);
+              }
+              field.onChange(e);
+            }}
+          >
             <FormControl>
               <SelectTrigger className="shad-select-trigger">
                 <SelectValue placeholder={props.placeholder} />
@@ -309,7 +323,7 @@ const CustomInputField = <T,>(props: TCustomFormFieldProps<T>) => {
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem  className={cn("flex-1", props.className)}>
+        <FormItem className={cn("flex-1", props.className)}>
           {fieldType !== FormFieldType.CHECKBOX && label && (
             <FormLabel className="text-[15px] text-black/80">{label}</FormLabel>
           )}

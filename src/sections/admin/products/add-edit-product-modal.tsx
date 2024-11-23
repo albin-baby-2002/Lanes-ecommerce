@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import AddEditProductForm from "@/components/forms/add-edit-product";
 import { ProductSchema } from "@/lib/zod-schema";
 import { cn } from "@/lib/utils";
+import { createCategory } from "@/lib/actions/admin/category-actions";
 
 //-----------------------------------------------------------------------------------
 
@@ -109,7 +110,7 @@ const AddOrEditProductModal: React.FC<TProps> = ({
     } else {
       const isValid = await form.trigger(`productVariants.${page - 1}`);
 
-      if(!isValid) return
+      if (!isValid) return;
     }
 
     setPage((prev) => prev + 1);
@@ -149,8 +150,9 @@ const AddOrEditProductModal: React.FC<TProps> = ({
       setSubmitting(true);
       switch (type) {
         case "add": {
+          console.log(values);
           // submit logic for adding new category
-          // let resp = await createCategory(values);
+          let resp = await createCategory(values);
 
           // if (!resp.success) {
           //   setSubmitting(false);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form } from "../ui/form";
 import CustomInputField, { FormFieldType } from "../custom-input";
 import { UseFieldArrayReturn, UseFormReturn } from "react-hook-form";
@@ -12,10 +12,8 @@ import { TProductData } from "@/sections/admin/products/add-edit-product-modal";
 import { productsReducers } from "@/store/slices/admin/products";
 import { MdAdd } from "react-icons/md";
 import { Button } from "../ui/button";
-import { SketchPicker } from "react-color";
-import { FaRegTrashCan } from "react-icons/fa6";
-import { FaTrash } from "react-icons/fa";
-import { PiTrash, PiTrashBold } from "react-icons/pi";
+import {  PiTrashBold } from "react-icons/pi";
+import { cn } from "@/lib/utils";
 
 //----------------------------------------------------------------------------------------------------
 
@@ -78,6 +76,10 @@ const AddEditProductForm: React.FC<TProps> = ({
     }
   };
 
+  useEffect(() => {
+    console.log(productVariantFields);
+  }, [productVariantFields]);
+
   //----------------------------------------------------------------------------------------------------
 
   return (
@@ -117,6 +119,7 @@ const AddEditProductForm: React.FC<TProps> = ({
                 name="onDiscount"
                 placeholder="Select"
                 label="On Discount"
+                dataType="boolean"
               >
                 {ON_DISCOUNT_OPTIONS.map((item) => (
                   <SelectItem
@@ -145,13 +148,18 @@ const AddEditProductForm: React.FC<TProps> = ({
 
         {/*  product variant form  */}
 
-        {currentPage >= 1 && (
-          <ProductVariant
-            HandleVariant={HandleVariant}
-            form={form}
-            currentPage={currentPage}
-          />
-        )}
+        {currentPage >= 1 &&
+          productVariantFields?.fields?.map((val, idx) => {
+            return (
+              <ProductVariant
+                key={idx}
+                HandleVariant={HandleVariant}
+                form={form}
+                currentPage={idx + 1}
+                className={cn({ hidden: idx !== currentPage - 1 })}
+              />
+            );
+          })}
       </form>
     </Form>
   );
@@ -171,6 +179,7 @@ interface TProductVariantProps {
   currentPage: number;
   HandleVariant: (type: "add" | "delete") => void;
   form: UseFormReturn<TProductData>;
+  className?: string;
 }
 
 //----------------------------------------------------------------------------------------------------
@@ -179,6 +188,7 @@ const ProductVariant = ({
   currentPage,
   form,
   HandleVariant,
+  className,
 }: TProductVariantProps) => {
   // react hooks
 
@@ -244,7 +254,7 @@ const ProductVariant = ({
   //----------------------------------------------------------------------------------------------------
 
   return (
-    <>
+    <div className={cn("flex flex-col gap-3", className)}>
       <div className="flex min-h-9 items-center justify-between rounded-sm bg-ceramic px-3">
         <p className="font-bold text-black/70">
           {" "}
@@ -266,14 +276,14 @@ const ProductVariant = ({
       </div>
 
       <div className="flex gap-3">
-          <CustomInputField
-            control={form.control}
-            fieldType={FormFieldType.COLOR}
-            name={`productVariants.${currentPage - 1}.color`}
-            placeholder="#2fas1"
-            label="Color"
-            className=" basis-1/2 flex-grow-0"
-          />
+        <CustomInputField
+          control={form.control}
+          fieldType={FormFieldType.COLOR}
+          name={`productVariants.${currentPage - 1}.color`}
+          placeholder="#2fas1"
+          label="Color"
+          className="flex-grow-0 basis-1/2"
+        />
 
         <CustomInputField
           control={form.control}
@@ -281,7 +291,7 @@ const ProductVariant = ({
           name={`productVariants.${currentPage - 1}.size`}
           placeholder="M/XL/L"
           label="Size"
-          className=" basis-1/2 flex-grow-0"
+          className="flex-grow-0 basis-1/2"
         />
       </div>
 
@@ -312,6 +322,7 @@ const ProductVariant = ({
           name={`productVariants.${currentPage - 1}.onSale`}
           placeholder="Select"
           label="On Sale"
+          dataType="boolean"
         >
           {ON_DISCOUNT_OPTIONS.map((item) => (
             <SelectItem
@@ -360,7 +371,7 @@ const ProductVariant = ({
 
         <AddImage onClick={() => handleImage({ type: "add" })} />
       </div>
-    </>
+    </div>
   );
 };
 
