@@ -79,7 +79,7 @@ const AddOrEditCategoryModal: React.FC<TProps | TEditProps> = ({
     mode: "onChange",
     resolver: zodResolver(CategorySchema),
     defaultValues: {
-      onOffer: "False",
+      onOffer: false,
     },
   });
 
@@ -100,9 +100,9 @@ const AddOrEditCategoryModal: React.FC<TProps | TEditProps> = ({
       const existingCategory: TCategoryData = {
         name: categoryToEdit.name,
         description: categoryToEdit.description,
-        onOffer: categoryToEdit.onOffer ? "True" : "False",
+        onOffer: categoryToEdit.onOffer,
         offerName: categoryToEdit.offerName,
-        offerDiscount: categoryToEdit.offerDiscount + "",
+        offerDiscount: categoryToEdit.offerDiscount,
       };
 
       form.reset(existingCategory);

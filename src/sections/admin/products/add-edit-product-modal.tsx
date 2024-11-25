@@ -19,6 +19,7 @@ import AddEditProductForm from "@/components/forms/add-edit-product";
 import { ProductSchema } from "@/lib/zod-schema";
 import { cn } from "@/lib/utils";
 import { createCategory } from "@/lib/actions/admin/category-actions";
+import { createProductWithVariantsAndCategory } from "@/lib/actions/admin/product-actions";
 
 //-----------------------------------------------------------------------------------
 
@@ -76,7 +77,7 @@ const AddOrEditProductModal: React.FC<TProps> = ({
           size: "",
           inventoryCount: 0,
           price: 0,
-          onSale: "False",
+          onSale: false,
           productVariantImages: [],
         },
       ],
@@ -152,14 +153,16 @@ const AddOrEditProductModal: React.FC<TProps> = ({
         case "add": {
           console.log(values);
           // submit logic for adding new category
-          let resp = await createCategory(values);
 
-          // if (!resp.success) {
-          //   setSubmitting(false);
-          //   return toast.error(resp.message);
-          // }
+          let resp = await createProductWithVariantsAndCategory(values);
 
-          toast.success("Successfully Created Category");
+          if (!resp.success) {
+            setSubmitting(false);
+            return toast.error(resp.message);
+          }
+
+          toast.success("Successfully Created Product");
+
           break;
         }
 

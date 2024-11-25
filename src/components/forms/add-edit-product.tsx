@@ -30,13 +30,13 @@ type TProductVariantField = UseFieldArrayReturn<
     description: string;
     categories: string[];
     discount: number;
-    onDiscount: "True" | "False";
+    onDiscount: boolean;
     productVariants: {
       color: string;
       size: string;
       inventoryCount: number;
       price: number;
-      onSale: "True" | "False";
+      onSale: boolean;
       productVariantImages: string[];
     }[];
   },
@@ -63,7 +63,7 @@ const AddEditProductForm: React.FC<TProps> = ({
       return productVariantFields.append({
         color: "",
         inventoryCount: 0,
-        onSale: "False",
+        onSale: false,
         price: 0,
         productVariantImages: [],
         size: "",

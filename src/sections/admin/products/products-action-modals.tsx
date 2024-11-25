@@ -4,11 +4,12 @@ import AddOrEditProductModal from "./add-edit-product-modal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { productsReducers } from "@/store/slices/admin/products";
+import { TCategoryOptions } from "./views/products-view";
 
 const ProductActionsModals = ({
   categoryOptions,
 }: {
-  categoryOptions: { label: string; value: string }[];
+  categoryOptions: TCategoryOptions[];
 }) => {
   // redux states and hooks
   const dispatch = useDispatch<AppDispatch>();

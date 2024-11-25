@@ -1,9 +1,10 @@
+'use server'
 //-----------------------------------------------------------------------------------------
 
 import { TProductData } from "@/sections/admin/products/add-edit-product-modal";
 import { checkIsAdmin } from "../auth-actions";
 import { parseProductData } from "@/lib/helpers/data-validation";
-import { findProductByName, insertProduct } from "@/lib/db-services/products";
+import { findProductByName } from "@/lib/db-services/products";
 import { NOT_ADMIN_ERR_MESSAGE } from "../constants";
 import { db } from "@/drizzle/db";
 import {
@@ -20,98 +21,102 @@ import {
 export const createProductWithVariantsAndCategory = async (
   product: TProductData,
 ) => {
+  const response = { success: false, message: "" };
+
   try {
-    // create a resp obj
-    const response = { success: false, message: "" }; // check is admin
+    // Check admin
 
     const isAdmin = await checkIsAdmin();
 
     if (!isAdmin) {
       response.message = NOT_ADMIN_ERR_MESSAGE;
-
       return response;
     }
+
+    // Parse product data
 
     let parsedProduct: TProductData;
 
     try {
       parsedProduct = await parseProductData(product);
     } catch (error: any) {
-      response.message = error.message;
+      response.message = `Validation Error: ${error.message}`;
       return response;
     }
-    // check a category with same name exist if return an error resp
+
+    // Check for existing product
 
     const existingProduct = await findProductByName(parsedProduct.name);
 
     if (existingProduct?.length > 0) {
-      response.message = `Product with name ${parsedProduct.name} already exist`;
+      response.message = `Product with name ${parsedProduct.name} already exists.`;
       return response;
     }
 
-    // insert the data to db if all checks are done
+    // Perform transaction
 
-    await db.transaction(async (tx) => {
-      const {
-        productVariants: ProductVariantsInfo,
-        categories,
-        ...productInfo
-      } = parsedProduct;
+    try {
+      await db.transaction(async (tx) => {
+        const {
+          productVariants: ProductVariantsInfo,
+          categories,
+          ...productInfo
+        } = parsedProduct;
 
-      // insert the new product info
+        // Insert product
 
-      const newProduct = await tx
-        .insert(products)
-        .values(productInfo)
-        .returning({ productId: products.productId });
+        const [newProduct] = await tx
+          .insert(products)
+          .values(productInfo)
+          .returning({ productId: products.productId });
 
-      const productId = newProduct[0].productId;
+        const productId = newProduct.productId;
 
-      // map categories-id and productId to insert into the product categories table
+        // Insert categories
 
-      const categoryInsert = categories.map((categoryId) => {
-        return { productId, categoryId };
+        const categoryInsert = categories.map((categoryId) => ({
+          productId,
+          categoryId,
+        }));
+
+        await tx.insert(productCategories).values(categoryInsert);
+
+        // Insert variants and images
+
+        for (const val of ProductVariantsInfo) {
+          const { productVariantImages: variantImages, ...variantInfo } = val;
+
+          const [newVariant] = await tx
+            .insert(productVariants)
+            .values({ ...variantInfo, productId })
+            .returning({ productVariantId: productVariants.productVariantId });
+
+          const imagesInsert = variantImages.map((imgUrl) => ({
+            imgUrl,
+            productVariantId: newVariant.productVariantId,
+          }));
+
+          await tx.insert(productVariantImages).values(imagesInsert);
+        }
       });
 
-      // insert productCatgories
-
-      await tx.insert(productCategories).values(categoryInsert);
-
-      ProductVariantsInfo.forEach(async (val) => {
-        const { productVariantImages: variantImages, ...variantInfo } = val;
-
-        const variantInsert = { ...variantInfo, productId };
-
-        const newVariant = await tx
-          .insert(productVariants)
-          .values(variantInsert)
-          .returning({ productVariantId: productVariants.productVariantId });
-
-        const imagesInsert = variantImages.map((imgUrl) => {
-          return { imgUrl, productVariantId: newVariant[0].productVariantId };
-        });
-
-        await tx.insert(productVariantImages).values(imagesInsert);
-      });
-
-      // if insert success end success repsonse
+      // Success response
 
       response.success = true;
-      response.message = "Successfully created new category";
-      return response;
-    });
+      response.message = "Successfully created new product.";
+    } catch (txError) {
+      console.error("Transaction Error:", txError);
+      response.message = "Failed to insert product. Please try again.";
 
-    response.message = "Unexpected Error Failed to Insert Product Try Again";
+      throw txError;
+    }
 
     return response;
   } catch (error: any) {
-    // if any unexpected error occur return error resp
-
-    console.log(error, "error");
-
+    console.error("Error:", error);
     return {
       success: false,
-      message: "Sorry,Something went wrong. Please try again later.",
+      message: "Sorry, something went wrong. Please try again later.",
       details: error.message,
     };
   }
