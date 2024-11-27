@@ -7,78 +7,49 @@ import { ColumnDef, Row } from "@tanstack/react-table";
 import { FaTrashAlt } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { useDispatch } from "react-redux";
+import { ProductVariant, TProductsData } from "./views/products-view";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
 
-
-export interface TData {
-  products: Products;
-  productVariants: ProductVariants;
-  productVariantImages: ProductVariantImages;
-  productCategories: ProductCategories;
-  categories: Categories;
-}
-
-export interface Products {
-  productId: string;
-  productInternalId: number;
-  name: string;
-  description: string;
-  discount: number | null;
-  onDiscount: boolean | null;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface ProductVariants {
-  productVariantId: string;
-  productVariantInternalId: number;
-  productId: string;
-  color: string;
-  size: string;
-  inventoryCount: number | null;
-  price: number;
-  onSale: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface ProductVariantImages {
-  productVariantImageId: string;
-  imgUrl: string;
-  productVariantId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface ProductCategories {
-  productId: string;
-  categoryId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface Categories {
-  categoryId: string;
-  categoryInternalId: number;
-  name: string;
-  description: string;
-  onOffer: boolean;
-  offerName: string;
-  offerDiscount: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export const productsColumns: ColumnDef<TData>[] = [
+export const productsColumns: ColumnDef<TProductsData>[] = [
   {
     accessorKey: "productId",
     header: "ID",
     enableHiding: true,
   },
   {
-    accessorKey: "products.productInternalId",
-    header: "Id",
+    accessorKey: "productVariants",
+    header: "productVariants",
+    enableHiding: true,
+  },
+
+  {
+    accessorKey: "none",
+    header: "Product",
+    maxSize: 50,
     cell: ({ row }) => {
-      return "#CAT" + row.getValue("productInternalId");
+      const variants: ProductVariant[] = row.getValue("productVariants");
+      const imageUrl = variants[0].productVariantImages[0];
+
+      return (
+        <div className="flex items-center justify-center">
+          <div className="relative h-10 w-10">
+            <Image
+              fill
+              className="h-full w-full rounded-lg object-cover"
+              src={` https://res.cloudinary.com/dfm8vhuea/image/upload/${imageUrl}`}
+              alt=""
+            />
+          </div>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "productInternalId",
+    header: "",
+    cell: ({ row }) => {
+      return "#PRD" + row.getValue("productInternalId");
     },
   },
   {
@@ -92,24 +63,49 @@ export const productsColumns: ColumnDef<TData>[] = [
   },
 
   {
-    accessorKey: "onOffer",
-    header: "On Offer",
+    accessorKey: "onDiscount",
+    header: "On Discount",
     cell: ({ row }) => {
-      return row.getValue("onOffer") ? "True" : "False";
+      return row.getValue("onDiscount") ? "True" : "False";
     },
   },
+
   {
-    accessorKey: "offerName",
-    header: "Offer Name",
-  },
-  {
-    accessorKey: "offerDiscount",
+    accessorKey: "discount",
     size: 140,
     maxSize: 140,
     header: () => <div className="text-center">Offer Discount</div>,
     cell: ({ row }) => {
       return (
-        <div className="text-center">{row.getValue("offerDiscount") + "%"}</div>
+        <div className="text-center">{row.getValue("discount") + "%"}</div>
+      );
+    },
+  },
+  {
+    accessorKey: "none",
+    size: 140,
+    maxSize: 140,
+    header: () => <div className="text-center"> Variant Colors</div>,
+    cell: ({ row }) => {
+      const variants: ProductVariant[] = row.getValue("productVariants");
+      const colors = variants?.map((val) => val?.color);
+
+      console.log(colors);
+      return (
+        <div className="flex items-center justify-center">
+          {colors.map((val, idx) => {
+            return (
+              <div
+                style={{ background: val }}
+                key={idx}
+                className={cn(
+                  "flex size-[18px] items-center justify-center rounded-[50%] bg-red-300 p-1",
+                  `bg-['${val}']`,
+                )}
+              ></div>
+            );
+          })}
+        </div>
       );
     },
   },
@@ -130,9 +126,7 @@ const ActionsCell = ({ row }: { row: Row<TColumns> }) => {
 
   const showDeleteproductConfirmation = () => {
     console.log(row.getValue("productId"));
-    dispatch(
-      productsReducers.setproductToDelete(row.getValue("productId")),
-    );
+    dispatch(productsReducers.setproductToDelete(row.getValue("productId")));
     dispatch(productsReducers.toggleDeleteproductConfirmation());
   };
 

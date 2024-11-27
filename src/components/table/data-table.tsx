@@ -28,6 +28,7 @@ export function DataTable<TData, TValue>({
   data,
   columnVisibility,
 }: DataTableProps<TData, TValue>) {
+
   const table = useReactTable({
     data,
     columns,

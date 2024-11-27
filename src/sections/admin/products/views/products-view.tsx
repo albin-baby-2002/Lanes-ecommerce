@@ -16,10 +16,38 @@ import {
 import ProductActionsModals from "../products-action-modals";
 import { DataTable } from "@/components/table/data-table";
 import { productsColumns } from "../datatable-columns";
+import { TProductData } from "../add-edit-product-modal";
 
 export interface TCategoryOptions {
   label: string;
   value: string;
+}
+export interface TProductsData {
+  productId: string
+  productInternalId: number
+  name: string
+  description: string
+  discount: number
+  onDiscount: boolean
+  createdAt: string
+  updatedAt: string
+  categories: Category[]
+  productVariants: ProductVariant[]
+}
+
+export interface Category {
+  categoryId: string
+  categoryInternalId: number
+}
+
+export interface ProductVariant {
+  productVariantId: string
+  color: string
+  size: string
+  inventoryCount: number
+  price: number
+  onSale: boolean
+  productVariantImages: string[]
 }
 
 const ProductsView = async () => {
@@ -29,61 +57,51 @@ const ProductsView = async () => {
   })) as unknown as TCategoryOptions[];
 
   const productsData = await db.execute(sql`
-  SELECT
-    products.productId,
-    products.name,
-    products.description,
-    products.discount,
-    products.onDiscount,
-    ARRAY_AGG(DISTINCT categories.name) AS categories,
-    JSON_AGG(
-      JSON_BUILD_OBJECT(
-        'productVariantId', productVariants.productVariantId,
-        'color', productVariants.color,
-        'size', productVariants.size,
-        'inventoryCount', productVariants.inventoryCount,
-        'price', productVariants.price,
-        'onSale', productVariants.onSale,
-        'productVariantImages', ARRAY_AGG(productVariantImages.imgUrl)
-      )
-    ) AS productVariants
-  FROM products
-  INNER JOIN productVariants
-    ON products.productId = productVariants.productId
-  INNER JOIN productVariantImages
-    ON productVariants.productVariantId = productVariantImages.productVariantId
-  INNER JOIN productCategories
-    ON products.productId = productCategories.productId
-  INNER JOIN categories
-    ON productCategories.categoryId = categories.categoryId
-  GROUP BY products.productId
-  ORDER BY products.productId;
-`);
+    SELECT
+      products."productId",
+      products."productInternalId",
+      products."name",
+      products."description",
+      products."discount",
+      products."onDiscount",
+      products."createdAt",
+      products."updatedAt",
+      JSON_AGG(
+        JSON_BUILD_OBJECT(
+        'categoryId', "categories"."categoryId",
+        'categoryInternalId',"categories"."categoryInternalId"
+        )
+      ) AS categories,
+      JSON_AGG(
+        JSON_BUILD_OBJECT(
+          'productVariantId', "productVariants"."productVariantId",
+          'color', "productVariants"."color",
+          'size', "productVariants"."size",
+          'inventoryCount', "productVariants"."inventoryCount",
+          'price', "productVariants"."price",
+          'onSale', "productVariants"."onSale",
+          'productVariantImages', img_data.images
+        )
+      ) AS "productVariants"
+    FROM "products"
+    INNER JOIN "productVariants"
+      ON products."productId" = "productVariants"."productId"
+    INNER JOIN (
+      SELECT
+        "productVariantImages"."productVariantId",
+        ARRAY_AGG("productVariantImages"."imgUrl") AS images
+      FROM "productVariantImages"
+      GROUP BY "productVariantImages"."productVariantId"
+    ) AS img_data
+      ON "productVariants"."productVariantId" = img_data."productVariantId"
+    INNER JOIN "productCategories"
+      ON products."productId" = "productCategories"."productId"
+    INNER JOIN "categories"
+      ON "productCategories"."categoryId" = "categories"."categoryId"
+    GROUP BY products."productId"
+    ORDER BY products."productId";
+  `) as unknown as TProductsData[];
 
-  // const productsData = await db
-  //   .select()
-  //   .from(products)
-  //   .innerJoin(
-  //     productVariants,
-  //     eq(products.productId, productVariants.productId),
-  //   )
-  //   .innerJoin(
-  //     productVariantImages,
-  //     eq(
-  //       productVariants.productVariantId,
-  //       productVariantImages.productVariantId,
-  //     ),
-  //   )
-  //   .innerJoin(
-  //     productCategories,
-  //     eq(products.productId, productCategories.productId),
-  //   )
-  //   .innerJoin(
-  //     categories,
-  //     eq(productCategories.categoryId, categories.categoryId),
-  //   );
-
-  console.log(productsData);
 
   return (
     <div className="h-full bg-slate-50 p-8">
@@ -95,14 +113,12 @@ const ProductsView = async () => {
 
       <ProductActionsModals categoryOptions={categoriesOptions} />
 
-      {/* <div className="mt-8">
+      <div className="mt-8">
         <DataTable
-          columns={productsColumns}
-          data={productsData}
-          columnVisibility={{ productId: false }}
+          columns={productsColumns} data={productsData}
+          columnVisibility={{ productId: false,productVariants:false }}
         />
-      </div> */}
-
+      </div>
     </div>
   );
 };
