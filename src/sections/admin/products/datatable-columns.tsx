@@ -22,17 +22,22 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
     header: "productVariants",
     enableHiding: true,
   },
-
+  {
+    accessorKey: "productInternalId",
+    header: "productInternalId",
+    enableHiding: true,
+  },
   {
     accessorKey: "none",
-    header: "Product",
+    header: "Product ID",
     maxSize: 50,
     cell: ({ row }) => {
       const variants: ProductVariant[] = row.getValue("productVariants");
       const imageUrl = variants[0].productVariantImages[0];
+      const productID = "#PRD" + row.getValue("productInternalId");
 
       return (
-        <div className="flex items-center justify-center">
+        <div className="flex items-center gap-4">
           <div className="relative h-10 w-10">
             <Image
               fill
@@ -41,27 +46,13 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
               alt=""
             />
           </div>
+          <p>{productID}</p>{" "}
         </div>
       );
     },
   },
-  {
-    accessorKey: "productInternalId",
-    header: "",
-    cell: ({ row }) => {
-      return "#PRD" + row.getValue("productInternalId");
-    },
-  },
-  {
-    accessorKey: "name",
-    header: "product Name",
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
-    minSize: 260,
-  },
-
+  { accessorKey: "name", header: "Product Name" },
+  { accessorKey: "description", header: "Description" },
   {
     accessorKey: "onDiscount",
     header: "On Discount",
@@ -69,7 +60,15 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
       return row.getValue("onDiscount") ? "True" : "False";
     },
   },
+  {
+    accessorKey: "none",
+    header: "Base Product Price",
+    cell: ({ row }) => {
+      const variants: ProductVariant[] = row.getValue("productVariants");
 
+      return 'Rs : '+variants[0].price;
+    },
+  },
   {
     accessorKey: "discount",
     size: 140,
@@ -83,7 +82,7 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
   },
   {
     accessorKey: "none",
-    size: 140,
+    minSize: 140,
     maxSize: 140,
     header: () => <div className="text-center"> Variant Colors</div>,
     cell: ({ row }) => {
@@ -116,18 +115,18 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
   },
 ];
 
-const ActionsCell = ({ row }: { row: Row<TColumns> }) => {
+const ActionsCell = ({ row }: { row: Row<TProductsData> }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const showEdit = () => {
-    dispatch(productsReducers.setproductToEdit(row.getValue("productId")));
-    dispatch(productsReducers.toggleShowEditproduct());
+    dispatch(productsReducers.setProductToEdit(row.getValue("productId")));
+    dispatch(productsReducers.toggleShowEditProduct());
   };
 
   const showDeleteproductConfirmation = () => {
     console.log(row.getValue("productId"));
-    dispatch(productsReducers.setproductToDelete(row.getValue("productId")));
-    dispatch(productsReducers.toggleDeleteproductConfirmation());
+    dispatch(productsReducers.setProductToDelete(row.getValue("productId")));
+    dispatch(productsReducers.toggleDeleteProductConfirmation());
   };
 
   return (

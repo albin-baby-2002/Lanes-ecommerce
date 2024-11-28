@@ -3,6 +3,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface TIntialState {
   showAddProduct: boolean;
   categoryOptions: TCategoryOption[] | null;
+  showEditProduct: boolean;
+  productToEdit: string | null;
+  showDeleteProductConfirmation: boolean;
+  productToDelete: string | null;
 }
 
 export interface TCategoryOption {
@@ -13,6 +17,11 @@ export interface TCategoryOption {
 const initialState: TIntialState = {
   showAddProduct: false,
   categoryOptions: null,
+
+  showEditProduct: false,
+  productToEdit: null,
+  showDeleteProductConfirmation: false,
+  productToDelete: null,
 };
 
 const productSlice = createSlice({
@@ -23,11 +32,27 @@ const productSlice = createSlice({
       state.showAddProduct = !state.showAddProduct;
     },
 
+    toggleShowEditProduct: (state) => {
+      state.showEditProduct = !state.showEditProduct;
+    },
     setCategoryOptions: (
       state,
       action: PayloadAction<TCategoryOption[] | null>,
     ) => {
       state.categoryOptions = action.payload;
+    },
+
+    setProductToEdit: (state, action: PayloadAction<string | null>) => {
+      state.productToEdit = action.payload;
+    },
+
+    toggleDeleteProductConfirmation: (state) => {
+      console.log("toggled", state.showDeleteProductConfirmation);
+      state.showDeleteProductConfirmation =
+        !state.showDeleteProductConfirmation;
+    },
+    setProductToDelete: (state, action: PayloadAction<string | null>) => {
+      state.productToDelete = action.payload;
     },
   },
 });

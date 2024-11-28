@@ -4,21 +4,33 @@ import AddOrEditProductModal from "./add-edit-product-modal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { productsReducers } from "@/store/slices/admin/products";
-import { TCategoryOptions } from "./views/products-view";
+import { TCategoryOptions, TProductsData } from "./views/products-view";
 
-const ProductActionsModals = ({
-  categoryOptions,
-}: {
+//--------------------------------------------------------------------------------------------------------
+
+interface TProps {
   categoryOptions: TCategoryOptions[];
-}) => {
+  productsData: TProductsData[];
+}
+
+//--------------------------------------------------------------------------------------------------------
+
+const ProductActionsModals = (props: TProps) => {
   // redux states and hooks
+
   const dispatch = useDispatch<AppDispatch>();
 
-  const { showAddProduct } = useSelector((state: RootState) => state.products);
+  const { showAddProduct, productToEdit, showEditProduct } = useSelector(
+    (state: RootState) => state.products,
+  );
 
   useEffect(() => {
-    dispatch(productsReducers.setCategoryOptions(categoryOptions || null));
-  }, [categoryOptions]);
+    dispatch(
+      productsReducers.setCategoryOptions(props.categoryOptions || null),
+    );
+  }, [props.categoryOptions, dispatch]);
+
+  //--------------------------------------------------------------------------------------------------------
 
   return (
     <>
@@ -28,6 +40,15 @@ const ProductActionsModals = ({
         toggleClose={() => {
           dispatch(productsReducers.toggleShowAddProduct());
         }}
+      />
+
+      <AddOrEditProductModal
+        type="edit"
+        open={showEditProduct}
+        toggleClose={() => {
+          dispatch(productsReducers.toggleShowEditProduct());
+        }}
+        productToEdit={ props.productsData.find((product)=>product.productId === productToEdit)}
       />
     </>
   );

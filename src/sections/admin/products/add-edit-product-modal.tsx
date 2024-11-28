@@ -20,6 +20,7 @@ import { ProductSchema } from "@/lib/zod-schema";
 import { cn } from "@/lib/utils";
 import { createCategory } from "@/lib/actions/admin/category-actions";
 import { createProductWithVariantsAndCategory } from "@/lib/actions/admin/product-actions";
+import { TProductsData } from "./views/products-view";
 
 //-----------------------------------------------------------------------------------
 
@@ -27,6 +28,7 @@ interface TProps {
   type: "add" | "edit";
   open: boolean;
   toggleClose: () => void;
+  productToEdit?: TProductsData;
 }
 
 export type TProductData = z.infer<typeof ProductSchema>;
@@ -49,6 +51,7 @@ const AddOrEditProductModal: React.FC<TProps> = ({
   type,
   open = false,
   toggleClose,
+  productToEdit,
 }) => {
   //-----------------------------------------------------------------------------------
 
@@ -83,6 +86,32 @@ const AddOrEditProductModal: React.FC<TProps> = ({
       ],
     },
   });
+
+  // useEffect to set the initial state for edit modal
+
+  useEffect(() => {
+    if (productToEdit && type === "edit") {
+      const {
+        productInternalId,
+        productVariants,
+        createdAt,
+        updatedAt,
+        categories,
+        ...productInfo
+      } = { ...productToEdit };
+
+
+      const categoriesInfo = categories.map((val) => val.categoryId);
+
+      const existingProduct: TProductData = {
+        ...productInfo,
+        categories: categoriesInfo,
+        productVariants
+      };
+
+      form.reset(existingProduct);
+    }
+  }, [productToEdit, type, form]);
 
   // watch value of form
 
@@ -166,21 +195,21 @@ const AddOrEditProductModal: React.FC<TProps> = ({
           break;
         }
 
-        // case "edit": {
-        //   // submit logic for editing existing category
-        //   if (!categoryToEdit) {
-        //     return toast.error("Unexpected error: category data not found");
-        //   }
+        case "edit": {
+          // submit logic for editing existing category
+          if (!productToEdit) {
+            return toast.error("Unexpected error: category data not found");
+          }
 
-        //   let resp = await EditCategory(categoryToEdit?.id, values);
+          // let resp = await EditCategory(categoryToEdit?.id, values);
 
-        //   if (!resp.success) {
-        //     setSubmitting(false);
-        //     return toast.error(resp.message);
-        //   }
+          // if (!resp.success) {
+          //   setSubmitting(false);
+          //   return toast.error(resp.message);
+          // }
 
-        //   toast.success("Successfully Updated Category");
-        //   break;
+          toast.success("Successfully Updated Category");
+          break;
         // }
 
         default: {
@@ -220,6 +249,7 @@ const AddOrEditProductModal: React.FC<TProps> = ({
 
         <div className="max-h-[600px] overflow-hidden overflow-y-auto px-2 pt-2">
           <AddEditProductForm
+            type={type}
             productVariantFields={productVariantFields}
             currentPage={page}
             setCurrentPage={setPage}

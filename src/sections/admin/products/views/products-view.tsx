@@ -23,31 +23,31 @@ export interface TCategoryOptions {
   value: string;
 }
 export interface TProductsData {
-  productId: string
-  productInternalId: number
-  name: string
-  description: string
-  discount: number
-  onDiscount: boolean
-  createdAt: string
-  updatedAt: string
-  categories: Category[]
-  productVariants: ProductVariant[]
+  productId: string;
+  productInternalId: number;
+  name: string;
+  description: string;
+  discount: number;
+  onDiscount: boolean;
+  createdAt: string;
+  updatedAt: string;
+  categories: Category[];
+  productVariants: ProductVariant[];
 }
 
 export interface Category {
-  categoryId: string
-  categoryInternalId: number
+  categoryId: string;
+  categoryInternalId: number;
 }
 
 export interface ProductVariant {
-  productVariantId: string
-  color: string
-  size: string
-  inventoryCount: number
-  price: number
-  onSale: boolean
-  productVariantImages: string[]
+  productVariantId: string;
+  color: string;
+  size: string;
+  inventoryCount: number;
+  price: number;
+  onSale: boolean;
+  productVariantImages: string[];
 }
 
 const ProductsView = async () => {
@@ -56,7 +56,7 @@ const ProductsView = async () => {
     value: categories.categoryId,
   })) as unknown as TCategoryOptions[];
 
-  const productsData = await db.execute(sql`
+  const productsData = (await db.execute(sql`
     SELECT
       products."productId",
       products."productInternalId",
@@ -100,8 +100,7 @@ const ProductsView = async () => {
       ON "productCategories"."categoryId" = "categories"."categoryId"
     GROUP BY products."productId"
     ORDER BY products."productId";
-  `) as unknown as TProductsData[];
-
+  `)) as unknown as TProductsData[];
 
   return (
     <div className="h-full bg-slate-50 p-8">
@@ -111,12 +110,17 @@ const ProductsView = async () => {
 
       <SearchAndActions />
 
-      <ProductActionsModals categoryOptions={categoriesOptions} />
+      <ProductActionsModals productsData={productsData} categoryOptions={categoriesOptions} />
 
       <div className="mt-8">
         <DataTable
-          columns={productsColumns} data={productsData}
-          columnVisibility={{ productId: false,productVariants:false }}
+          columns={productsColumns}
+          data={productsData}
+          columnVisibility={{
+            productInternalId: false,
+            productId: false,
+            productVariants: false,
+          }}
         />
       </div>
     </div>

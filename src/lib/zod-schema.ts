@@ -80,6 +80,7 @@ export const CategorySchema = z.object({
 });
 
 export const ProductVariantSchema = z.object({
+  productVariantId:z.string().optional(),
   color: z.string().min(3, {
     message: "Color must be atleast 3 char long.",
   }),
@@ -97,6 +98,7 @@ export const ProductVariantSchema = z.object({
 });
 
 export const ProductSchema = z.object({
+  productId:z.string().optional(),
   name: z.string().min(4, {
     message: "Name must be atleast 4 char long.",
   }),

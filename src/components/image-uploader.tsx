@@ -30,13 +30,17 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
           {
             cloudName: "dfm8vhuea",
             uploadPreset: "lmyyofoj",
+            croppingAspectRatio: 0.76 / 1,
             cropping: true,
             clientAllowedFormats: ["jpg", "jpeg", "png", "webP"],
+
             maxFiles: 1,
           },
           async function (error: any, result: any) {
             if (error) {
               toast.error("Failed to upload  Img");
+
+              toggleModal();
             }
             if (result.info.public_id) {
               try {

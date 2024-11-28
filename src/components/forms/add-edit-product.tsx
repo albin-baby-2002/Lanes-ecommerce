@@ -12,12 +12,13 @@ import { TProductData } from "@/sections/admin/products/add-edit-product-modal";
 import { productsReducers } from "@/store/slices/admin/products";
 import { MdAdd } from "react-icons/md";
 import { Button } from "../ui/button";
-import {  PiTrashBold } from "react-icons/pi";
+import { PiTrashBold } from "react-icons/pi";
 import { cn } from "@/lib/utils";
 
 //----------------------------------------------------------------------------------------------------
 
 interface TProps {
+  type: "add" | "edit";
   form: UseFormReturn<any>;
   productVariantFields: TProductVariantField;
   currentPage: number;
@@ -47,6 +48,7 @@ type TProductVariantField = UseFieldArrayReturn<
 //----------------------------------------------------------------------------------------------------
 
 const AddEditProductForm: React.FC<TProps> = ({
+  type,
   form,
   productVariantFields,
   currentPage,
@@ -153,6 +155,7 @@ const AddEditProductForm: React.FC<TProps> = ({
             return (
               <ProductVariant
                 key={idx}
+                type={type}
                 HandleVariant={HandleVariant}
                 form={form}
                 currentPage={idx + 1}
@@ -177,6 +180,7 @@ interface HandleImageParams {
 
 interface TProductVariantProps {
   currentPage: number;
+  type: "add" | "edit";
   HandleVariant: (type: "add" | "delete") => void;
   form: UseFormReturn<TProductData>;
   className?: string;
@@ -189,6 +193,7 @@ const ProductVariant = ({
   form,
   HandleVariant,
   className,
+  type,
 }: TProductVariantProps) => {
   // react hooks
 
@@ -361,9 +366,15 @@ const ProductVariant = ({
                 onSuccessfullUpload={(image) =>
                   handleImage({ type: "add", image, imageIdx: idx })
                 }
-                toggleModal={() =>
-                  dispatch(productsReducers.toggleShowAddProduct())
-                }
+                toggleModal={() => {
+                  if (type === "add") {
+                    dispatch(productsReducers.toggleShowAddProduct());
+                  }
+
+                  if (type === "edit") {
+                    dispatch(productsReducers.toggleShowEditProduct());
+                  }
+                }}
               />
             );
           },
