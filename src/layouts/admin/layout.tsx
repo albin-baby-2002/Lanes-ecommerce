@@ -78,7 +78,7 @@ const Navigation = [
 const AdminLayout: React.FC<TProps> = ({ children }) => {
   return (
     <div className="flex h-screen">
-      <div className="w-[300px] border-r">
+      <div className=" bg-yellow-200 md:bg-white lg:min-w-[300px] border-r">
         <div className="px-6 py-8">
           <Image
             src="/logos/lanes.svg"

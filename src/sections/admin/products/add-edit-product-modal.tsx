@@ -19,7 +19,10 @@ import AddEditProductForm from "@/components/forms/add-edit-product";
 import { ProductSchema } from "@/lib/zod-schema";
 import { cn } from "@/lib/utils";
 import { createCategory } from "@/lib/actions/admin/category-actions";
-import { createProductWithVariantsAndCategory } from "@/lib/actions/admin/product-actions";
+import {
+  createProductWithVariantsAndCategory,
+  EditProduct,
+} from "@/lib/actions/admin/product-actions";
 import { TProductsData } from "./views/products-view";
 
 //-----------------------------------------------------------------------------------
@@ -100,13 +103,12 @@ const AddOrEditProductModal: React.FC<TProps> = ({
         ...productInfo
       } = { ...productToEdit };
 
-
       const categoriesInfo = categories.map((val) => val.categoryId);
 
       const existingProduct: TProductData = {
         ...productInfo,
         categories: categoriesInfo,
-        productVariants
+        productVariants,
       };
 
       form.reset(existingProduct);
@@ -201,16 +203,16 @@ const AddOrEditProductModal: React.FC<TProps> = ({
             return toast.error("Unexpected error: category data not found");
           }
 
-          // let resp = await EditCategory(categoryToEdit?.id, values);
+          let resp = await EditProduct(values);
 
-          // if (!resp.success) {
-          //   setSubmitting(false);
-          //   return toast.error(resp.message);
-          // }
+          if (!resp.success) {
+            setSubmitting(false);
+            return toast.error(resp.message);
+          }
 
           toast.success("Successfully Updated Category");
           break;
-        // }
+        }
 
         default: {
           return toast.error("Invalid operation type");

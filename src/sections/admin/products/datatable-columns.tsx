@@ -30,7 +30,7 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
   {
     accessorKey: "none",
     header: "Product ID",
-    maxSize: 50,
+    maxSize: 120,
     cell: ({ row }) => {
       const variants: ProductVariant[] = row.getValue("productVariants");
       const imageUrl = variants[0].productVariantImages[0];
@@ -51,8 +51,28 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
       );
     },
   },
-  { accessorKey: "name", header: "Product Name" },
-  { accessorKey: "description", header: "Description" },
+  {
+    accessorKey: "name",
+    header: "Product Name",
+    size: 150,
+    cell: ({ row }) => {
+      const val: string = row.getValue("name");
+      return (
+        <p className="overflow-hidden overflow-ellipsis text-nowrap">{val}</p>
+      );
+    },
+  },
+  {
+    accessorKey: "description",
+    header: "Description",
+    maxSize: 300,
+    cell: ({ row }) => {
+      const val: string = row.getValue("description");
+      return (
+        <p className="overflow-hidden overflow-ellipsis text-nowrap">{val}</p>
+      );
+    },
+  },
   {
     accessorKey: "onDiscount",
     header: "On Discount",
@@ -66,7 +86,7 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
     cell: ({ row }) => {
       const variants: ProductVariant[] = row.getValue("productVariants");
 
-      return 'Rs : '+variants[0].price;
+      return "Rs : " + variants[0].price;
     },
   },
   {

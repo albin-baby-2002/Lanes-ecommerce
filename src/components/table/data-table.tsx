@@ -28,7 +28,6 @@ export function DataTable<TData, TValue>({
   data,
   columnVisibility,
 }: DataTableProps<TData, TValue>) {
-
   const table = useReactTable({
     data,
     columns,
@@ -40,7 +39,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="rounded-md border">
-      <Table className="bg-white">
+      <Table style={{tableLayout:'fixed'}} className="bg-white ">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>

@@ -125,7 +125,7 @@ export const createProductWithVariantsAndCategory = async (
 
 // server action to edit existing product and variants
 
-async function EditProduct( product: TProductData) {
+export const EditProduct = async(product: TProductData)=> {
   const response = { success: false, message: "" };
 
   try {
@@ -135,11 +135,6 @@ async function EditProduct( product: TProductData) {
 
     if (!isAdmin) {
       response.message = NOT_ADMIN_ERR_MESSAGE;
-      return response;
-    }
-
-    if(!product.productId){
-      response.message = 'Failed to fetch product id';
       return response;
     }
 
@@ -154,9 +149,16 @@ async function EditProduct( product: TProductData) {
       return response;
     }
 
+    const productId = parsedProduct.productId;
+
+    if (!productId) {
+      response.message = "Failed to fetch product id";
+      return response;
+    }
+
     // Check for existing product by Id
 
-    const existingProduct = await findProductById(product?.productId);
+    const existingProduct = await findProductById(productId);
 
     // if product not found return
 
@@ -179,14 +181,14 @@ async function EditProduct( product: TProductData) {
         await tx
           .update(products)
           .set({ ...productInfo, updatedAt: new Date() })
-          .where(eq(products.productId, product.productId));
+          .where(eq(products.productId, productId));
 
         // Update categories
 
         const existingCategoriesResp = await tx
           .select({ id: productCategories.categoryId })
           .from(productCategories)
-          .where(eq(productCategories.productId, product.productId));
+          .where(eq(productCategories.productId, productId));
 
         // extract the id
 
@@ -210,7 +212,7 @@ async function EditProduct( product: TProductData) {
 
         if (categoriesToAdd.length > 0) {
           const categoryInsert = categoriesToAdd.map((categoryId) => ({
-            productId:product.productId,
+            productId,
             categoryId,
           }));
 
@@ -222,64 +224,85 @@ async function EditProduct( product: TProductData) {
         const existingVariants = await tx
           .select()
           .from(productVariants)
-          .where(eq(productVariants.productId,productId));
+          .where(eq(productVariants.productId, productId));
+
+        // loop through existing values and check is that variant is in the input(productVariantsInfo) passed now
+        // if the value is present update to that values images
+        // if variant not in current input (productVariantsInfo) then delete it
 
         for (const existingVariant of existingVariants) {
-
-          const newVariant = ProductVariantsInfo.find(
+          const updatedVariant = ProductVariantsInfo.find(
             (pv) => pv.productVariantId === existingVariant.productVariantId,
           );
 
-          if (!newVariant) {
+          if (!updatedVariant) {
             // Delete variant and its images if not in new data
+
             await tx
               .delete(productVariantImages)
               .where(
-                productVariantImages.productVariantId.equals(
+                eq(
+                  productVariantImages.productVariantId,
                   existingVariant.productVariantId,
                 ),
               );
+
             await tx
               .delete(productVariants)
               .where(
-                productVariants.productVariantId.equals(
+                eq(
+                  productVariants.productVariantId,
                   existingVariant.productVariantId,
                 ),
               );
           } else {
             // Update variant if it exists and has changes
-            const { productVariantImages, ...variantInfo } = newVariant;
+
+            const {
+              productVariantImages: updatedProductVariantImages,
+              ...variantInfo
+            } = updatedVariant;
 
             await tx
               .update(productVariants)
               .set(variantInfo)
               .where(
-                productVariants.productVariantId.equals(
+                eq(
+                  productVariants.productVariantId,
                   existingVariant.productVariantId,
                 ),
               );
 
             // Sync variant images
+
             const existingImages = await tx
-              .select(productVariantImages.imgUrl)
+              .select({ imgUrl: productVariantImages.imgUrl })
               .from(productVariantImages)
               .where(
-                productVariantImages.productVariantId.equals(
+                eq(
+                  productVariantImages.productVariantId,
                   existingVariant.productVariantId,
                 ),
               );
 
             const imagesToDelete = existingImages.filter(
-              (ei) => !productVariantImages.includes(ei.imgUrl),
+              (ei) => !updatedProductVariantImages.includes(ei.imgUrl),
             );
-            const imagesToAdd = productVariantImages.filter(
+
+            const imagesToDeleteString = imagesToDelete.map(
+              (val) => val.imgUrl,
+            );
+
+            const imagesToAdd = updatedProductVariantImages.filter(
               (ni) => !existingImages.some((ei) => ei.imgUrl === ni),
             );
 
             if (imagesToDelete.length > 0) {
               await tx
                 .delete(productVariantImages)
-                .where(productVariantImages.imgUrl.in(imagesToDelete));
+                .where(
+                  inArray(productVariantImages.imgUrl, imagesToDeleteString),
+                );
             }
 
             if (imagesToAdd.length > 0) {
@@ -287,19 +310,25 @@ async function EditProduct( product: TProductData) {
                 imgUrl,
                 productVariantId: existingVariant.productVariantId,
               }));
+
               await tx.insert(productVariantImages).values(imagesInsert);
             }
           }
         }
 
         // Add new variants
+
         for (const val of ProductVariantsInfo) {
           if (
             !existingVariants.some(
               (ev) => ev.productVariantId === val.productVariantId,
             )
           ) {
-            const { productVariantImages: variantImages, ...variantInfo } = val;
+            const {
+              productVariantId: newVariantNullField,
+              productVariantImages: variantImages,
+              ...variantInfo
+            } = val;
 
             const [newVariant] = await tx
               .insert(productVariants)
@@ -312,6 +341,7 @@ async function EditProduct( product: TProductData) {
               imgUrl,
               productVariantId: newVariant.productVariantId,
             }));
+
             await tx.insert(productVariantImages).values(imagesInsert);
           }
         }
@@ -326,7 +356,7 @@ async function EditProduct( product: TProductData) {
     }
 
     return response;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error:", error);
     return {
       success: false,

@@ -173,7 +173,7 @@ export default AddEditProductForm;
 //----------------------------------------------------------------------------------------------------
 
 interface HandleImageParams {
-  type: "add" | "delete";
+  operationType: "add" | "delete";
   image?: string;
   imageIdx?: number;
 }
@@ -211,13 +211,17 @@ const ProductVariant = ({
 
   // fn to handle image add or delete
 
-  const handleImage = ({ type, image, imageIdx }: HandleImageParams) => {
+  const handleImage = ({
+    operationType,
+    image,
+    imageIdx,
+  }: HandleImageParams) => {
     const currentVariant = productVariants[currentPage - 1];
 
     if (!currentVariant) return;
 
     const updateImages = () => {
-      if (type === "delete" && imageIdx !== undefined) {
+      if (operationType === "delete" && imageIdx !== undefined) {
         // Remove image by index
         return (
           currentVariant.productVariantImages?.filter(
@@ -226,7 +230,7 @@ const ProductVariant = ({
         );
       }
 
-      if (type === "add") {
+      if (operationType === "add") {
         if (image && imageIdx !== undefined) {
           // Replace existing image by index
           return currentVariant.productVariantImages?.map((val, idx) =>
@@ -251,8 +255,14 @@ const ProductVariant = ({
 
     form.setValue("productVariants", updatedVariants);
 
-    if (image && type === "add") {
-      dispatch(productsReducers.toggleShowAddProduct());
+    if (image && operationType === "add") {
+      if (type === "add") {
+        dispatch(productsReducers.toggleShowAddProduct());
+      }
+
+      if (type === "edit") {
+        dispatch(productsReducers.toggleShowEditProduct());
+      }
     }
   };
 
@@ -361,10 +371,10 @@ const ProductVariant = ({
                 key={idx}
                 imageUrl={img}
                 handleDelete={() => {
-                  handleImage({ type: "delete", image: "", imageIdx: idx });
+                  handleImage({ operationType: "delete", image: "", imageIdx: idx });
                 }}
                 onSuccessfullUpload={(image) =>
-                  handleImage({ type: "add", image, imageIdx: idx })
+                  handleImage({ operationType: "add", image, imageIdx: idx })
                 }
                 toggleModal={() => {
                   if (type === "add") {
@@ -380,7 +390,7 @@ const ProductVariant = ({
           },
         )}
 
-        <AddImage onClick={() => handleImage({ type: "add" })} />
+        <AddImage onClick={() => handleImage({ operationType: "add" })} />
       </div>
     </div>
   );
