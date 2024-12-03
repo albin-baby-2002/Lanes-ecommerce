@@ -7,6 +7,7 @@ interface TIntialState {
   productToEdit: string | null;
   showDeleteProductConfirmation: boolean;
   productToDelete: string | null;
+  pendingDeleting: boolean;
 }
 
 export interface TCategoryOption {
@@ -17,11 +18,11 @@ export interface TCategoryOption {
 const initialState: TIntialState = {
   showAddProduct: false,
   categoryOptions: null,
-
   showEditProduct: false,
   productToEdit: null,
   showDeleteProductConfirmation: false,
   productToDelete: null,
+  pendingDeleting: false,
 };
 
 const productSlice = createSlice({
@@ -35,6 +36,11 @@ const productSlice = createSlice({
     toggleShowEditProduct: (state) => {
       state.showEditProduct = !state.showEditProduct;
     },
+
+    togglePendingDeleting: (state) => {
+      state.pendingDeleting = !state.pendingDeleting;
+    },
+
     setCategoryOptions: (
       state,
       action: PayloadAction<TCategoryOption[] | null>,

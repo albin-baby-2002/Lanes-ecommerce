@@ -4,7 +4,11 @@
 import { TProductData } from "@/sections/admin/products/add-edit-product-modal";
 import { checkIsAdmin } from "../auth-actions";
 import { parseProductData } from "@/lib/helpers/data-validation";
-import { findProductById, findProductByName } from "@/lib/db-services/products";
+import {
+  findProductById,
+  findProductByName,
+  getProductDataWithVariantsAndImages,
+} from "@/lib/db-services/products";
 import { NOT_ADMIN_ERR_MESSAGE } from "../constants";
 import { db } from "@/drizzle/db";
 import {
@@ -13,7 +17,7 @@ import {
   productVariantImages,
   productVariants,
 } from "@/drizzle/schema";
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 
 // server action to create a new product on admin req
 
@@ -125,7 +129,7 @@ export const createProductWithVariantsAndCategory = async (
 
 // server action to edit existing product and variants
 
-export const EditProduct = async(product: TProductData)=> {
+export const EditProduct = async (product: TProductData) => {
   const response = { success: false, message: "" };
 
   try {
@@ -364,4 +368,88 @@ export const EditProduct = async(product: TProductData)=> {
       details: error.message,
     };
   }
-}
+};
+
+// product action to delete a complete product with its variants
+
+export const DeleteProduct = async (productId: string) => {
+  const response = { success: false, message: "" };
+
+  try {
+    // Check admin
+    const isAdmin = await checkIsAdmin();
+    if (!isAdmin) {
+      response.message = NOT_ADMIN_ERR_MESSAGE;
+      return response;
+    }
+
+    // Validate productId
+    if (!productId || typeof productId !== "string") {
+      response.message = "Invalid product ID provided.";
+      return response;
+    }
+
+    // Check for existing product by ID
+    const existingProduct = await findProductById(productId);
+    if (!existingProduct[0]) {
+      response.message = "Unexpected Error! Failed To Find Product Info.";
+      return response;
+    }
+
+    // Perform transaction
+    try {
+      await db.transaction(async (tx) => {
+        const {
+          productVariants: productVariantsInfo,
+          categories,
+          ...rest
+        } = await getProductDataWithVariantsAndImages(productId);
+
+        // Delete categories
+        const categoriesToDelete = categories.map((cat) => cat.categoryId);
+        await tx
+          .delete(productCategories)
+          .where(
+            and(
+              inArray(productCategories.categoryId, categoriesToDelete),
+              eq(productCategories.productId, productId),
+            ),
+          );
+
+        // Delete variants and images in bulk
+        const variantIdsToDelete = productVariantsInfo.map(
+          (variant) => variant.productVariantId,
+        );
+        const imagesToDelete = productVariantsInfo.flatMap(
+          (variant) => variant.productVariantImages,
+        );
+
+        await tx
+          .delete(productVariantImages)
+          .where(inArray(productVariantImages.imgUrl, imagesToDelete));
+        await tx
+          .delete(productVariants)
+          .where(inArray(productVariants.productVariantId, variantIdsToDelete));
+
+        await tx.delete(products).where(eq(products.productId, productId));
+      });
+
+      // Successful deletion
+      response.success = true;
+      response.message = "Successfully deleted product.";
+    } catch (txError) {
+      console.error("Transaction Error:", txError);
+      response.message = "Failed to delete product. Please try again.";
+      throw txError;
+    }
+
+    return response;
+  } catch (error: any) {
+    console.error("Error:", error);
+    return {
+      success: false,
+      message: "Sorry, something went wrong. Please try again later.",
+      details: error.message,
+    };
+  }
+};

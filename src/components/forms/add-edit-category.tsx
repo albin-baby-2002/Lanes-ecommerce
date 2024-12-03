@@ -60,6 +60,7 @@ const AddEditCategoryForm: React.FC<TProps> = ({ form }) => {
             fieldType={FormFieldType.INPUT}
             name="offerDiscount"
             placeholder="10"
+            dataType="number"
             label="Discount (%)"
           />
         </div>

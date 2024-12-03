@@ -30,7 +30,7 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
   {
     accessorKey: "none",
     header: "Product ID",
-    maxSize: 120,
+    maxSize: 170,
     cell: ({ row }) => {
       const variants: ProductVariant[] = row.getValue("productVariants");
       const imageUrl = variants[0].productVariantImages[0];
@@ -54,7 +54,7 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
   {
     accessorKey: "name",
     header: "Product Name",
-    size: 150,
+    minSize: 200,
     cell: ({ row }) => {
       const val: string = row.getValue("name");
       return (
@@ -65,7 +65,7 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
   {
     accessorKey: "description",
     header: "Description",
-    maxSize: 300,
+    minSize: 250,
     cell: ({ row }) => {
       const val: string = row.getValue("description");
       return (
@@ -82,11 +82,32 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
   },
   {
     accessorKey: "none",
-    header: "Base Product Price",
+    header: "Base Variant Price",
     cell: ({ row }) => {
       const variants: ProductVariant[] = row.getValue("productVariants");
 
-      return "Rs : " + variants[0].price;
+      return variants[0].price;
+    },
+  },
+
+  {
+    accessorKey: "none",
+    minSize: 140,
+    maxSize: 140,
+    header: () => <div className="text-center"> Avg Price</div>,
+    cell: ({ row }) => {
+      const variants: ProductVariant[] = row.getValue("productVariants");
+      const totalPrice = variants.reduce((total, val) => {
+        return (total += val.price);
+      }, 0);
+
+      const avgPrice = totalPrice / variants.length;
+
+      return (
+        <div className="flex items-center justify-center gap-3">
+          <p>{avgPrice.toFixed(2)}</p>
+        </div>
+      );
     },
   },
   {
@@ -109,9 +130,8 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
       const variants: ProductVariant[] = row.getValue("productVariants");
       const colors = variants?.map((val) => val?.color);
 
-      console.log(colors);
       return (
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center gap-3">
           {colors.map((val, idx) => {
             return (
               <div
@@ -144,7 +164,6 @@ const ActionsCell = ({ row }: { row: Row<TProductsData> }) => {
   };
 
   const showDeleteproductConfirmation = () => {
-    console.log(row.getValue("productId"));
     dispatch(productsReducers.setProductToDelete(row.getValue("productId")));
     dispatch(productsReducers.toggleDeleteProductConfirmation());
   };

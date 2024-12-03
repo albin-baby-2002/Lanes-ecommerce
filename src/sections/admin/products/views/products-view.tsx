@@ -17,6 +17,7 @@ import ProductActionsModals from "../products-action-modals";
 import { DataTable } from "@/components/table/data-table";
 import { productsColumns } from "../datatable-columns";
 import { TProductData } from "../add-edit-product-modal";
+import { getAllProductsDataUsingAggregation } from "@/lib/db-services/products";
 
 export interface TCategoryOptions {
   label: string;
@@ -56,51 +57,7 @@ const ProductsView = async () => {
     value: categories.categoryId,
   })) as unknown as TCategoryOptions[];
 
-  const productsData = (await db.execute(sql`
-    SELECT
-      products."productId",
-      products."productInternalId",
-      products."name",
-      products."description",
-      products."discount",
-      products."onDiscount",
-      products."createdAt",
-      products."updatedAt",
-      JSON_AGG(
-        JSON_BUILD_OBJECT(
-        'categoryId', "categories"."categoryId",
-        'categoryInternalId',"categories"."categoryInternalId"
-        )
-      ) AS categories,
-      JSON_AGG(
-        JSON_BUILD_OBJECT(
-          'productVariantId', "productVariants"."productVariantId",
-          'color', "productVariants"."color",
-          'size', "productVariants"."size",
-          'inventoryCount', "productVariants"."inventoryCount",
-          'price', "productVariants"."price",
-          'onSale', "productVariants"."onSale",
-          'productVariantImages', img_data.images
-        )
-      ) AS "productVariants"
-    FROM "products"
-    INNER JOIN "productVariants"
-      ON products."productId" = "productVariants"."productId"
-    INNER JOIN (
-      SELECT
-        "productVariantImages"."productVariantId",
-        ARRAY_AGG("productVariantImages"."imgUrl") AS images
-      FROM "productVariantImages"
-      GROUP BY "productVariantImages"."productVariantId"
-    ) AS img_data
-      ON "productVariants"."productVariantId" = img_data."productVariantId"
-    INNER JOIN "productCategories"
-      ON products."productId" = "productCategories"."productId"
-    INNER JOIN "categories"
-      ON "productCategories"."categoryId" = "categories"."categoryId"
-    GROUP BY products."productId"
-    ORDER BY products."productId";
-  `)) as unknown as TProductsData[];
+  const productsData = await getAllProductsDataUsingAggregation();
 
   return (
     <div className="h-full bg-slate-50 p-8">
@@ -110,7 +67,10 @@ const ProductsView = async () => {
 
       <SearchAndActions />
 
-      <ProductActionsModals productsData={productsData} categoryOptions={categoriesOptions} />
+      <ProductActionsModals
+        productsData={productsData}
+        categoryOptions={categoriesOptions}
+      />
 
       <div className="mt-8">
         <DataTable

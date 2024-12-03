@@ -18,7 +18,7 @@ import Image from "next/image";
 interface TProps {
   open: boolean;
   title: string;
-  description: string;
+  description: string | React.ReactNode;
   primaryActionLabel: string;
   secondaryActionLabel?: string;
   primaryAction: () => void;

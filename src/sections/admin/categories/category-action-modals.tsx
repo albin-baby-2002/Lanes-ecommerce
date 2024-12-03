@@ -90,6 +90,7 @@ const CategoryActionModals: React.FC<TProps> = ({ categoriesData }) => {
         primaryActionPending={pendingDeleting}
         color="error"
       />
+
     </>
   );
 };
