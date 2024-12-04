@@ -1,0 +1,2 @@
+ALTER TABLE "users" ADD COLUMN "userInternalId" integer NOT NULL GENERATED ALWAYS AS IDENTITY (sequence name "users_userInternalId_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1000 CACHE 1);--> statement-breakpoint
+ALTER TABLE "users" ADD CONSTRAINT "users_userInternalId_unique" UNIQUE("userInternalId");

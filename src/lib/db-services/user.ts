@@ -11,3 +11,7 @@ export const findUserByKindeId = async (kindeId: string) => {
 export const insertUser = async (user: TUser) => {
   return await db.insert(users).values(user);
 };
+
+export const getAllUsers = async () => {
+  return await db.select().from(users);
+};

@@ -10,6 +10,12 @@ import {
 
 export const users = pgTable("users", {
   userId: uuid("userId").defaultRandom().primaryKey(),
+  userInternalId: integer("userInternalId")
+    .generatedAlwaysAsIdentity({
+      startWith: 1000,
+      increment: 1,
+    })
+    .unique(),
   kindeId: varchar({ length: 256 }).notNull().unique(),
   email: varchar({ length: 256 }).notNull().unique(),
   firstName: varchar({ length: 256 }),
