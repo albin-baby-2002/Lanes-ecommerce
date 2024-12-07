@@ -18,6 +18,7 @@ export const users = pgTable("users", {
     .unique(),
   kindeId: varchar({ length: 256 }).notNull().unique(),
   email: varchar({ length: 256 }).notNull().unique(),
+  phone: varchar({ length: 256 }).unique(),
   firstName: varchar({ length: 256 }),
   lastName: varchar({ length: 256 }),
   createdAt: timestamp("createdAt").notNull().defaultNow(),

@@ -1,8 +1,11 @@
 "use server";
-
 import { TCategoryData } from "@/sections/admin/categories/add-edit-category-modal";
-import { CategorySchema, ProductSchema } from "../zod-schema";
+import { CategorySchema, ProductSchema, UserProfileSchema } from "../zod-schema";
 import { TProductData } from "@/sections/admin/products/add-edit-product-modal";
+import { z } from "zod";
+
+
+export type TUser = z.infer<typeof UserProfileSchema>;
 
 //-----------------------------------------------------------------------------------------
 
@@ -73,4 +76,37 @@ export const parseProductData = async (product: TProductData) => {
   }
 
   return parsedProduct;
+};
+
+// fn to validate user data using zod
+
+export const parseUserData = async (user: TUser) => {
+  // validate the data using zod
+
+  const result = UserProfileSchema.safeParse(user);
+
+  // check for errors after parsing and give error resp
+
+  const errors = result.error?.errors;
+
+  if (errors) {
+    const firstError = errors[0].message;
+
+    const errorRespMessage =
+      firstError === "Required"
+        ? firstError + " - " + errors[0].path[0]
+        : firstError;
+
+    throw new Error(errorRespMessage);
+  }
+
+  // check for parsed data and error if data not found
+
+  const parsedUser: TUser | undefined = result.data;
+
+  if (!parsedUser) {
+    throw new Error("Unexpected Error. Failed to process users data");
+  }
+
+  return parsedUser;
 };

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { FaSearch } from "react-icons/fa";
 import { AppDispatch } from "@/store/store";
 import { useDispatch } from "react-redux";
+import { usersReducers } from "@/store/slices/admin/users";
 
 const SearchAndActions = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,7 +19,13 @@ const SearchAndActions = () => {
           />
         </div>
 
-        <Button className="h-auto min-h-full rounded-md bg-black px-5 text-white">
+        <Button
+          onClick={() => {
+            console.log(true)
+            dispatch(usersReducers.toggleShowAddUser());
+          }}
+          className="h-auto min-h-full rounded-md bg-black px-5 text-white"
+        >
           Add Users
         </Button>
 

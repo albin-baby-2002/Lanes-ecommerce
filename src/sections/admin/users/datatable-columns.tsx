@@ -4,13 +4,12 @@ import { Button } from "@/components/ui/button";
 import { productsReducers } from "@/store/slices/admin/products";
 import { AppDispatch } from "@/store/store";
 import { ColumnDef, Row } from "@tanstack/react-table";
+import { format } from "date-fns";
 import { FaTrashAlt } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
 
-interface userData {
+interface TUserData {
   userId: string;
   userInternalId: number;
   kindeId: string;
@@ -21,7 +20,7 @@ interface userData {
   updatedAt: Date;
 }
 
-export const usersColumns: ColumnDef<userData>[] = [
+export const usersColumns: ColumnDef<TUserData>[] = [
   {
     accessorKey: "userId",
     header: "ID",
@@ -32,8 +31,7 @@ export const usersColumns: ColumnDef<userData>[] = [
     header: "User ID",
     enableHiding: true,
     cell: ({ row }) => {
-      const userID = "#PRD" + row.getValue("userInternalId");
-
+      const userID = "#USR" + row.getValue("userInternalId");
       return <p>{userID}</p>;
     },
   },
@@ -41,27 +39,79 @@ export const usersColumns: ColumnDef<userData>[] = [
   {
     accessorKey: "firstName",
     header: "User Name",
-    minSize: 200,
+    minSize: 100,
     enableHiding: true,
   },
   {
-    accessorKey: "firstName",
-    header: "User Name",
-    minSize: 200,
+    accessorKey: "lastName",
+    header: "Last Name",
+    minSize: 100,
     enableHiding: true,
   },
   {
-    accessorKey: "description",
-    header: "Description",
-    minSize: 250,
+    accessorKey: "",
+    header: "Username",
+    minSize: 60,
     cell: ({ row }) => {
-      const val: string = row.getValue("description");
+      const firstName: string = row.getValue("firstName");
+      const lastName: string = row.getValue("lastName");
+
       return (
-        <p className="overflow-hidden overflow-ellipsis text-nowrap">{val}</p>
+        <p className="overflow-hidden overflow-ellipsis text-nowrap">
+          {firstName} {lastName}
+        </p>
       );
     },
   },
 
+  {
+    accessorKey: "email",
+    header: "Email",
+    minSize: 200,
+  },
+  {
+    accessorKey: "phone",
+    header: "Phone",
+    minSize: 200,
+
+    cell: ({ row }) => {
+      const phone: string = row.getValue("phone");
+
+      return (
+        <p className="overflow-hidden overflow-ellipsis text-nowrap">
+          {phone || "-"}
+        </p>
+      );
+    },
+  },
+  {
+    accessorKey: "kindeId",
+    header: "KindeId",
+    minSize: 300,
+  },
+
+  {
+    accessorKey: "createdAt",
+    header: "CreatedAt",
+    minSize: 80,
+
+    cell: ({ row }) => {
+      const date: Date = row.getValue("createdAt");
+
+      return <p>{format(date, "yyyy-MM-dd")}</p>;
+    },
+  },
+  {
+    accessorKey: "updatedAt",
+    header: "updatedAt",
+    minSize: 80,
+
+    cell: ({ row }) => {
+      const date: Date = row.getValue("createdAt");
+
+      return <p>{format(date, "yyyy-MM-dd")}</p>;
+    },
+  },
   {
     header: () => <div className="text-center">Actions</div>,
     accessorKey: "h",
@@ -69,7 +119,7 @@ export const usersColumns: ColumnDef<userData>[] = [
   },
 ];
 
-const ActionsCell = ({ row }: { row: Row<TProductsData> }) => {
+const ActionsCell = ({ row }: { row: Row<TUserData> }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const showEdit = () => {

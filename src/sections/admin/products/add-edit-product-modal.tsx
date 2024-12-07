@@ -18,7 +18,6 @@ import { useRouter } from "next/navigation";
 import AddEditProductForm from "@/components/forms/add-edit-product";
 import { ProductSchema } from "@/lib/zod-schema";
 import { cn } from "@/lib/utils";
-import { createCategory } from "@/lib/actions/admin/category-actions";
 import {
   createProductWithVariantsAndCategory,
   EditProduct,
@@ -200,7 +199,7 @@ const AddOrEditProductModal: React.FC<TProps> = ({
         case "edit": {
           // submit logic for editing existing category
           if (!productToEdit) {
-            return toast.error("Unexpected error: category data not found");
+            return toast.error("Unexpected error: Product data not found");
           }
 
           let resp = await EditProduct(values);
@@ -210,7 +209,7 @@ const AddOrEditProductModal: React.FC<TProps> = ({
             return toast.error(resp.message);
           }
 
-          toast.success("Successfully Updated Category");
+          toast.success("Successfully Updated Product");
           break;
         }
 

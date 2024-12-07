@@ -15,3 +15,9 @@ export const insertUser = async (user: TUser) => {
 export const getAllUsers = async () => {
   return await db.select().from(users);
 };
+
+export const findUserByEmail = async (email: string) => {
+  return await db.select().from(users).where(eq(users.email, email));
+};
+
+  

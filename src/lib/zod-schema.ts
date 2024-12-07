@@ -44,7 +44,10 @@ export const UserProfileSchema = z.object({
 
   phone: z
     .string()
-    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+    .refine(
+      (phone) => /^\+\d{1,3}\s?\d{7,15}$/.test(phone),
+      "Invalid phone - Enter Phone With Country Code",
+    ),
 });
 
 export const ResetPasswordSchema = z
@@ -80,7 +83,7 @@ export const CategorySchema = z.object({
 });
 
 export const ProductVariantSchema = z.object({
-  productVariantId:z.string().optional(),
+  productVariantId: z.string().optional(),
   color: z.string().min(3, {
     message: "Color must be atleast 3 char long.",
   }),
@@ -98,7 +101,7 @@ export const ProductVariantSchema = z.object({
 });
 
 export const ProductSchema = z.object({
-  productId:z.string().optional(),
+  productId: z.string().optional(),
   name: z.string().min(4, {
     message: "Name must be atleast 4 char long.",
   }),

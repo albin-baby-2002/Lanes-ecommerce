@@ -3,6 +3,10 @@ import React from "react";
 import SearchAndActions from "../search-and-actions";
 import { getAllUsers } from "@/lib/db-services/user";
 import { usersColumns } from "../datatable-columns";
+import { users } from "@/drizzle/schema";
+import UserActionModels from "../users-action-modals";
+
+export type TUser = typeof users.$inferSelect;
 
 const UsersView = async () => {
   const userData = await getAllUsers();
@@ -14,11 +18,7 @@ const UsersView = async () => {
       </div>
 
       <SearchAndActions />
-
-      {/* <ProductActionsModals */}
-      {/* productsData={productsData} */}
-      {/* categoryOptions={categoriesOptions} */}
-      {/* /> */}
+      <UserActionModels />
 
       <div className="mt-8">
         <DataTable
@@ -27,6 +27,8 @@ const UsersView = async () => {
           columnVisibility={{
             userId: false,
             productVariants: false,
+            firstName: false,
+            lastName: false,
           }}
         />
       </div>

@@ -1,7 +1,7 @@
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
-const PROTECTED_ROUTES = ["/cart", "/admin", "/checkout", "/settings"];
+const PROTECTED_ROUTES = ["/cart", "/checkout", "/settings"];
 
 export async function middleware(request: NextRequest) {
   const { isAuthenticated, getPermission } = getKindeServerSession();
@@ -20,13 +20,13 @@ export async function middleware(request: NextRequest) {
 
   // check permission of user for admin route
 
-  if (request.nextUrl.pathname.startsWith("/admin")) {
-    const adminPermission = await getPermission("admin:permission");
+  // if (request.nextUrl.pathname.startsWith("/admin")) {
+  //   const adminPermission = await getPermission("admin:permission");
 
-    if (!adminPermission?.isGranted) {
-      return NextResponse.redirect(new URL("/api/auth/login", request.url));
-    }
-  }
+  //   if (!adminPermission?.isGranted) {
+  //     return NextResponse.redirect(new URL("/api/auth/login", request.url));
+  //   }
+  // }
 
   return NextResponse.next();
 }
