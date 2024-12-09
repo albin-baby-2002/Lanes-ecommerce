@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { productsReducers } from "@/store/slices/admin/products";
+import { usersReducers } from "@/store/slices/admin/users";
 import { AppDispatch } from "@/store/store";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { format } from "date-fns";
@@ -123,13 +124,13 @@ const ActionsCell = ({ row }: { row: Row<TUserData> }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const showEdit = () => {
-    dispatch(productsReducers.setProductToEdit(row.getValue("productId")));
-    dispatch(productsReducers.toggleShowEditProduct());
+    dispatch(usersReducers.setUserToEdit(row.getValue("userId")));
+    dispatch(usersReducers.toggleShowEditUser());
   };
 
-  const showDeleteproductConfirmation = () => {
-    dispatch(productsReducers.setProductToDelete(row.getValue("productId")));
-    dispatch(productsReducers.toggleDeleteProductConfirmation());
+  const showDeleteUserConfirmation = () => {
+    dispatch(usersReducers.setUserToDelete(row.getValue("userId")));
+    dispatch(usersReducers.toggleShowDeleteConfirmation());
   };
 
   return (
@@ -143,7 +144,7 @@ const ActionsCell = ({ row }: { row: Row<TUserData> }) => {
       </Button>
 
       <Button
-        onClick={showDeleteproductConfirmation}
+        onClick={showDeleteUserConfirmation}
         className="size-[26px] bg-black/10 text-black hover:bg-black/15 hover:text-red-600"
         size={"icon"}
       >

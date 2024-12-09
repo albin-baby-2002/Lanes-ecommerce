@@ -106,6 +106,7 @@ const RenderField = <T,>({
           <FormControl>
             <Input
               placeholder={props.placeholder}
+              disabled={props.disabled}
               {...field}
               onChange={(e) => {
                 if (props.dataType === "number") {

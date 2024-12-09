@@ -18,7 +18,7 @@ const UsersView = async () => {
       </div>
 
       <SearchAndActions />
-      <UserActionModels />
+      <UserActionModels userData={userData} />
 
       <div className="mt-8">
         <DataTable

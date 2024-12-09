@@ -8,23 +8,18 @@ import {
 } from "@/components/ui/dialog";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useFieldArray, useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFormStatus } from "react-dom";
 import Image from "next/image";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import AddEditProductForm from "@/components/forms/add-edit-product";
-import { ProductSchema, UserProfileSchema } from "@/lib/zod-schema";
 import { cn } from "@/lib/utils";
-import {
-  createProductWithVariantsAndCategory,
-  EditProduct,
-} from "@/lib/actions/admin/product-actions";
 import AddEditUserForm from "@/components/forms/add-edit-users";
-import { createUser } from "@/lib/actions/admin/users-actions";
-import { TUser } from "@/lib/helpers/data-validation";
+import { createUser, EditUser } from "@/lib/actions/admin/users-actions";
+import { useForm } from "react-hook-form";
+import { UserProfileSchema } from "@/lib/zod-schema";
+import { TUser } from "./views/users-view";
+import { TParsedUser } from "@/lib/helpers/data-validation";
 
 //-----------------------------------------------------------------------------------
 
@@ -68,7 +63,7 @@ const AddOrEditUserModal: React.FC<TProps> = ({
 
   // react-hook form
 
-  const form = useForm<TUser>({
+  const form = useForm<TParsedUser>({
     mode: "onChange",
     resolver: zodResolver(UserProfileSchema),
   });
@@ -77,12 +72,25 @@ const AddOrEditUserModal: React.FC<TProps> = ({
 
   useEffect(() => {
     if (userToEdit && type === "edit") {
+      const {
+        kindeId,
+        userId,
+        userInternalId,
+        createdAt,
+        updatedAt,
+        ...userInfo
+      } = userToEdit;
+
+      const userData: TParsedUser = {
+        first_name: userInfo.firstName || "",
+        last_name: userInfo.lastName || "",
+        email: userInfo.email || "",
+        phone: userInfo.phone || "",
+      };
+
+      form.reset(userData);
     }
   }, [userToEdit, type, form]);
-
-  // watch value of form
-
-  const values = form.watch();
 
   //-----------------------------------------------------------------------------------
 
@@ -91,7 +99,6 @@ const AddOrEditUserModal: React.FC<TProps> = ({
   useEffect(() => {
     setShow(open);
   }, [open]);
-
   //-----------------------------------------------------------------------------------
 
   // fn to toggle  the modal
@@ -104,21 +111,19 @@ const AddOrEditUserModal: React.FC<TProps> = ({
 
   // fn to handle submit form edit or add
 
-  async function onSubmit(values: TUser) {
+  async function onSubmit(values: TParsedUser) {
     try {
       setSubmitting(true);
       switch (type) {
         case "add": {
-          console.log(values,'users');
           // submit logic for adding new category
 
+          let resp = await createUser(values);
 
-          let resp = await createUser(values)
-
-          // if (!resp.success) {
-          //   setSubmitting(false);
-          //   return toast.error(resp.message);
-          // }
+          if (!resp.success) {
+            setSubmitting(false);
+            return toast.error(resp.message);
+          }
 
           toast.success("Successfully Created User");
 
@@ -131,7 +136,7 @@ const AddOrEditUserModal: React.FC<TProps> = ({
             return toast.error("Unexpected error: User data not found");
           }
 
-          // let resp = await EditProduct(values);
+          let resp = await EditUser(values);
 
           // if (!resp.success) {
           //   setSubmitting(false);
@@ -178,7 +183,7 @@ const AddOrEditUserModal: React.FC<TProps> = ({
         {/* form */}
 
         <div className="max-h-[600px] overflow-hidden overflow-y-auto px-2 pt-2">
-          <AddEditUserForm form={form} type="add" />
+          <AddEditUserForm form={form} type={type} />
         </div>
 
         {/* footer with actions */}

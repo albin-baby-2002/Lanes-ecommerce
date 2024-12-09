@@ -16,14 +16,12 @@ interface TProps {
 const AddEditUserForm: React.FC<TProps> = ({ type, form }) => {
   // redux states and hooks
 
-
   //----------------------------------------------------------------------------------------------------
 
   return (
     <Form {...form}>
       <form className="grid w-full gap-4">
         <>
-
           <CustomInputField
             control={form.control}
             fieldType={FormFieldType.INPUT}
@@ -40,13 +38,13 @@ const AddEditUserForm: React.FC<TProps> = ({ type, form }) => {
             label="Last Name"
           />
 
-
           <CustomInputField
             control={form.control}
             fieldType={FormFieldType.INPUT}
             name="email"
             placeholder="Enter Email"
             label="Email"
+            disabled={type === "edit"}
           />
 
           <CustomInputField
@@ -56,10 +54,6 @@ const AddEditUserForm: React.FC<TProps> = ({ type, form }) => {
             placeholder="Enter Phone Number"
             label="Phone"
           />
-
-
-
-
         </>
       </form>
     </Form>
@@ -69,10 +63,3 @@ const AddEditUserForm: React.FC<TProps> = ({ type, form }) => {
 export default AddEditUserForm;
 
 //----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-

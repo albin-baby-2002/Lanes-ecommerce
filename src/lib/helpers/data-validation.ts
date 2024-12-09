@@ -5,7 +5,7 @@ import { TProductData } from "@/sections/admin/products/add-edit-product-modal";
 import { z } from "zod";
 
 
-export type TUser = z.infer<typeof UserProfileSchema>;
+export type TParsedUser = z.infer<typeof UserProfileSchema>;
 
 //-----------------------------------------------------------------------------------------
 

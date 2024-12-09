@@ -15,8 +15,6 @@ import { NOT_ADMIN_ERR_MESSAGE } from "../constants";
 
 // server action to create a new catgory on admin req
 
-// todo - authenticate to protect server action
-
 export const createCategory = async (category: TCategoryData) => {
   try {
     // create a resp obj
@@ -79,8 +77,6 @@ export const createCategory = async (category: TCategoryData) => {
 //-----------------------------------------------------------------------------------------
 
 // server action to edit category
-
-// todo - authenticate to protect server action
 
 export const EditCategory = async (id: string, category: TCategoryData) => {
   try {
@@ -157,8 +153,6 @@ export const EditCategory = async (id: string, category: TCategoryData) => {
 //-----------------------------------------------------------------------------------------
 
 // server action to delete a category
-
-// todo - authenticate to protect server action
 
 export const deleteCategory = async (id: string) => {
   try {
