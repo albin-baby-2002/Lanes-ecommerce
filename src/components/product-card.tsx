@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import ProductCarousel, { TImg } from "./product-carousel";
+import ProductCarousel from "./product-carousel";
 import StarRating from "./star-rating";
 import { Divide } from "lucide-react";
 import { Pricing } from "./pricing";
@@ -9,7 +9,7 @@ interface TProps {
   price: number;
   discount: number;
   rating: number;
-  images: TImg[];
+  images: string[];
 }
 
 const ProductCard: React.FC<TProps> = ({

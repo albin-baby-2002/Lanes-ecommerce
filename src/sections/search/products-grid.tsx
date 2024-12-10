@@ -2,113 +2,29 @@ import ProductCard from "@/components/product-card";
 import React from "react";
 import ProductGridHeader from "./product-grid-header";
 import ProductPagination from "./products-pagination";
+import { getAllProductVariantsWithDetails } from "@/lib/db-services/products";
 
-const ProductsGrid = ({ totalPageSize }: { totalPageSize: number }) => {
+const ProductsGrid = async ({ totalPageSize }: { totalPageSize: number }) => {
+  const products = await getAllProductVariantsWithDetails();
+
   return (
     <div className="mt-2">
       <ProductGridHeader />
       {/* products  */}
 
       <div className="my-6 grid grid-cols-4 justify-center gap-10">
-        <ProductCard
-          name="T-shirt with Tape Details of what we need"
-          price={120}
-          discount={10}
-          rating={4.5}
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCard
-          name="T-shirt with Tape Details of what we need"
-          price={120}
-          discount={10}
-          rating={4.5}
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCard
-          name="T-shirt with Tape Details of what we need"
-          price={120}
-          discount={10}
-          rating={4.5}
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCard
-          name="T-shirt with Tape Details of what we need"
-          price={120}
-          discount={10}
-          rating={4.5}
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCard
-          name="T-shirt with Tape Details of what we need"
-          price={120}
-          discount={10}
-          rating={4.5}
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCard
-          name="T-shirt with Tape Details of what we need"
-          price={120}
-          discount={10}
-          rating={4.5}
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCard
-          name="T-shirt with Tape Details of what we need"
-          price={120}
-          discount={10}
-          rating={4.5}
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCard
-          name="T-shirt with Tape Details of what we need"
-          price={120}
-          discount={10}
-          rating={4.5}
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCard
-          name="T-shirt with Tape Details of what we need"
-          price={120}
-          discount={10}
-          rating={4.5}
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
+        {products.map((product, idx) => {
+          return (
+            <ProductCard
+              key={idx}
+              name={product.name}
+              price={product.price}
+              discount={product.discount || 0}
+              rating={4.5}
+              images={product.productVariantImages}
+            />
+          );
+        })}
       </div>
 
       <ProductPagination totalPageSize={totalPageSize} />

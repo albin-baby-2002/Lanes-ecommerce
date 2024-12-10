@@ -78,10 +78,6 @@ const AddEditProductForm: React.FC<TProps> = ({
     }
   };
 
-  useEffect(() => {
-    console.log(productVariantFields);
-  }, [productVariantFields]);
-
   //----------------------------------------------------------------------------------------------------
 
   return (
@@ -211,58 +207,58 @@ const ProductVariant = ({
 
   // fn to handle image add or delete
 
-  const handleImage = ({
+  const handleImage = async ({
     operationType,
     image,
     imageIdx,
   }: HandleImageParams) => {
-    const currentVariant = productVariants[currentPage - 1];
+    try {
+      console.log(image, operationType, "add image fn");
+      const currentVariant = productVariants[currentPage - 1];
 
-    if (!currentVariant) return;
+      if (!currentVariant) return;
 
-    const updateImages = () => {
-      if (operationType === "delete" && imageIdx !== undefined) {
-        // Remove image by index
-        return (
-          currentVariant.productVariantImages?.filter(
-            (_, idx) => idx !== imageIdx,
-          ) || []
-        );
-      }
+      // Try direct assignment instead of callback
+      const currentVariants = form.getValues('productVariants');
+      
+      const updatedVariants = currentVariants.map((variant, idx) => {
+        if (idx !== currentPage - 1) return variant;
 
-      if (operationType === "add") {
-        if (image && imageIdx !== undefined) {
-          // Replace existing image by index
-          return currentVariant.productVariantImages?.map((val, idx) =>
-            idx === imageIdx ? image : val,
-          );
+        const updatedImages = (() => {
+          if (operationType === "delete" && imageIdx !== undefined) {
+            return variant.productVariantImages?.filter(
+              (_, idx) => idx !== imageIdx
+            ) || [];
+          }
+
+          if (operationType === "add" && image) {
+            console.log("Adding image", image);
+            return [...(variant.productVariantImages || []), image];
+          }
+
+          return variant.productVariantImages || [];
+        })();
+
+        return {
+          ...variant,
+          productVariantImages: updatedImages,
+        };
+      });
+
+      // Try direct assignment
+      form.setValue("productVariants", updatedVariants);
+
+      // Rest of your logic remains the same
+      if (image && operationType === "add") {
+        if (type === "add") {
+          dispatch(productsReducers.toggleShowAddProduct());
         }
-        // Add new empty image
-        return [...(currentVariant.productVariantImages || []), ""];
+        if (type === "edit") {
+          dispatch(productsReducers.toggleShowEditProduct());
+        }
       }
-
-      return currentVariant.productVariantImages || [];
-    };
-
-    const updatedVariant = {
-      ...currentVariant,
-      productVariantImages: updateImages(),
-    };
-
-    const updatedVariants = productVariants.map((variant, idx) =>
-      idx === currentPage - 1 ? updatedVariant : variant,
-    );
-
-    form.setValue("productVariants", updatedVariants);
-
-    if (image && operationType === "add") {
-      if (type === "add") {
-        dispatch(productsReducers.toggleShowAddProduct());
-      }
-
-      if (type === "edit") {
-        dispatch(productsReducers.toggleShowEditProduct());
-      }
+    } catch (error) {
+      console.log(error, "error loading img");
     }
   };
 
@@ -364,17 +360,21 @@ const ProductVariant = ({
       )}
 
       <div className="grid grid-cols-3 gap-2 gap-y-4">
-        {values?.productVariants?.[currentPage - 1].productVariantImages?.map(
+        {values?.productVariants?.[currentPage - 1]?.productVariantImages?.map(
           (img, idx) => {
             return (
               <ImageUploader
                 key={idx}
                 imageUrl={img}
                 handleDelete={() => {
-                  handleImage({ operationType: "delete", image: "", imageIdx: idx });
+                  handleImage({
+                    operationType: "delete",
+                    image: "",
+                    imageIdx: idx,
+                  });
                 }}
                 onSuccessfullUpload={(image) =>
-                  handleImage({ operationType: "add", image, imageIdx: idx })
+                  handleImage({ operationType: "add", image })
                 }
                 toggleModal={() => {
                   if (type === "add") {
@@ -389,6 +389,21 @@ const ProductVariant = ({
             );
           },
         )}
+
+        <ImageUploader
+          onSuccessfullUpload={(image) =>
+            handleImage({ operationType: "add", image })
+          }
+          toggleModal={() => {
+            if (type === "add") {
+              dispatch(productsReducers.toggleShowAddProduct());
+            }
+
+            if (type === "edit") {
+              dispatch(productsReducers.toggleShowEditProduct());
+            }
+          }}
+        />
 
         <AddImage onClick={() => handleImage({ operationType: "add" })} />
       </div>

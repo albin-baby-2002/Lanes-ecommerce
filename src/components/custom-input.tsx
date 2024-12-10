@@ -166,7 +166,6 @@ const RenderField = <T,>({
             <SketchPicker
               color={field.value}
               onChange={(color) => {
-                console.log(field);
                 field.onChange(color.hex, 0);
               }}
               className="absolute top-[46px] z-50"

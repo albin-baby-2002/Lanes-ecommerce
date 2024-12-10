@@ -8,12 +8,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 interface TProps {
   className?: string;
-  images: TImg[];
-}
-
-export interface TImg {
-  url: string;
-  alt: string;
+  images: string[];
 }
 
 const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
@@ -46,7 +41,7 @@ const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
   return (
     <div className="group relative">
       <div
-        className={cn("overflow-hidden rounded-[20px]", className)}
+        className={cn("overflow-hidden rounded-[8px]", className)}
         ref={emblaRef}
       >
         <div className="flex">
@@ -57,11 +52,11 @@ const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
                 className="min-w-0 flex-shrink-0 flex-grow-0 basis-full"
               >
                 <Image
-                  src={image.url}
-                  alt={image.alt}
+                  src={` https://res.cloudinary.com/dfm8vhuea/image/upload/${image}`}
+                  alt={"image of product"}
                   width={1000}
                   height={"1000"}
-                  className=""
+                  className=" h-[240px] object-cover"
                 />
               </div>
             );

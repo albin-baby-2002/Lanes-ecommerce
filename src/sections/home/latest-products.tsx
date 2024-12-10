@@ -1,9 +1,11 @@
 import ProductCard from "@/components/product-card";
 import React from "react";
-import { MdOutlineArrowCircleRight } from "react-icons/md";
 import ExploreNow from "./components/explore-now-btn";
+import { getAllProductsDataUsingAggregation, getAllProductVariantsWithDetails } from "@/lib/db-services/products";
 
-const LatestProducts = () => {
+const LatestProducts = async () => {
+  const products = await getAllProductVariantsWithDetails();
+
   return (
     <div className="grid gap-8 px-10 pt-14">
       <div className="flex items-end justify-between">
@@ -16,32 +18,22 @@ const LatestProducts = () => {
           </p>
         </div>
 
-        <ExploreNow  href={'/search'}/>
+        <ExploreNow href={"/search"} />
       </div>
 
       <div className="grid grid-cols-5 justify-center gap-10">
-        <ProductCard
-          name="T-shirt with Tape Details of what we need"
-          price={120}
-          discount={10}
-          rating={4.5}
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
-        <ProductCard
-          name="T-shirt with Tape Details of what we need"
-          price={120}
-          discount={10}
-          rating={4.5}
-          images={[
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-            { url: "/images/products/p1.svg", alt: "product" },
-          ]}
-        />
+        {products.map((product, idx) => {
+          return (
+            <ProductCard
+              key={idx}
+              name={product.name}
+              price={product.price}
+              discount={product.discount || 0}
+              rating={4.5}
+              images={product.productVariantImages}
+            />
+          );
+        })}
       </div>
     </div>
   );

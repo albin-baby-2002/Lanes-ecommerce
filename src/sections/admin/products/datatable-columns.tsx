@@ -75,18 +75,18 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
   },
   {
     accessorKey: "onDiscount",
-    header: "On Discount",
+    header: ()=><p className=" w-full text-center" >On Discount</p>,
     cell: ({ row }) => {
-      return row.getValue("onDiscount") ? "True" : "False";
+      return <p className=" text-center w-full">{row.getValue("onDiscount") ? "True" : "False"}</p>;
     },
   },
   {
     accessorKey: "none",
-    header: "Base Variant Price",
+    header: ()=><p className=" w-full text-center" >Base Variant Price</p>,
     cell: ({ row }) => {
       const variants: ProductVariant[] = row.getValue("productVariants");
 
-      return variants[0].price;
+      return <p className=" text-center w-full">{variants[0].price}</p>;
     },
   },
 
@@ -138,7 +138,7 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
                 style={{ background: val }}
                 key={idx}
                 className={cn(
-                  "flex size-[18px] items-center justify-center rounded-[50%] bg-red-300 p-1",
+                  "flex size-[18px] items-center justify-center rounded-[50%] border border-gray-300 bg-red-300 p-1",
                   `bg-['${val}']`,
                 )}
               ></div>

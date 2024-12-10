@@ -6,10 +6,10 @@ import { TbCameraPlus } from "react-icons/tb";
 import { toast } from "sonner";
 
 interface TImageUploaderProps {
-  imageUrl: string;
+  imageUrl?: string;
   onSuccessfullUpload: (image: string) => void;
   toggleModal: () => void;
-  handleDelete: () => void;
+  handleDelete?: () => void;
 }
 
 const ImageUploader: React.FC<TImageUploaderProps> = ({
@@ -31,10 +31,10 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
             cloudName: "dfm8vhuea",
             uploadPreset: "lmyyofoj",
             croppingAspectRatio: 0.76 / 1,
-            cropping: true,
-            clientAllowedFormats: ["jpg", "jpeg", "png", "webP"],
-
-            maxFiles: 1,
+            // cropping: true,
+            clientAllowedFormats: ["jpg", "avif", "jpeg", "png", "webP"],
+            multiple: true,
+            maxFiles: 4,
           },
           async function (error: any, result: any) {
             if (error) {
@@ -43,6 +43,7 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
               toggleModal();
             }
             if (result.info.public_id) {
+              console.log(result, "result of img");
               try {
                 onSuccessfullUpload(result.info.public_id);
               } catch (err: any) {
@@ -57,6 +58,12 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
       }
     }
   }, []);
+
+  const isMinimized = imageWidgetRef?.current?.isShowing();
+
+  useEffect(() => {
+    console.log(isMinimized, "MINIZED",imageWidgetRef?.current);
+  }, [isMinimized]);
 
   return (
     <div

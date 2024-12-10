@@ -181,7 +181,6 @@ const AddOrEditProductModal: React.FC<TProps> = ({
       setSubmitting(true);
       switch (type) {
         case "add": {
-          console.log(values);
           // submit logic for adding new category
 
           let resp = await createProductWithVariantsAndCategory(values);
