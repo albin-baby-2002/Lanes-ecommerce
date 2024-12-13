@@ -197,6 +197,8 @@ const ProductVariant = ({
 
   const dispatch = useDispatch<AppDispatch>();
 
+  const { showAddProduct } = useSelector((state: RootState) => state.products);
+
   const productVariants = values.productVariants;
 
   const imageError =
@@ -219,16 +221,18 @@ const ProductVariant = ({
       if (!currentVariant) return;
 
       // Try direct assignment instead of callback
-      const currentVariants = form.getValues('productVariants');
-      
+      const currentVariants = form.getValues("productVariants");
+
       const updatedVariants = currentVariants.map((variant, idx) => {
         if (idx !== currentPage - 1) return variant;
 
         const updatedImages = (() => {
           if (operationType === "delete" && imageIdx !== undefined) {
-            return variant.productVariantImages?.filter(
-              (_, idx) => idx !== imageIdx
-            ) || [];
+            return (
+              variant.productVariantImages?.filter(
+                (_, idx) => idx !== imageIdx,
+              ) || []
+            );
           }
 
           if (operationType === "add" && image) {
@@ -261,6 +265,57 @@ const ProductVariant = ({
       console.log(error, "error loading img");
     }
   };
+
+  useEffect(() => {
+    let observer: MutationObserver | null = null;
+
+    const observerCallback = (mutations: MutationRecord[]) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === "style") {
+          const visibility = getComputedStyle(
+            mutation.target as HTMLElement,
+          ).visibility;
+
+          if (visibility === "visible") {
+            console.log("Iframe is visible");
+          } else {
+            console.log("Iframe is hidden");
+            if (type === "add") {
+            }
+            if (type === "edit") {
+            }
+          }
+        }
+      });
+    };
+
+    const setupObserver = () => {
+      const iframe = document.querySelector(
+        'iframe[src*="upload-widget.cloudinary.com"]',
+      );
+
+      if (iframe && !observer) {
+        observer = new MutationObserver(observerCallback);
+
+        // Observe attribute changes
+        observer.observe(iframe, { attributes: true });
+      }
+    };
+
+    // Use timeout to ensure iframe is rendered
+    const timeoutId = setTimeout(() => {
+      setupObserver();
+    }, 100); // Adjust delay as necessary
+
+    // Clean up observer and timeout on unmount
+    return () => {
+      if (observer) {
+        observer.disconnect();
+        observer = null;
+      }
+      clearTimeout(timeoutId);
+    };
+  }, [currentPage]);
 
   //----------------------------------------------------------------------------------------------------
 

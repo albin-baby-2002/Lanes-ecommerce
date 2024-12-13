@@ -24,7 +24,7 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
   useEffect(() => {
     cloudinaryRef.current = window.cloudinary;
 
-    if (cloudinaryRef.current) {
+    if (cloudinaryRef.current && !imageWidgetRef.current) {
       try {
         imageWidgetRef.current = cloudinaryRef.current.createUploadWidget(
           {
@@ -59,15 +59,10 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
     }
   }, []);
 
-  const isMinimized = imageWidgetRef?.current?.isShowing();
-
-  useEffect(() => {
-    console.log(isMinimized, "MINIZED",imageWidgetRef?.current);
-  }, [isMinimized]);
 
   return (
     <div
-      className={`relative h-[185px] w-[135px] cursor-pointer rounded-[4px] border-[1px] border-input`}
+      className={`relative z-50 h-[185px] w-[135px] cursor-pointer rounded-[4px] border-[1px] border-input`}
     >
       {imageUrl ? (
         <>
@@ -92,7 +87,7 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
             className="cursor-pointer text-4xl text-gray-400"
             onClick={() => {
               imageWidgetRef.current.open();
-              toggleModal();
+              // toggleModal();
             }}
           />
         </div>

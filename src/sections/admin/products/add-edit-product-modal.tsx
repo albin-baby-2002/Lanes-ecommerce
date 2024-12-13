@@ -241,58 +241,60 @@ const AddOrEditProductModal: React.FC<TProps> = ({
       <DialogContent className="max-w-[600px]">
         {/* header */}
 
-        <DialogHeader>
-          <DialogTitle className="text-xl">{H1[type]}</DialogTitle>
-        </DialogHeader>
+        <div className=" -z-10">
+          <DialogHeader>
+            <DialogTitle className="text-xl">{H1[type]}</DialogTitle>
+          </DialogHeader>
 
-        {/* form */}
+          {/* form */}
 
-        <div className="max-h-[600px] overflow-hidden overflow-y-auto px-2 pt-2">
-          <AddEditProductForm
-            type={type}
-            productVariantFields={productVariantFields}
-            currentPage={page}
-            setCurrentPage={setPage}
-            form={form}
-          />
-        </div>
-
-        {/* footer with actions */}
-
-        <DialogFooter>
-          <div
-            className={cn("mt-2 flex w-full justify-between", {
-              "justify-end": page === 0,
-            })}
-          >
-            {/* previous btn */}
-
-            {page > 0 && (
-              <Button variant={"outline"} onClick={goBack}>
-                Previous
-              </Button>
-            )}
-
-            <div className="flex gap-2">
-              {page === totalPage ? (
-                <Button onClick={form.handleSubmit(onSubmit)} className="">
-                  {(submitting || pending) && (
-                    <Image
-                      height={24}
-                      width={24}
-                      className="mr-2"
-                      alt="svg"
-                      src={"/loaders/circular-loader.svg"}
-                    />
-                  )}
-                  {LABELS[type]}
-                </Button>
-              ) : (
-                <Button onClick={goNext}>Continue</Button>
-              )}
-            </div>
+          <div className="max-h-[600px] overflow-hidden overflow-y-auto px-2 pt-2">
+            <AddEditProductForm
+              type={type}
+              productVariantFields={productVariantFields}
+              currentPage={page}
+              setCurrentPage={setPage}
+              form={form}
+            />
           </div>
-        </DialogFooter>
+
+          {/* footer with actions */}
+
+          <DialogFooter>
+            <div
+              className={cn("mt-2 flex w-full justify-between", {
+                "justify-end": page === 0,
+              })}
+            >
+              {/* previous btn */}
+
+              {page > 0 && (
+                <Button variant={"outline"} onClick={goBack}>
+                  Previous
+                </Button>
+              )}
+
+              <div className="flex gap-2">
+                {page === totalPage ? (
+                  <Button onClick={form.handleSubmit(onSubmit)} className="">
+                    {(submitting || pending) && (
+                      <Image
+                        height={24}
+                        width={24}
+                        className="mr-2"
+                        alt="svg"
+                        src={"/loaders/circular-loader.svg"}
+                      />
+                    )}
+                    {LABELS[type]}
+                  </Button>
+                ) : (
+                  <Button onClick={goNext}>Continue</Button>
+                )}
+              </div>
+            </div>
+          </DialogFooter>
+        </div>
       </DialogContent>
     </Dialog>
   );
