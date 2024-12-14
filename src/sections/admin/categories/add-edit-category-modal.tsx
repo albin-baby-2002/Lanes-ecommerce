@@ -137,6 +137,7 @@ const AddOrEditCategoryModal: React.FC<TProps | TEditProps> = ({
             return toast.error(resp.message);
           }
 
+          form.reset({});
           toast.success("Successfully Created Category");
           break;
         }
@@ -155,6 +156,7 @@ const AddOrEditCategoryModal: React.FC<TProps | TEditProps> = ({
           }
 
           toast.success("Successfully Updated Category");
+          form.reset();
           break;
         }
 

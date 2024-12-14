@@ -21,8 +21,7 @@ const AddEditCategoryForm: React.FC<TProps> = ({ form }) => {
           control={form.control}
           fieldType={FormFieldType.INPUT}
           name="name"
-          placeholder="Enter Product Name"
-          label="Product Name"
+          placeholder="Enter Category Name" label="Category Name"
         />
 
         <CustomInputField

@@ -156,6 +156,10 @@ const AddOrEditProductModal: React.FC<TProps> = ({
     name: "productVariants",
   });
 
+  useEffect(() => {
+    setPage(0);
+  }, [productToEdit]);
+
   //-----------------------------------------------------------------------------------
 
   // useEffect to set show based on open if modal don't have trigger
@@ -238,10 +242,10 @@ const AddOrEditProductModal: React.FC<TProps> = ({
       open={show}
       onOpenChange={type === "edit" ? toggleClose : toggleShow}
     >
-      <DialogContent className="max-w-[600px]">
+      <DialogContent className="z-10 max-w-[600px]">
         {/* header */}
 
-        <div className=" -z-10">
+        <div className=" ">
           <DialogHeader>
             <DialogTitle className="text-xl">{H1[type]}</DialogTitle>
           </DialogHeader>

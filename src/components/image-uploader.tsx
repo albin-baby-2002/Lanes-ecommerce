@@ -31,7 +31,12 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
             cloudName: "dfm8vhuea",
             uploadPreset: "lmyyofoj",
             croppingAspectRatio: 0.76 / 1,
-            // cropping: true,
+            showCompletedButton: true,
+            autoMinimize: true,
+            preBatch: (cb, _data) => {
+              cb();
+              toggleModal();
+            },
             clientAllowedFormats: ["jpg", "avif", "jpeg", "png", "webP"],
             multiple: true,
             maxFiles: 4,
@@ -58,7 +63,6 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
       }
     }
   }, []);
-
 
   return (
     <div
@@ -87,7 +91,7 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
             className="cursor-pointer text-4xl text-gray-400"
             onClick={() => {
               imageWidgetRef.current.open();
-              // toggleModal();
+              toggleModal();
             }}
           />
         </div>

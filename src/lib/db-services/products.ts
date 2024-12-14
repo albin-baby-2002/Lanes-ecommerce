@@ -32,7 +32,6 @@ export interface TProductVariantData {
   productVariantImages: string[];
 }
 
-
 export const getAllProducts = async () => {
   return await db.select().from(products);
 };
@@ -65,51 +64,58 @@ export const deleteProductById = async (id: string) => {
 };
 
 export const getAllProductsDataUsingAggregation = async () => {
-  const productsData = (await db.execute(sql`
-    SELECT
-      products."productId",
-      products."productInternalId",
-      products."name",
-      products."description",
-      products."discount",
-      products."onDiscount",
-      products."createdAt",
-      products."updatedAt",
-      JSON_AGG(
-        JSON_BUILD_OBJECT(
-        'categoryId', "categories"."categoryId",
-        'categoryInternalId',"categories"."categoryInternalId"
-        )
-      ) AS categories,
-      JSON_AGG(
-        JSON_BUILD_OBJECT(
-          'productVariantId', "productVariants"."productVariantId",
-          'color', "productVariants"."color",
-          'size', "productVariants"."size",
-          'inventoryCount', "productVariants"."inventoryCount",
-          'price', "productVariants"."price",
-          'onSale', "productVariants"."onSale",
-          'productVariantImages', img_data.images
-        )
-      ) AS "productVariants"
-    FROM "products"
-    INNER JOIN "productVariants"
-      ON products."productId" = "productVariants"."productId"
-    INNER JOIN (
+  const productsData = (await db.execute(
+    sql`
       SELECT
-        "productVariantImages"."productVariantId",
-        ARRAY_AGG("productVariantImages"."imgUrl") AS images
-      FROM "productVariantImages"
-      GROUP BY "productVariantImages"."productVariantId"
-    ) AS img_data
-      ON "productVariants"."productVariantId" = img_data."productVariantId"
-    INNER JOIN "productCategories"
-      ON products."productId" = "productCategories"."productId"
-    INNER JOIN "categories"
-      ON "productCategories"."categoryId" = "categories"."categoryId"
-    GROUP BY products."productId"
-    ORDER BY products."productId";
-  `)) as unknown as TProductsData[];
+        p."productId",
+        p."productInternalId",
+        p."name",
+        p."description",
+        p."discount",
+        p."onDiscount",
+        p."createdAt",
+        p."updatedAt",
+
+        (
+          SELECT JSON_AGG(
+            JSON_BUILD_OBJECT(
+              'categoryId', c."categoryId",
+              'categoryInternalId', c."categoryInternalId"
+            )
+          )
+          FROM "productCategories" pc
+          INNER JOIN "categories" c
+            ON pc."categoryId" = c."categoryId"
+          WHERE pc."productId" = p."productId"
+        ) AS categories,
+
+        (
+          SELECT JSON_AGG(variant_data)
+          FROM (
+            SELECT
+              pv."productVariantId",
+              pv."color",
+              pv."size",
+              pv."inventoryCount",
+              pv."price",
+              pv."onSale",
+              (
+                SELECT ARRAY_AGG(pvi."imgUrl")
+                FROM "productVariantImages" pvi
+                WHERE pvi."productVariantId" = pv."productVariantId"
+              ) AS "productVariantImages"
+            FROM "productVariants" pv
+            WHERE pv."productId" = p."productId"
+            GROUP BY pv."productVariantId", pv."color", pv."size", pv."inventoryCount", pv."price", pv."onSale"
+          ) AS variant_data
+        ) AS "productVariants"
+
+      FROM "products" p
+      ORDER BY p."productId";
+    `,
+  )) as unknown as TProductsData[];
+
+  console.log("\n", productsData[0].productVariants, "products input \n");
 
   return productsData;
 };
@@ -168,41 +174,59 @@ export const getProductDataWithVariantsAndImages = async (
 };
 
 export const getAllProductVariantsWithDetails = async () => {
-  const productsData = (await db.execute(sql` SELECT
-      ${products.productId} AS "productId",
-      ${products.productInternalId} AS "productInternalId",
-      ${products.name} AS "name",
-      ${products.description} AS "description",
-      ${products.discount} AS "discount",
-      ${products.onDiscount} AS "onDiscount",
-      ${products.createdAt} AS "createdAt",
-      ${products.updatedAt} AS "updatedAt",
-      ${categories.categoryId} AS "categoryId",
-      ${categories.categoryInternalId} AS "categoryInternalId",
-      ${productVariants.productVariantId} AS "productVariantId",
-      ${productVariants.color} AS "color",
-      ${productVariants.size} AS "size",
-      ${productVariants.inventoryCount} AS "inventoryCount",
-      ${productVariants.price} AS "price",
-      ${productVariants.onSale} AS "onSale",
+  const productsData = (await db.execute(sql`
+    SELECT
+      p."productId",
+      p."productInternalId",
+      p."name",
+      p."description",
+      p."discount",
+      p."onDiscount",
+      p."createdAt",
+      p."updatedAt",
+
+      -- Aggregate categories for each product variant
+      (
+        SELECT JSON_AGG(
+          JSON_BUILD_OBJECT(
+            'categoryId', c."categoryId",
+            'categoryInternalId', c."categoryInternalId"
+          )
+        )
+        FROM "productCategories" pc
+        INNER JOIN "categories" c
+          ON pc."categoryId" = c."categoryId"
+        WHERE pc."productId" = p."productId"
+      ) AS categories,
+
+      -- Product variant details
+      pv."productVariantId",
+      pv."color",
+      pv."size",
+      pv."inventoryCount",
+      pv."price",
+      pv."onSale",
+
+      -- Aggregate images for each product variant
       img_data.images AS "productVariantImages"
-    FROM ${products}
-    INNER JOIN ${productVariants}
-      ON ${products.productId} = ${productVariants.productId}
-    INNER JOIN (
+
+    FROM "products" p
+    INNER JOIN "productVariants" pv
+      ON p."productId" = pv."productId"
+
+    -- Aggregate images for product variants
+    LEFT JOIN (
       SELECT
-        ${productVariantImages.productVariantId} AS "productVariantId",
-        ARRAY_AGG(${productVariantImages.imgUrl}) AS images
-      FROM ${productVariantImages}
-      GROUP BY ${productVariantImages.productVariantId}
+        pvi."productVariantId",
+        ARRAY_AGG(pvi."imgUrl") AS images
+      FROM "productVariantImages" pvi
+      GROUP BY pvi."productVariantId"
     ) AS img_data
-      ON ${productVariants.productVariantId} = img_data."productVariantId"
-    INNER JOIN ${productCategories}
-      ON ${products.productId} = ${productCategories.productId}
-    INNER JOIN ${categories}
-      ON ${productCategories.categoryId} = ${categories.categoryId}
-    ORDER BY ${products.productId}, ${productVariants.productVariantId};
+      ON pv."productVariantId" = img_data."productVariantId"
+
+    ORDER BY p."productId", pv."productVariantId";
   `)) as unknown as TProductVariantData[];
 
   return productsData;
 };
+

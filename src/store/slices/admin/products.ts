@@ -33,6 +33,14 @@ const productSlice = createSlice({
       state.showAddProduct = !state.showAddProduct;
     },
 
+    setShowAddProduct: (state, action: PayloadAction<boolean>) => {
+      state.showAddProduct = action.payload;
+    },
+
+    setShowEditProduct: (state, action: PayloadAction<boolean>) => {
+      state.showEditProduct = action.payload;
+    },
+
     toggleShowEditProduct: (state) => {
       state.showEditProduct = !state.showEditProduct;
     },

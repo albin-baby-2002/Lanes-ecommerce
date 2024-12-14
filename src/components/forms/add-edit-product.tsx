@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Form } from "../ui/form";
 import CustomInputField, { FormFieldType } from "../custom-input";
 import { UseFieldArrayReturn, UseFormReturn } from "react-hook-form";
@@ -197,7 +197,9 @@ const ProductVariant = ({
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { showAddProduct } = useSelector((state: RootState) => state.products);
+  const { showAddProduct, showEditProduct } = useSelector(
+    (state: RootState) => state.products,
+  );
 
   const productVariants = values.productVariants;
 
@@ -221,6 +223,7 @@ const ProductVariant = ({
       if (!currentVariant) return;
 
       // Try direct assignment instead of callback
+
       const currentVariants = form.getValues("productVariants");
 
       const updatedVariants = currentVariants.map((variant, idx) => {
@@ -251,71 +254,10 @@ const ProductVariant = ({
 
       // Try direct assignment
       form.setValue("productVariants", updatedVariants);
-
-      // Rest of your logic remains the same
-      if (image && operationType === "add") {
-        if (type === "add") {
-          dispatch(productsReducers.toggleShowAddProduct());
-        }
-        if (type === "edit") {
-          dispatch(productsReducers.toggleShowEditProduct());
-        }
-      }
     } catch (error) {
       console.log(error, "error loading img");
     }
   };
-
-  useEffect(() => {
-    let observer: MutationObserver | null = null;
-
-    const observerCallback = (mutations: MutationRecord[]) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === "style") {
-          const visibility = getComputedStyle(
-            mutation.target as HTMLElement,
-          ).visibility;
-
-          if (visibility === "visible") {
-            console.log("Iframe is visible");
-          } else {
-            console.log("Iframe is hidden");
-            if (type === "add") {
-            }
-            if (type === "edit") {
-            }
-          }
-        }
-      });
-    };
-
-    const setupObserver = () => {
-      const iframe = document.querySelector(
-        'iframe[src*="upload-widget.cloudinary.com"]',
-      );
-
-      if (iframe && !observer) {
-        observer = new MutationObserver(observerCallback);
-
-        // Observe attribute changes
-        observer.observe(iframe, { attributes: true });
-      }
-    };
-
-    // Use timeout to ensure iframe is rendered
-    const timeoutId = setTimeout(() => {
-      setupObserver();
-    }, 100); // Adjust delay as necessary
-
-    // Clean up observer and timeout on unmount
-    return () => {
-      if (observer) {
-        observer.disconnect();
-        observer = null;
-      }
-      clearTimeout(timeoutId);
-    };
-  }, [currentPage]);
 
   //----------------------------------------------------------------------------------------------------
 
@@ -446,9 +388,9 @@ const ProductVariant = ({
         )}
 
         <ImageUploader
-          onSuccessfullUpload={(image) =>
-            handleImage({ operationType: "add", image })
-          }
+          onSuccessfullUpload={(image) => {
+            handleImage({ operationType: "add", image });
+          }}
           toggleModal={() => {
             if (type === "add") {
               dispatch(productsReducers.toggleShowAddProduct());
@@ -459,27 +401,12 @@ const ProductVariant = ({
             }
           }}
         />
-
-        <AddImage onClick={() => handleImage({ operationType: "add" })} />
       </div>
     </div>
   );
 };
 
 //----------------------------------------------------------------------------------------------------
-
-const AddImage = ({ onClick }: { onClick: () => void }) => {
-  return (
-    <div
-      onClick={onClick}
-      className={`relative h-[185px] w-[135px] cursor-pointer rounded-[4px] border-[1px] border-input`}
-    >
-      <div className="flex h-full w-full items-center justify-center">
-        <LuPlus className="cursor-pointer text-4xl text-gray-400" />
-      </div>
-    </div>
-  );
-};
 
 const IconButton = ({
   onClick,
