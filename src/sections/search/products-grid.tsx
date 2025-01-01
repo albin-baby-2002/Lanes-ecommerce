@@ -2,10 +2,10 @@ import ProductCard from "@/components/product-card";
 import React from "react";
 import ProductGridHeader from "./product-grid-header";
 import ProductPagination from "./products-pagination";
-import { getAllProductVariantsWithDetails } from "@/lib/db-services/products";
+import { getAllIndividualVariantsWithDetails } from "@/lib/db-services/products";
 
 const ProductsGrid = async ({ totalPageSize }: { totalPageSize: number }) => {
-  const products = await getAllProductVariantsWithDetails();
+  const products = await getAllIndividualVariantsWithDetails();
 
   return (
     <div className="mt-2">

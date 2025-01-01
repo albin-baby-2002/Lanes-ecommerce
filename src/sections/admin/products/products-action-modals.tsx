@@ -9,12 +9,13 @@ import ConfirmationModal from "@/components/ui/confirmation-modal";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { DeleteProduct } from "@/lib/actions/admin/product-actions";
+import { TProductsWithVariantsAndImages } from "@/lib/db-services/products";
 
 //--------------------------------------------------------------------------------------------------------
 
 interface TProps {
   categoryOptions: TCategoryOptions[];
-  productsData: TProductsData[];
+  productsData: TProductsWithVariantsAndImages[];
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -86,7 +87,7 @@ const ProductActionsModals = (props: TProps) => {
         toggleClose={() => {
           dispatch(productsReducers.toggleShowEditProduct());
         }}
-        productToEdit={props.productsData.find(
+        productToEdit={props.productsData?.find(
           (product) => product.productId === productToEdit,
         )}
       />

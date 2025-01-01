@@ -23,6 +23,7 @@ import {
   EditProduct,
 } from "@/lib/actions/admin/product-actions";
 import { TProductsData } from "./views/products-view";
+import { TProductsWithVariantsAndImages } from "@/lib/db-services/products";
 
 //-----------------------------------------------------------------------------------
 
@@ -30,7 +31,7 @@ interface TProps {
   type: "add" | "edit";
   open: boolean;
   toggleClose: () => void;
-  productToEdit?: TProductsData;
+  productToEdit?: TProductsWithVariantsAndImages;
 }
 
 export type TProductData = z.infer<typeof ProductSchema>;

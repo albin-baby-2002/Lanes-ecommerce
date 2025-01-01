@@ -10,8 +10,9 @@ import { useDispatch } from "react-redux";
 import { ProductVariant, TProductsData } from "./views/products-view";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { TProductsWithVariantsAndImages } from "@/lib/db-services/products";
 
-export const productsColumns: ColumnDef<TProductsData>[] = [
+export const productsColumns: ColumnDef<TProductsWithVariantsAndImages>[] = [
   {
     accessorKey: "productId",
     header: "ID",
@@ -155,7 +156,7 @@ export const productsColumns: ColumnDef<TProductsData>[] = [
   },
 ];
 
-const ActionsCell = ({ row }: { row: Row<TProductsData> }) => {
+const ActionsCell = ({ row }: { row: Row<TProductsWithVariantsAndImages> }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const showEdit = () => {

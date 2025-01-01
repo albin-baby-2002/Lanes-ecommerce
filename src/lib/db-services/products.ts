@@ -12,6 +12,34 @@ import { eq, sql } from "drizzle-orm";
 
 type TProduct = typeof products.$inferInsert;
 
+export interface TProductsWithVariantsAndImages {
+  productId: string;
+  productInternalId: number;
+  name: string;
+  description: string;
+  discount: number;
+  onDiscount: boolean;
+  createdAt: string;
+  updatedAt: string;
+  categories: TCategory[];
+  productVariants: ProductVariant[];
+}
+
+export interface TCategory {
+  categoryId: string;
+  categoryInternalId: number;
+}
+export interface ProductVariant {
+  productVariantId: string;
+  productVariantInternalId: number;
+  color: string;
+  size: string;
+  price: number;
+  inventoryCount: number;
+  onSale: boolean;
+  productVariantImages: string[];
+}
+
 export interface TProductVariantData {
   productId: string;
   productInternalId: string;
@@ -63,118 +91,57 @@ export const deleteProductById = async (id: string) => {
   return await db.delete(products).where(eq(products.productId, id));
 };
 
-export const getAllProductsDataUsingAggregation = async () => {
-  const productsData = (await db.execute(
-    sql`
-      SELECT
-        p."productId",
-        p."productInternalId",
-        p."name",
-        p."description",
-        p."discount",
-        p."onDiscount",
-        p."createdAt",
-        p."updatedAt",
 
-        (
-          SELECT JSON_AGG(
+export const getProductsWithVariants = async (productId?: string) => {
+  // Construct the base SQL query
+  const query = sql`
+    WITH
+      category_agg AS (
+        SELECT
+          pc."productId",
+          JSON_AGG(
             JSON_BUILD_OBJECT(
               'categoryId', c."categoryId",
               'categoryInternalId', c."categoryInternalId"
             )
-          )
-          FROM "productCategories" pc
-          INNER JOIN "categories" c
-            ON pc."categoryId" = c."categoryId"
-          WHERE pc."productId" = p."productId"
-        ) AS categories,
+          ) AS categories
+        FROM
+          "productCategories" pc
+          JOIN "categories" c ON c."categoryId" = pc."categoryId"
+        GROUP BY
+          pc."productId"
+      ),
 
-        (
-          SELECT JSON_AGG(variant_data)
-          FROM (
+      product_variant_agg AS (
+        SELECT
+          pv."productId",
+          ARRAY_AGG(
+            JSON_BUILD_OBJECT(
+              'productVariantId', pv."productVariantId",
+              'productVariantInternalId', pv."productVariantInternalId",
+              'color', pv.color,
+              'size', pv.size,
+              'price', pv.price,
+              'inventoryCount', pv."inventoryCount",
+              'onSale', pv."onSale",
+              'productVariantImages', pv_agg."productVariantImages"
+            )
+          ) AS variants
+        FROM
+          "productVariants" pv
+          LEFT JOIN (
             SELECT
-              pv."productVariantId",
-              pv."color",
-              pv."size",
-              pv."inventoryCount",
-              pv."price",
-              pv."onSale",
-              (
-                SELECT ARRAY_AGG(pvi."imgUrl")
-                FROM "productVariantImages" pvi
-                WHERE pvi."productVariantId" = pv."productVariantId"
-              ) AS "productVariantImages"
-            FROM "productVariants" pv
-            WHERE pv."productId" = p."productId"
-            GROUP BY pv."productVariantId", pv."color", pv."size", pv."inventoryCount", pv."price", pv."onSale"
-          ) AS variant_data
-        ) AS "productVariants"
+              pvi."productVariantId",
+              ARRAY_AGG(pvi."imgUrl") AS "productVariantImages"
+            FROM
+              "productVariantImages" pvi
+            GROUP BY
+              pvi."productVariantId"
+          ) AS pv_agg ON pv_agg."productVariantId" = pv."productVariantId"
+        GROUP BY
+          pv."productId"
+      )
 
-      FROM "products" p
-      ORDER BY p."productId";
-    `,
-  )) as unknown as TProductsData[];
-
-  console.log("\n", productsData[0].productVariants, "products input \n");
-
-  return productsData;
-};
-
-export const getProductDataWithVariantsAndImages = async (
-  productId: string,
-) => {
-  const productsData = (await db.execute(sql`
-    SELECT
-      ${products.productId} AS "productId",
-      ${products.productInternalId} AS "productInternalId",
-      ${products.name} AS "name",
-      ${products.description} AS "description",
-      ${products.discount} AS "discount",
-      ${products.onDiscount} AS "onDiscount",
-      ${products.createdAt} AS "createdAt",
-      ${products.updatedAt} AS "updatedAt",
-      JSON_AGG(
-        JSON_BUILD_OBJECT(
-          'categoryId', ${categories.categoryId},
-          'categoryInternalId', ${categories.categoryInternalId}
-        )
-      ) AS categories,
-      JSON_AGG(
-        JSON_BUILD_OBJECT(
-          'productVariantId', ${productVariants.productVariantId},
-          'color', ${productVariants.color},
-          'size', ${productVariants.size},
-          'inventoryCount', ${productVariants.inventoryCount},
-          'price', ${productVariants.price},
-          'onSale', ${productVariants.onSale},
-          'productVariantImages', img_data.images
-        )
-      ) AS "productVariants"
-    FROM ${products}
-    INNER JOIN ${productVariants}
-      ON ${products.productId} = ${productVariants.productId}
-    INNER JOIN (
-      SELECT
-        ${productVariantImages.productVariantId} AS "productVariantId",
-        ARRAY_AGG(${productVariantImages.imgUrl}) AS images
-      FROM ${productVariantImages}
-      GROUP BY ${productVariantImages.productVariantId}
-    ) AS img_data
-      ON ${productVariants.productVariantId} = img_data."productVariantId"
-    INNER JOIN ${productCategories}
-      ON ${products.productId} = ${productCategories.productId}
-    INNER JOIN ${categories}
-      ON ${productCategories.categoryId} = ${categories.categoryId}
-    WHERE ${products.productId} = ${productId}
-    GROUP BY ${products.productId}
-    ORDER BY ${products.productId};
-  `)) as unknown as TProductsData[];
-
-  return productsData[0];
-};
-
-export const getAllProductVariantsWithDetails = async () => {
-  const productsData = (await db.execute(sql`
     SELECT
       p."productId",
       p."productInternalId",
@@ -184,49 +151,107 @@ export const getAllProductVariantsWithDetails = async () => {
       p."onDiscount",
       p."createdAt",
       p."updatedAt",
+      cat.categories,
+      pv_agg.variants as "productVariants"
+    FROM
+      products p
+      JOIN category_agg cat ON cat."productId" = p."productId"
+      LEFT JOIN product_variant_agg pv_agg ON pv_agg."productId" = p."productId"
+    ${productId ? sql`WHERE p."productId" = ${productId}` : sql``}  -- Apply filter if productId is provided
+    ORDER BY
+      p."createdAt"
+    LIMIT 10;
+  `;
 
-      -- Aggregate categories for each product variant
-      (
-        SELECT JSON_AGG(
-          JSON_BUILD_OBJECT(
-            'categoryId', c."categoryId",
-            'categoryInternalId', c."categoryInternalId"
-          )
-        )
-        FROM "productCategories" pc
-        INNER JOIN "categories" c
-          ON pc."categoryId" = c."categoryId"
-        WHERE pc."productId" = p."productId"
-      ) AS categories,
-
-      -- Product variant details
-      pv."productVariantId",
-      pv."color",
-      pv."size",
-      pv."inventoryCount",
-      pv."price",
-      pv."onSale",
-
-      -- Aggregate images for each product variant
-      img_data.images AS "productVariantImages"
-
-    FROM "products" p
-    INNER JOIN "productVariants" pv
-      ON p."productId" = pv."productId"
-
-    -- Aggregate images for product variants
-    LEFT JOIN (
-      SELECT
-        pvi."productVariantId",
-        ARRAY_AGG(pvi."imgUrl") AS images
-      FROM "productVariantImages" pvi
-      GROUP BY pvi."productVariantId"
-    ) AS img_data
-      ON pv."productVariantId" = img_data."productVariantId"
-
-    ORDER BY p."productId", pv."productVariantId";
-  `)) as unknown as TProductVariantData[];
+  // Execute the query and return the result
+  const productsData = (await db.execute(query)) as unknown as TProductsWithVariantsAndImages[];
 
   return productsData;
 };
+;
 
+//---------------------------------------------------------------------------------------
+
+export interface TProductVariantWithDetails {
+  productId: string;
+  productInternalId: number;
+  name: string;
+  description: string;
+  discount: number;
+  onDiscount: boolean;
+  createdAt: string;
+  categories: TCategory[];
+  productVariantId: string;
+  productVariantInternalId: number;
+  color: string;
+  size: string;
+  price: number;
+  inventoryCount: number;
+  productVariantImages: string[];
+}
+
+export const getAllIndividualVariantsWithDetails = async () => {
+  const productVariants = await db.execute(
+    sql`
+   WITH
+    category_agg AS (
+      SELECT
+        pc."productId",
+        JSON_AGG(
+          JSON_BUILD_OBJECT(
+            'categoryId',
+            c."categoryId",
+            'categoryInternalId',
+            c."categoryInternalId"
+          )
+        ) AS categories
+      FROM
+        "productCategories" pc
+        JOIN "categories" c ON c."categoryId" = pc."categoryId"
+      GROUP BY
+        pc."productId"
+    ),
+
+    product_variant_agg AS (
+      SELECT
+        pv."productId",
+        pv."productVariantId",
+        pv."productVariantInternalId",
+        pv.color,
+        pv.price,
+        pv.size,
+        pv."inventoryCount",
+        pvi_agg."productVariantImages",
+        pv."createdAt"
+      FROM
+        "productVariants" pv
+        LEFT JOIN (
+          SELECT
+            pvi."productVariantId",
+            ARRAY_AGG(pvi."imgUrl") AS "productVariantImages"
+          FROM
+            "productVariantImages" pvi
+          GROUP BY
+            pvi."productVariantId"
+        ) AS pvi_agg ON pvi_agg."productVariantId" = pv."productVariantId"
+    )
+
+    SELECT
+      p."productId",
+      p."productInternalId",
+      p."name",
+      p."description",
+      p."discount",
+      p."onDiscount",
+      p."createdAt",
+      cat.categories,
+      pv_agg.*
+    FROM
+      products p
+      JOIN category_agg cat ON cat."productId" = p."productId"
+      LEFT JOIN product_variant_agg pv_agg ON pv_agg."productId" = p."productId"
+    ORDER BY
+      p."productId"; `,
+  );
+  return productVariants as unknown as TProductVariantWithDetails[];
+};

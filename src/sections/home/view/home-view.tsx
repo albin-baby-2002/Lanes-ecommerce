@@ -13,9 +13,9 @@ const HomeView = () => {
       <LatestProducts />
 
       <TopSelling />
-      
+
       <BrowseByStyle/>
-      
+
       <CustomerTestimonials/>
     </div>
   );

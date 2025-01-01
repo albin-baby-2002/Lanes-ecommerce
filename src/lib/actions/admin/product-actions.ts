@@ -7,7 +7,7 @@ import { parseProductData } from "@/lib/helpers/data-validation";
 import {
   findProductById,
   findProductByName,
-  getProductDataWithVariantsAndImages,
+  getProductsWithVariants,
 } from "@/lib/db-services/products";
 import { NOT_ADMIN_ERR_MESSAGE } from "../constants";
 import { db } from "@/drizzle/db";
@@ -401,11 +401,13 @@ export const DeleteProduct = async (productId: string) => {
     // Perform transaction
     try {
       await db.transaction(async (tx) => {
+        const details = await getProductsWithVariants(productId);
+
         const {
           productVariants: productVariantsInfo,
           categories,
           ...rest
-        } = await getProductDataWithVariantsAndImages(productId);
+        }  = details[0]
 
         // Delete categories
         const categoriesToDelete = categories.map((cat) => cat.categoryId);

@@ -14,7 +14,7 @@ interface TProps {
 const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel();
   const [scrollTrigger, setScrollTrigger] = useState(0);
-  const length = images.length;
+  const length = images?.length;
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) {

@@ -1,10 +1,10 @@
 import ProductCard from "@/components/product-card";
 import React from "react";
 import ExploreNow from "./components/explore-now-btn";
-import { getAllProductsDataUsingAggregation, getAllProductVariantsWithDetails } from "@/lib/db-services/products";
+import { getProductsWithVariants } from "@/lib/db-services/products";
 
 const LatestProducts = async () => {
-  const products = await getAllProductVariantsWithDetails();
+  const products = await getProductsWithVariants();
 
   return (
     <div className="grid gap-8 px-10 pt-14">
@@ -27,10 +27,10 @@ const LatestProducts = async () => {
             <ProductCard
               key={idx}
               name={product.name}
-              price={product.price}
+              price={product.productVariants[0]?.price}
               discount={product.discount || 0}
               rating={4.5}
-              images={product.productVariantImages}
+              images={product?.productVariants[0]?.productVariantImages || []}
             />
           );
         })}

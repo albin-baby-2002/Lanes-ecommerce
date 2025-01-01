@@ -1,23 +1,11 @@
 import React from "react";
 import SearchAndActions from "../search-and-actions";
-import { db } from "@/drizzle/db";
-import {
-  categories,
-  productCategories,
-  products,
-  productVariantImages,
-  productVariants,
-} from "@/drizzle/schema";
-import { eq, sql } from "drizzle-orm";
-import {
-  getAllCategories,
-  getAllCategoriesWithSpecificFields,
-} from "@/lib/db-services/category";
+import { categories } from "@/drizzle/schema";
+import { getAllCategoriesWithSpecificFields } from "@/lib/db-services/category";
 import ProductActionsModals from "../products-action-modals";
 import { DataTable } from "@/components/table/data-table";
 import { productsColumns } from "../datatable-columns";
-import { TProductData } from "../add-edit-product-modal";
-import { getAllProductsDataUsingAggregation } from "@/lib/db-services/products";
+import { getProductsWithVariants, TProductsWithVariantsAndImages } from "@/lib/db-services/products";
 
 export interface TCategoryOptions {
   label: string;
@@ -57,7 +45,7 @@ const ProductsView = async () => {
     value: categories.categoryId,
   })) as unknown as TCategoryOptions[];
 
-  const productsData = await getAllProductsDataUsingAggregation();
+  const productsData = await getProductsWithVariants();
 
   return (
     <div className="h-full bg-slate-50 p-8">
@@ -73,7 +61,7 @@ const ProductsView = async () => {
       />
 
       <div className="mt-8">
-        <DataTable
+        <DataTable<TProductsWithVariantsAndImages>
           columns={productsColumns}
           data={productsData}
           columnVisibility={{
