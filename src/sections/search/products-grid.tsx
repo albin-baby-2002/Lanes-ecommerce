@@ -22,6 +22,7 @@ const ProductsGrid = async ({ totalPageSize }: { totalPageSize: number }) => {
               discount={product.discount || 0}
               rating={4.5}
               images={product.productVariantImages}
+              variantId={product?.productVariantId}
             />
           );
         })}

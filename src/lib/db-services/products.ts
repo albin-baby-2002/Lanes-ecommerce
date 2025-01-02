@@ -1,13 +1,6 @@
 "use server";
 import { db } from "@/drizzle/db";
-import {
-  categories,
-  productCategories,
-  products,
-  productVariantImages,
-  productVariants,
-} from "@/drizzle/schema";
-import { TProductsData } from "@/sections/admin/products/views/products-view";
+import { products } from "@/drizzle/schema";
 import { eq, sql } from "drizzle-orm";
 
 type TProduct = typeof products.$inferInsert;
@@ -91,8 +84,13 @@ export const deleteProductById = async (id: string) => {
   return await db.delete(products).where(eq(products.productId, id));
 };
 
-
-export const getProductsWithVariants = async (productId?: string) => {
+export const getProductsWithVariants = async ({
+  productId,
+  limit,
+}: {
+  productId?: string;
+  limit?: number;
+}) => {
   // Construct the base SQL query
   const query = sql`
     WITH
@@ -160,16 +158,16 @@ export const getProductsWithVariants = async (productId?: string) => {
     ${productId ? sql`WHERE p."productId" = ${productId}` : sql``}  -- Apply filter if productId is provided
     ORDER BY
       p."createdAt"
-    LIMIT 10;
+    LIMIT ${limit || 10};
   `;
 
   // Execute the query and return the result
-  const productsData = (await db.execute(query)) as unknown as TProductsWithVariantsAndImages[];
+  const productsData = (await db.execute(
+    query,
+  )) as unknown as TProductsWithVariantsAndImages[];
 
   return productsData;
 };
-;
-
 //---------------------------------------------------------------------------------------
 
 export interface TProductVariantWithDetails {
@@ -254,4 +252,88 @@ export const getAllIndividualVariantsWithDetails = async () => {
       p."productId"; `,
   );
   return productVariants as unknown as TProductVariantWithDetails[];
+};
+
+//---------------------------------------------------------------------------------
+
+export interface TProductVariantDetails {
+  productVariantId: string
+  productVariantInternalId: number
+  productId: string
+  color: string
+  size: string
+  inventoryCount: number
+  price: number
+  onSale: boolean
+  createdAt: string
+  updatedAt: string
+  productInternalId: number
+  name: string
+  description: string
+  discount: number
+  productVariantImages:string[]
+  onDiscount: boolean
+  variants: Variant[]
+}
+
+export interface Variant {
+  productVariantId: string
+  productVariantInternalId: number
+  color: string
+  size: string
+  inventoryCount: number
+  onSale: boolean
+}
+
+
+export const getProductVariantDetails = async(variantId: string) => {
+
+  const query = sql`
+    SELECT
+      *,
+      (
+        SELECT
+          ARRAY_AGG(pvi."imgUrl")
+        FROM
+          "productVariantImages" pvi
+        WHERE
+          pvi."productVariantId" = pv."productVariantId"
+      ) as "productVariantImages",
+      (
+        SELECT
+          JSON_AGG(
+            JSON_BUILD_OBJECT(
+              'productVariantId',
+              prdVar."productVariantId",
+              'productVariantInternalId',
+              prdVar."productVariantInternalId",
+              'color',
+              prdVar.color,
+              'size',
+              prdVar.size,
+              'inventoryCount',
+              prdVar."inventoryCount",
+              'onSale',
+              prdVar."onSale"
+            )
+          )
+        FROM
+          "productVariants" prdVar
+        WHERE
+          prdVar."productId" = pv."productId"
+      ) as variants
+    FROM
+      "productVariants" pv
+      join products p on p."productId" = pv."productId"
+    WHERE
+      pv."productVariantId" = ${variantId}
+
+  `;
+
+
+  const variantDetails = (await db.execute(
+    query,
+  )) as unknown as TProductVariantDetails[]
+
+  return variantDetails[0];
 };

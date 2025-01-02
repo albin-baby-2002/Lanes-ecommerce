@@ -1,8 +1,9 @@
-import { useMemo } from "react";
+"use client";
+
 import ProductCarousel from "./product-carousel";
 import StarRating from "./star-rating";
-import { Divide } from "lucide-react";
 import { Pricing } from "./pricing";
+import { useRouter } from "next/navigation";
 
 interface TProps {
   name: string;
@@ -10,6 +11,7 @@ interface TProps {
   discount: number;
   rating: number;
   images: string[];
+  variantId:string;
 }
 
 const ProductCard: React.FC<TProps> = ({
@@ -18,13 +20,19 @@ const ProductCard: React.FC<TProps> = ({
   discount,
   rating,
   images,
+  variantId
 }) => {
+  const router = useRouter();
+
   return (
-    <div>
+    <div
+      onClick={() => {
+        router.push('/product-detail/'+variantId)
+      }}
+    >
+      {" "}
       <ProductCarousel images={images} />
-
       {/* product details */}
-
       <div className="my-3 grid text-sm">
         {/* text with animation */}
 
@@ -33,7 +41,7 @@ const ProductCard: React.FC<TProps> = ({
             {name}
           </p>
 
-          <p className="absolute top-0 z-50 max-w-0 overflow-hidden overflow-ellipsis text-nowrap  py-2 font-bold bg-white transition-all duration-200 ease-linear group-hover:max-w-[120%]  ">
+          <p className="absolute top-0 z-50 max-w-0 overflow-hidden overflow-ellipsis text-nowrap bg-white py-2 font-bold transition-all duration-200 ease-linear group-hover:max-w-[120%]">
             {name}
           </p>
         </div>

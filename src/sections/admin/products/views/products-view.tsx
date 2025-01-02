@@ -45,7 +45,7 @@ const ProductsView = async () => {
     value: categories.categoryId,
   })) as unknown as TCategoryOptions[];
 
-  const productsData = await getProductsWithVariants();
+  const productsData = await getProductsWithVariants({});
 
   return (
     <div className="h-full bg-slate-50 p-8">

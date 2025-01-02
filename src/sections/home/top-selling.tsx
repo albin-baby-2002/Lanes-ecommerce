@@ -5,7 +5,7 @@ import { getProductsWithVariants } from "@/lib/db-services/products";
 
 const TopSelling = async() => {
 
-  const products = await getProductsWithVariants();
+  const products = await getProductsWithVariants({});
   return (
     <div className="grid gap-8 px-10 pt-16">
       <div className="flex items-end justify-between">
@@ -29,6 +29,7 @@ const TopSelling = async() => {
               discount={product.discount || 0}
               rating={4.5}
               images={product?.productVariants[0]?.productVariantImages}
+              variantId={product?.productVariants[0]?.productVariantId}
             />
           );
         })}

@@ -401,7 +401,7 @@ export const DeleteProduct = async (productId: string) => {
     // Perform transaction
     try {
       await db.transaction(async (tx) => {
-        const details = await getProductsWithVariants(productId);
+        const details = await getProductsWithVariants({productId});
 
         const {
           productVariants: productVariantsInfo,
