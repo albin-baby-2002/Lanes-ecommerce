@@ -1,0 +1,1 @@
+ALTER TABLE "cartItem" ALTER COLUMN "quantity" DROP DEFAULT;

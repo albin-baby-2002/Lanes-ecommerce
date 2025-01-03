@@ -1,24 +1,76 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import MinusIcon from "@/assets/icons/minus-icon";
 import PlusIcon from "@/assets/icons/plus-icon";
 import { toast } from "sonner";
+import { useFormStatus } from "react-dom";
+import Image from "next/image";
+import { addToCart } from "@/lib/actions/client";
+import { getCartItemsIdByUser } from "@/lib/db-services/client";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { findUserByKindeId } from "@/lib/db-services/user";
 
-const AddToCart = () => {
+const AddToCart = ({ inventoryCount,variantId }: { inventoryCount: number,variantId :string}) => {
+  const { pending } = useFormStatus();
+const {user} = useKindeBrowserClient();
+
+
+  // local states
+  const [cartItems,setCartItems] = useState();
   const [count, setCount] = useState(1);
+  const [submitting, setSubmitting] = useState(false);
+
+  // count handlers
 
   const increment = () => {
-    if (count < 5) {
-      setCount((count) => count + 1);
-    } else {
-      toast.error("You cannot order more than 5 items at a time");
+    if (count >= inventoryCount) {
+      return toast.error("There isn't enough inventory");
     }
+
+    if (count >= 5) {
+      return toast.error("You cannot order more than 5 items at a time");
+    }
+
+    setCount((count) => count + 1);
   };
 
   const decrement = () => {
-    if (count >1 ) {
+    if (count > 1) {
       setCount((count) => count - 1);
+    }
+  };
+
+  useEffect(()=>{
+
+    const getCartItemData = async()=>{
+
+      const userInfo = await findUserByKindeId(user?.id as string);
+
+      const resp = await getCartItemsIdByUser(userInfo?.[0].userId)
+    }
+
+  },[])
+
+  const handleAddToCart = async () => {
+    try {
+      setSubmitting(true);
+      // submit logic for adding new category
+
+      let resp = await addToCart(variantId,count);
+
+      if (!resp.success) {
+        setSubmitting(false);
+        return toast.error(resp.message);
+      }
+
+      toast.success(resp.message)
+
+      setSubmitting(false);
+    } catch (error) {
+      toast.error("Unexpected error! Try Again !");
+      setSubmitting(false);
+      console.log(error);
     }
   };
 
@@ -36,7 +88,19 @@ const AddToCart = () => {
         </Button>
       </div>
 
-      <Button className="max-w-80 grow rounded-full py-[28px] text-lg">
+      <Button className="max-w-80 grow rounded-full py-[28px] text-lg"
+
+        onClick={handleAddToCart}
+      >
+        {(submitting || pending) && (
+          <Image
+            height={24}
+            width={24}
+            className="mr-2"
+            alt="svg"
+            src={"/loaders/circular-loader.svg"}
+          />
+        )}
         Add to Cart
       </Button>
     </div>

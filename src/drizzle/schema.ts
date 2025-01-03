@@ -109,3 +109,25 @@ export const productVariantImages = pgTable("productVariantImages", {
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
+
+export const cartItem = pgTable(
+  "cartItem",
+  {
+    cartItemId: uuid("cartItemId").defaultRandom(),
+
+    userId: uuid("userId")
+      .notNull()
+      .references(() => users.userId),
+
+    productVariantId: uuid("productVariantId")
+      .notNull()
+      .references(() => productVariants.productVariantId),
+
+    quantity: integer("quantity").notNull(),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.userId, table.productVariantId] }),
+    };
+  },
+);

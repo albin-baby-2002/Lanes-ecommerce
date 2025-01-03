@@ -109,7 +109,7 @@ const ProductImgInfo = ({
           </div>
         </div>
 
-        <AddToCart />
+        <AddToCart inventoryCount={variantDetails.inventoryCount} variantId={variantDetails.productVariantId} />
       </div>
     </div>
   );
