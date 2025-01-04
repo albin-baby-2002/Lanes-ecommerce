@@ -3,10 +3,11 @@ import BreadCrumb from "@/components/breadcrumb";
 import ProductImgInfo from "../product-img-info";
 import AllReviews from "../all-reviews";
 import SimilarProducts from "../similar-products";
-import { getProductVariantDetails } from "@/lib/db-services/products";
+import { findAllReviewByProductVariantId, getProductVariantDetails } from "@/lib/db-services/products";
 
 const ProductViewById = async ({ id }: { id: string }) => {
   const variantDetails = await getProductVariantDetails(id);
+  const reviews = await findAllReviewByProductVariantId(id);
 
   return (
     <div>
@@ -14,7 +15,7 @@ const ProductViewById = async ({ id }: { id: string }) => {
 
       <ProductImgInfo variantDetails={variantDetails} />
 
-      <AllReviews />
+      <AllReviews variantId={variantDetails.productVariantId} reviews={reviews} />
 
       <SimilarProducts />
     </div>

@@ -59,7 +59,7 @@ const ProductImgInfo = ({
           {variantDetails.name}
         </p>
 
-        <StarRating size={"medium"} rating={4.5} />
+        <StarRating size={"medium"} rating={variantDetails.avgRating} />
 
         <Pricing
           price={variantDetails.price}

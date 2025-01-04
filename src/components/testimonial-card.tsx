@@ -1,7 +1,8 @@
 import { IoMdCheckmark } from "react-icons/io";
 import StarRating from "./star-rating";
+import { TReview } from "@/sections/product-details/all-reviews";
 
-const TestimonialCard = () => {
+const TestimonialCard = ({ review }: { review: TReview }) => {
   return (
     <div className="min-h-[240px] min-w-[400px] space-y-3 rounded-xl border border-black/10 p-8">
       <div className="flex items-center gap-3">
@@ -12,15 +13,11 @@ const TestimonialCard = () => {
         </div>
       </div>
 
-      <p className="text-black/60">
-        &quot; I&apos;m blown away by the quality and style of the clothes I
-        received from Shop.co. From casual wear to elegant dresses, every piece
-        I&apos;ve bought has exceeded my expectations.&quot;
-      </p>
+      <p className="text-black/60">{review.review}</p>
 
-      <StarRating rating={5} />
+      <StarRating rating={review.rating} />
     </div>
   );
 };
 
-export default TestimonialCard
+export default TestimonialCard;

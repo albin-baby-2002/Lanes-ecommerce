@@ -6,18 +6,22 @@ import PlusIcon from "@/assets/icons/plus-icon";
 import { toast } from "sonner";
 import { useFormStatus } from "react-dom";
 import Image from "next/image";
-import { addToCart } from "@/lib/actions/client";
-import { getCartItemsIdByUser } from "@/lib/db-services/client";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { findUserByKindeId } from "@/lib/db-services/user";
+import { addToCart, getCartItemsId } from "@/lib/actions/client";
+import { useRouter } from "next/navigation";
 
-const AddToCart = ({ inventoryCount,variantId }: { inventoryCount: number,variantId :string}) => {
+const AddToCart = ({
+  inventoryCount,
+  variantId,
+}: {
+  inventoryCount: number;
+  variantId: string;
+}) => {
   const { pending } = useFormStatus();
-const {user} = useKindeBrowserClient();
 
+  const router = useRouter();
 
-  // local states
-  const [cartItems,setCartItems] = useState();
+// local states
+  const [cartItems, setCartItems] = useState<string[] | null>(null);
   const [count, setCount] = useState(1);
   const [submitting, setSubmitting] = useState(false);
 
@@ -41,30 +45,34 @@ const {user} = useKindeBrowserClient();
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
+    const getCartItemData = async () => {
+      const resp = await getCartItemsId();
 
-    const getCartItemData = async()=>{
-
-      const userInfo = await findUserByKindeId(user?.id as string);
-
-      const resp = await getCartItemsIdByUser(userInfo?.[0].userId)
-    }
-
-  },[])
+      setCartItems(resp.data);
+    };
+    getCartItemData();
+  }, []);
 
   const handleAddToCart = async () => {
     try {
       setSubmitting(true);
       // submit logic for adding new category
 
-      let resp = await addToCart(variantId,count);
+      if (count > inventoryCount) {
+        return toast.error("Item not in stock");
+      }
+
+      let resp = await addToCart(variantId, count);
 
       if (!resp.success) {
         setSubmitting(false);
         return toast.error(resp.message);
       }
 
-      toast.success(resp.message)
+      toast.success(resp.message);
+
+      router.refresh()
 
       setSubmitting(false);
     } catch (error) {
@@ -88,8 +96,8 @@ const {user} = useKindeBrowserClient();
         </Button>
       </div>
 
-      <Button className="max-w-80 grow rounded-full py-[28px] text-lg"
-
+      <Button
+        className="max-w-80 grow rounded-full py-[28px] text-lg"
         onClick={handleAddToCart}
       >
         {(submitting || pending) && (
@@ -101,7 +109,9 @@ const {user} = useKindeBrowserClient();
             src={"/loaders/circular-loader.svg"}
           />
         )}
-        Add to Cart
+        {cartItems && cartItems.includes(variantId)
+          ? "Update Count"
+          : "Add To Cart"}
       </Button>
     </div>
   );

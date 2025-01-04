@@ -5,9 +5,11 @@ import TestimonialCard from "@/components/testimonial-card";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import AddReview from "./add-review";
+import { productReviews } from "@/drizzle/schema";
 
-const AllReviews = () => {
-  const [value, setValue] = useState("  ");
+export type TReview = typeof productReviews.$inferSelect;
+
+const AllReviews = (props: { variantId: string; reviews: TReview[] }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -26,7 +28,10 @@ const AllReviews = () => {
         </p>
 
         <div className="space-x-3">
-          <Button onClick={handleOpen} className="rounded-full bg-ceramic px-8 py-6 text-black hover:text-white">
+          <Button
+            onClick={handleOpen}
+            className="rounded-full bg-ceramic px-8 py-6 text-black hover:text-white"
+          >
             Write a Review
           </Button>
         </div>
@@ -34,12 +39,9 @@ const AllReviews = () => {
 
       <>
         <div className="mt-10 grid grid-cols-2 gap-8">
-          <TestimonialCard />
-          <TestimonialCard />
-          <TestimonialCard />
-          <TestimonialCard />
-          <TestimonialCard />
-          <TestimonialCard />
+          {props.reviews.map((review, idx) => {
+            return <TestimonialCard review={review} key={idx} />;
+          })}
         </div>
 
         <div className="mt-6 flex justify-center">
@@ -48,7 +50,11 @@ const AllReviews = () => {
           </Button>
         </div>
       </>
-      <AddReview open={open} handleClose={handleClose}/>
+      <AddReview
+        variantId={props.variantId}
+        open={open}
+        handleClose={handleClose}
+      />
     </div>
   );
 };

@@ -94,6 +94,8 @@ export const productVariants = pgTable("productVariants", {
   inventoryCount: integer("inventoryCount").notNull().default(0),
   price: integer("price").notNull().default(0),
   onSale: boolean("onSale").default(false).notNull(),
+  avgRating: integer("avgRating").default(0),
+  ratingsCount: integer("ratingsCount").default(0),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
@@ -124,6 +126,30 @@ export const cartItem = pgTable(
       .references(() => productVariants.productVariantId),
 
     quantity: integer("quantity").notNull(),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.userId, table.productVariantId] }),
+    };
+  },
+);
+
+export const productReviews = pgTable(
+  "productReviews",
+  {
+    productReviewId: uuid("productReviewId").defaultRandom(),
+
+    userId: uuid("userId")
+      .notNull()
+      .references(() => users.userId),
+
+    productVariantId: uuid("productVariantId")
+      .notNull()
+      .references(() => productVariants.productVariantId),
+
+    rating: integer("rating").notNull(),
+
+    review: varchar({ length: 500 }).notNull(),
   },
   (table) => {
     return {

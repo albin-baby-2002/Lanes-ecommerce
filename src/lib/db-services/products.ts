@@ -1,6 +1,6 @@
 "use server";
 import { db } from "@/drizzle/db";
-import { products } from "@/drizzle/schema";
+import { productReviews, products, productVariants } from "@/drizzle/schema";
 import { eq, sql } from "drizzle-orm";
 
 type TProduct = typeof products.$inferInsert;
@@ -257,37 +257,37 @@ export const getAllIndividualVariantsWithDetails = async () => {
 //---------------------------------------------------------------------------------
 
 export interface TProductVariantDetails {
-  productVariantId: string
-  productVariantInternalId: number
-  productId: string
-  color: string
-  size: string
-  inventoryCount: number
-  price: number
-  onSale: boolean
-  createdAt: string
-  updatedAt: string
-  productInternalId: number
-  name: string
-  description: string
-  discount: number
-  productVariantImages:string[]
-  onDiscount: boolean
-  variants: Variant[]
+  productVariantId: string;
+  productVariantInternalId: number;
+  productId: string;
+  color: string;
+  size: string;
+  inventoryCount: number;
+  price: number;
+  avgRating:number;
+  onSale: boolean;
+  createdAt: string;
+  updatedAt: string;
+  productInternalId: number;
+  name: string;
+  description: string;
+  discount: number;
+  productVariantImages: string[];
+  onDiscount: boolean;
+  variants: Variant[];
 }
 
 export interface Variant {
-  productVariantId: string
-  productVariantInternalId: number
-  color: string
-  size: string
-  inventoryCount: number
-  onSale: boolean
+  productVariantId: string;
+  productVariantInternalId: number;
+  color: string;
+  size: string;
+  inventoryCount: number;
+  onSale: boolean;
+  avgRating:number;
 }
 
-
-export const getProductVariantDetails = async(variantId: string) => {
-
+export const getProductVariantDetails = async (variantId: string) => {
   const query = sql`
     SELECT
       *,
@@ -314,7 +314,9 @@ export const getProductVariantDetails = async(variantId: string) => {
               'inventoryCount',
               prdVar."inventoryCount",
               'onSale',
-              prdVar."onSale"
+              prdVar."onSale",
+              'avgRating',
+              prdVar."avgRating"
             )
           )
         FROM
@@ -330,10 +332,37 @@ export const getProductVariantDetails = async(variantId: string) => {
 
   `;
 
-
   const variantDetails = (await db.execute(
     query,
-  )) as unknown as TProductVariantDetails[]
+  )) as unknown as TProductVariantDetails[];
 
   return variantDetails[0];
+};
+
+export const getProductVariantReviewInfo = async (productVariantId: string) => {
+  return await db
+    .select({
+      avgRating: productVariants.avgRating,
+      ratingsCount: productVariants.ratingsCount,
+    })
+    .from(productVariants)
+    .where(eq(productVariants.productVariantId, productVariantId));
+};
+
+export const updateProductVariantAvgReview = async (
+  productVariantId: string,
+  avgRating: number,
+  ratingsCount: number,
+) => {
+  return await db
+    .update(productVariants)
+    .set({ avgRating, ratingsCount })
+    .where(eq(productVariants.productVariantId, productVariantId));
+};
+
+export const findAllReviewByProductVariantId = async (productVariantId: string) => {
+  return await db
+    .select()
+    .from(productReviews)
+    .where(eq(productVariants.productVariantId, productVariantId));
 };
