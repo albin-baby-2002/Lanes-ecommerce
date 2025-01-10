@@ -10,6 +10,7 @@ import {
   TCartItem,
 } from "../db-services/client";
 import {
+  findAllUserCartItems,
   getProductVariantReviewInfo,
   updateProductVariantAvgReview,
 } from "../db-services/products";
@@ -155,8 +156,7 @@ export const addReview = async (
     const { avgRating, ratingsCount } = variantReviewInfo[0];
 
     if (avgRating != null && ratingsCount != null) {
-
-      console.log('add avg rating')
+      console.log("add avg rating");
       const newAvgRating = (avgRating + rating) / (ratingsCount + 1);
 
       await updateProductVariantAvgReview(
@@ -169,6 +169,46 @@ export const addReview = async (
     response.success = true;
 
     response.message = "successfully added review";
+
+    return response;
+  } catch (err: any) {
+    console.error("Error:", err);
+
+    response.message = "Sorry, something went wrong. Please try again later.";
+    response.details = err.message;
+    return response;
+  }
+};
+
+export const getUserCartData = async () => {
+  const response: TDataResponse = { success: false, message: "", data: null };
+
+  try {
+    const { getUser } = getKindeServerSession();
+
+    const kindeUser = await getUser();
+
+    if (!kindeUser) {
+      response.message = "Unexpected try again ";
+      return response;
+    }
+
+    const user = await findUserByKindeId(kindeUser.id);
+
+    if (!user) {
+      response.message = "Unexpected error try again";
+      return response;
+    }
+
+    const cartItems = await findAllUserCartItems(user[0].userId);
+
+    console.log("cartItems \n \n", cartItems);
+
+    response.data = cartItems;
+
+    response.success = true;
+
+    response.message = "successfully fetched cart data";
 
     return response;
   } catch (err: any) {

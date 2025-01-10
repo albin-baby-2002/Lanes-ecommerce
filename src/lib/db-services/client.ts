@@ -1,26 +1,26 @@
 "use server";
 import { db } from "@/drizzle/db";
-import { cartItem, productReviews } from "@/drizzle/schema";
+import { cartItems, productReviews } from "@/drizzle/schema";
 import { and, eq } from "drizzle-orm";
 
-export type TCartItem = typeof cartItem.$inferInsert;
+export type TCartItem = typeof cartItems.$inferInsert;
 export type TReviewItem = typeof productReviews.$inferInsert;
 
 export const insertCartItem = async (cartItemValue: TCartItem) => {
   return await db
-    .insert(cartItem)
+    .insert(cartItems)
     .values(cartItemValue)
     .onConflictDoUpdate({
-      target: [cartItem.productVariantId, cartItem.userId],
+      target: [cartItems.productVariantId, cartItems.userId],
       set: { quantity: cartItemValue.quantity },
     });
 };
 
 export const findCartItemsIdByUser = async (userId: string) => {
   return await db
-    .select({ productId: cartItem.productVariantId })
-    .from(cartItem)
-    .where(eq(cartItem.userId, userId));
+    .select({ productId: cartItems.productVariantId })
+    .from(cartItems)
+    .where(eq(cartItems.userId, userId));
 };
 
 export const findReviewByUserIdAndVariantId = async (

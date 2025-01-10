@@ -112,10 +112,10 @@ export const productVariantImages = pgTable("productVariantImages", {
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
 
-export const cartItem = pgTable(
-  "cartItem",
+export const cartItems = pgTable(
+  "cartItems",
   {
-    cartItemId: uuid("cartItemId").defaultRandom(),
+    cartItemId: uuid("cartItemId").defaultRandom().notNull(),
 
     userId: uuid("userId")
       .notNull()

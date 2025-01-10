@@ -110,7 +110,7 @@ const AddToCart = ({
           />
         )}
         {cartItems && cartItems.includes(variantId)
-          ? "Update Count"
+          ? "Update Cart"
           : "Add To Cart"}
       </Button>
     </div>

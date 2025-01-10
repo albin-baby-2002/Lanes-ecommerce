@@ -7,7 +7,14 @@ import { Combobox } from "@/components/ui/combobox";
 import AddReview from "./add-review";
 import { productReviews } from "@/drizzle/schema";
 
-export type TReview = typeof productReviews.$inferSelect;
+export type TReview = {
+  productReviewId?: string | null;
+  userId?: string | null;
+  rating: number | null;
+  review: string | null;
+  firstName: string | null;
+  lastName: string | null;
+};
 
 const AllReviews = (props: { variantId: string; reviews: TReview[] }) => {
   const [open, setOpen] = useState(false);
@@ -24,7 +31,7 @@ const AllReviews = (props: { variantId: string; reviews: TReview[] }) => {
       <div className="flex justify-between">
         <p className="text-2xl font-bold">
           All Reviews{" "}
-          <span className="text-base font-normal text-black/60">(451)</span>
+          <span className="text-base font-normal text-black/60">( {props?.reviews?.length} )</span>
         </p>
 
         <div className="space-x-3">
@@ -44,11 +51,12 @@ const AllReviews = (props: { variantId: string; reviews: TReview[] }) => {
           })}
         </div>
 
-        <div className="mt-6 flex justify-center">
+        {/* <div className="mt-6 flex justify-center">
           <Button className="rounded-full px-8 py-6" variant={"outline"}>
             Load More Reviews
           </Button>
-        </div>
+        </div> */}
+
       </>
       <AddReview
         variantId={props.variantId}

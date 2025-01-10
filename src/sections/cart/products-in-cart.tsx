@@ -1,85 +1,129 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { FaMinus, FaPlus, FaTrashAlt } from "react-icons/fa";
+import { TcartItems } from "./views/cart-view";
+import { Pricing } from "@/components/pricing";
+import AddToCart from "../product-details/components/add-to-cart";
+import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { addToCart } from "@/lib/actions/client";
 
-const ProductsInCart = () => {
+const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
+  const { pending } = useFormStatus();
+
+  const router = useRouter();
+
+  // local states
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleAddToCart = async (
+    count: number,
+    inventoryCount: number,
+    variantId: string,
+  ) => {
+    try {
+      setSubmitting(true);
+      // submit logic for adding new category
+
+      if (count > inventoryCount) {
+        return toast.error("Item not in stock");
+      }
+
+      let resp = await addToCart(variantId, count);
+
+      if (!resp.success) {
+        setSubmitting(false);
+        return toast.error(resp.message);
+      }
+
+      toast.success(resp.message);
+
+      router.refresh();
+
+      setSubmitting(false);
+    } catch (error) {
+      toast.error("Unexpected error! Try Again !");
+      setSubmitting(false);
+      console.log(error);
+    }
+  };
   return (
     <div className="h-max basis-3/5 rounded-3xl border border-black/10 p-6">
-      <div className="flex justify-between border-black/10 [&:not(:first-of-type)]:pt-8 [&:not(:last-of-type)]:border-b [&:not(:last-of-type)]:pb-8">
-        <div className="flex gap-4">
-          <div className="relative size-32 rounded-2xl">
-            <Image
-              className="h-32 rounded-2xl"
-              fill
-              src={"/images/products/p1.svg"}
-              alt=" product"
-            />
+      {items?.map((item, idx) => (
+        <div
+          key={idx}
+          className="flex justify-between border-black/10 [&:not(:first-of-type)]:pt-8 [&:not(:last-of-type)]:border-b [&:not(:last-of-type)]:pb-8"
+        >
+          <div className="flex gap-4">
+            <div className="relative size-32 rounded-2xl">
+              <Image
+                className="h-32 rounded-2xl object-cover"
+                fill
+                src={` https://res.cloudinary.com/dfm8vhuea/image/upload/${item.imgUrls[0]}`}
+                alt=" product"
+              />
+            </div>
+            <div>
+              <p className="text-lg font-bold">{item.name}</p>
+              <p className="pt-1 text-black/90">
+                Size: <span className="text-black/30"> {item.size}</span>
+              </p>
+              <p className="pt-1 text-black/90">
+                Color: <span className="text-black/40">{item.color}</span>
+              </p>
+
+              <Pricing
+                price={item.price}
+                discount={(item.onDiscount !== null && item.discount) || 0}
+                className="mt-4 text-[16px]"
+              />
+            </div>
           </div>
-          <div>
-            <p className="text-lg font-bold">Gradient Graphic T-shirt</p>
-            <p className="pt-1 text-black/90">
-              Size: <span className="text-black/30"> Large</span>
-            </p>
-            <p className="pt-1 text-black/90">
-              Color: <span className="text-black/40">White</span>
-            </p>
-            <p className="mt-3 text-lg font-bold">$180</p>
-          </div>
-        </div>
 
-        <div className="flex flex-col items-end justify-between">
-          <FaTrashAlt size={20} className="mt-2 text-red-500" />
+          <div className="flex flex-col items-end justify-between">
+            <FaTrashAlt size={20} className="mt-2 text-red-500" />
 
-          <div className="flex items-center gap-3 rounded-full bg-ceramic px-3">
-            <Button size={"icon"} variant={"ghost"}>
-              <FaMinus size={12} />
-            </Button>
-            <p>1</p>
+            <div className="flex items-center gap-3 rounded-full bg-ceramic px-3">
+              <Button
+                size={"icon"}
+                variant={"ghost"}
+                onClick={() => {
+                  console.log(item.quantity, "item quantity");
+                  if (item.quantity <= 1) return;
 
-            <Button size={"icon"} variant={"ghost"}>
-              <FaPlus size={12} />
-            </Button>
-          </div>
-        </div>
-      </div>
-      <div className="flex justify-between border-black/10 [&:not(:first-of-type)]:pt-8 [&:not(:last-of-type)]:border-b [&:not(:last-of-type)]:pb-8">
-        <div className="flex gap-4">
-          <div className="relative size-32 rounded-2xl">
-            <Image
-              className="h-32 rounded-2xl"
-              fill
-              src={"/images/products/p1.svg"}
-              alt=" product"
-            />
-          </div>
-          <div>
-            <p className="text-lg font-bold">Gradient Graphic T-shirt</p>
-            <p className="pt-1 text-black/90">
-              Size: <span className="text-black/30"> Large</span>
-            </p>
-            <p className="pt-1 text-black/90">
-              Color: <span className="text-black/40">White</span>
-            </p>
-            <p className="mt-3 text-lg font-bold">$180</p>
-          </div>
-        </div>
+                  handleAddToCart(
+                    item.quantity - 1,
+                    item.inventoryCount,
+                    item.productVariantId,
+                  );
+                }}
+              >
+                <FaMinus size={12} />
+              </Button>
+              <p>{item.quantity}</p>
 
-        <div className="flex flex-col items-end justify-between">
-          <FaTrashAlt size={20} className="mt-2 text-red-500" />
+              <Button size={"icon"} variant={"ghost"}
 
-          <div className="flex items-center gap-3 rounded-full bg-ceramic px-3">
-            <Button size={"icon"} variant={"ghost"}>
-              <FaMinus size={12} />
-            </Button>
-            <p>1</p>
+                onClick={() => {
+                  console.log(item.quantity, "item quantity");
+                  if (item.quantity >= 5) return;
 
-            <Button size={"icon"} variant={"ghost"}>
-              <FaPlus size={12} />
-            </Button>
+                  handleAddToCart(
+                    item.quantity +1,
+                    item.inventoryCount,
+                    item.productVariantId,
+                  );
+                }}
+              >
+                <FaPlus size={12} />
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 };

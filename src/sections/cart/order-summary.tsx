@@ -4,7 +4,7 @@ import { MdOutlineLocalOffer } from "react-icons/md";
 
 const OrderSummary = () => {
   return (
-    <div className="basis-2/5 rounded-3xl border border-black/10 p-6">
+    <div className="basis-2/5 h-max pb-10 rounded-3xl border border-black/10 p-6">
       <p className="pb-4 text-2xl font-bold"> Order Summary</p>
 
       <div className="space-y-3 border-b pb-5">

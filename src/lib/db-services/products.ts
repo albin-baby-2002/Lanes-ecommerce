@@ -1,6 +1,13 @@
 "use server";
 import { db } from "@/drizzle/db";
-import { productReviews, products, productVariants } from "@/drizzle/schema";
+import {
+  cartItems,
+  productReviews,
+  products,
+  productVariantImages,
+  productVariants,
+  users,
+} from "@/drizzle/schema";
 import { eq, sql } from "drizzle-orm";
 
 type TProduct = typeof products.$inferInsert;
@@ -264,7 +271,7 @@ export interface TProductVariantDetails {
   size: string;
   inventoryCount: number;
   price: number;
-  avgRating:number;
+  avgRating: number;
   onSale: boolean;
   createdAt: string;
   updatedAt: string;
@@ -284,7 +291,7 @@ export interface Variant {
   size: string;
   inventoryCount: number;
   onSale: boolean;
-  avgRating:number;
+  avgRating: number;
 }
 
 export const getProductVariantDetails = async (variantId: string) => {
@@ -360,9 +367,73 @@ export const updateProductVariantAvgReview = async (
     .where(eq(productVariants.productVariantId, productVariantId));
 };
 
-export const findAllReviewByProductVariantId = async (productVariantId: string) => {
+export const findAllReviewByProductVariantId = async (
+  productVariantId: string,
+) => {
   return await db
-    .select()
+    .select({
+      productReviewId: productReviews.productReviewId,
+      userId: productReviews.userId,
+      rating: productReviews.rating,
+      review: productReviews.review,
+      firstName: users.firstName,
+      lastName: users.lastName,
+    })
     .from(productReviews)
-    .where(eq(productVariants.productVariantId, productVariantId));
+    .fullJoin(users, eq(users.userId, productReviews.userId))
+    .where(eq(productReviews.productVariantId, productVariantId));
+};
+
+export const findAllUserCartItems = async (userId: string) => {
+  return await db
+    .select({
+      cartItemId: cartItems.cartItemId,
+      userId: cartItems.userId,
+      name: products.name,
+      description: products.description,
+      discount: products.discount,
+      onDiscount: products.onDiscount,
+      productVariantId: cartItems.productVariantId,
+      inventoryCount: productVariants.inventoryCount,
+      quantity: cartItems.quantity,
+      color: productVariants.color,
+      size: productVariants.size,
+      price: productVariants.price,
+      imgUrls: sql`array_agg(${productVariantImages.imgUrl})`.as("imgUrls"), // Aggregating imgUrl into an array
+
+    })
+    .from(cartItems)
+    .leftJoin(
+      // Use leftJoin if you expect nulls for missing image data
+      productVariants,
+      eq(cartItems.productVariantId, productVariants.productVariantId),
+    )
+    .leftJoin(
+      // Join with products
+      products,
+      eq(products.productId, productVariants.productId),
+    )
+    .leftJoin(
+      // Join with productVariantImages
+      productVariantImages,
+      eq(
+        productVariantImages.productVariantId,
+        productVariants.productVariantId,
+      ),
+    )
+    .where(eq(cartItems.userId, userId))
+    .groupBy(
+      cartItems.cartItemId,
+      cartItems.userId,
+      products.name,
+      products.description,
+      products.discount,
+      products.onDiscount,
+      cartItems.productVariantId,
+      cartItems.quantity,
+      productVariants.color,
+      productVariants.inventoryCount,
+      productVariants.size,
+      productVariants.price,
+    ); // Grouping by non-aggregated columns
 };
