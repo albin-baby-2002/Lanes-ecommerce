@@ -38,6 +38,9 @@ const AddNewAddress = () => {
     try {
       setSubmitting(true);
 
+      console.log(data);
+      console.log("Submitting");
+
       let resp = await addNewBillingAddress(data);
 
       if (!resp.success) {
@@ -47,19 +50,11 @@ const AddNewAddress = () => {
 
       toast.success("Successfully added new address");
 
-      form.reset({
-        fullName: "",
-        email: "",
-        phone: "",
-        addressLine: "",
-        city: "",
-        state: "",
-        zipCode: "",
-      });
-
       router.refresh();
 
       setSubmitting(false);
+
+      form.reset({});
 
       router.refresh();
     } catch (error) {
@@ -83,7 +78,7 @@ const AddNewAddress = () => {
             const firstKey = Object.keys(e)[0];
 
             // @ts-ignore not needed to check for undefined
-            toast.error(firstKey + " " + e[firstKey].message);
+            toast.error(firstKey + ' '+e[firstKey].message );
           })}
         >
           {" "}

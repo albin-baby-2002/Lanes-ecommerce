@@ -6,33 +6,70 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import ExistingAddresses from "../existing-addresses";
 import AddNewAddress from "../add-new-address";
-import { getAllUserAddress } from "@/lib/actions/client";
+import { getAllUserAddress, getUserCartData } from "@/lib/actions/client";
 import { useEffect, useState } from "react";
 import { billingAddresses } from "@/drizzle/schema";
+import { TcartItems } from "@/sections/cart/views/cart-view";
 
 export type TAddress = typeof billingAddresses.$inferSelect;
 
 const CheckoutView = () => {
-
   const [addresses, setAddresses] = useState<TAddress[] | null>(null);
 
+  const [cartItems, setCartItems] = useState<TcartItems[] | null>(null);
+
+  const [loadingAddressess, setLoadingAddressess] = useState(true);
+
+  const [loadingCartItems, setLoadingCartItems] = useState(true);
+
+  const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
+
+  const total =
+    cartItems?.reduce((acc, item) => {
+      return acc + item.price * item.quantity;
+    }, 0) || 0;
+
+  const totalDiscount =
+    cartItems?.reduce((acc, item) => {
+      return acc + (item.price * item.quantity * (item.discount || 0)) / 100;
+    }, 0) || 0;
+
+  const deliveryFee = 15;
+
+  const GrandTotal = total - totalDiscount + deliveryFee;
 
   useEffect(() => {
     async function fetchAddresses() {
+      setLoadingAddressess(true);
 
       let resp = await getAllUserAddress();
 
-      if (!resp.success) {
-        return;
-      }
-
       setAddresses(resp.data);
+
+      setLoadingAddressess(false);
     }
 
     fetchAddresses();
   }, []);
 
+  useEffect(() => {
+    async function fetchCartItems() {
+      setLoadingCartItems(true);
 
+      const resp = await getUserCartData();
+      const data = resp.data as unknown as TcartItems[];
+
+      setCartItems(data);
+
+      setLoadingCartItems(true);
+    }
+
+    fetchCartItems();
+  }, []);
+
+  const handleSelectAddress = (addressId: string) => {
+    setSelectedAddress(addressId);
+  };
 
   return (
     <div className="min-h-[calc(100vh-90px)]">
@@ -50,8 +87,14 @@ const CheckoutView = () => {
             type="single"
             collapsible
           >
-            <ExistingAddresses Addressess={addresses }/>
-            <AddNewAddress/>
+            <ExistingAddresses
+              loading={loadingAddressess}
+              Addressess={addresses}
+              selectedAddress={selectedAddress}
+              handleOnSelect={handleSelectAddress}
+            />
+
+            <AddNewAddress />
           </Accordion>
         </div>
         <div className="basis-[30%] border bg-ceramic p-6">
@@ -69,41 +112,56 @@ const CheckoutView = () => {
 
             {/* products */}
 
-            <div className="flex">
-              <div className="basis-3/4">
-                <p>Tshirt - Polo</p>
-              </div>
-              <div className="basis-1/4 text-right">
-                <p>$45</p>
-              </div>
-            </div>
-
-            <div className="flex">
-              <div className="basis-3/4">
-                <p>Tshirt - Polo</p>
-              </div>
-              <div className="basis-1/4 text-right">
-                <p>$45</p>
-              </div>
-            </div>
+            {cartItems?.map((item, idx) => {
+              return (
+                <div key={idx} className="flex">
+                  <div className="basis-3/4">
+                    <p>
+                      {item.name} ( {item.quantity} )
+                    </p>
+                  </div>
+                  <div className="basis-1/4 text-right">
+                    <p>${item.price}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
           <div className="mt-4 flex border-b border-black/30 pb-4 font-semibold text-slate-500">
             <div className="basis-2/3">
               <p> Shipping</p>
             </div>
             <div className="basis-1/3 text-right">
-              <p>Free Shipping</p>
-            </div>
-          </div>
-          <div className="mt-4 flex pb-4 font-semibold">
-            <div className="basis-2/3">
-              <p> Grand Total</p>
-            </div>
-            <div className="basis-1/3 text-right">
-              <p>$45</p>
+              <p>${deliveryFee}</p>
             </div>
           </div>
 
+          <div className="mt-4 flex">
+            <div className="basis-2/3">
+              <p> Total</p>
+            </div>
+            <div className="basis-1/3 text-right">
+              <p>${total}</p>
+            </div>
+          </div>
+
+          <div className="mt-4 border-b border-black/30 pb-4  flex text-red-600">
+            <div className="basis-2/3">
+              <p> Discount</p>
+            </div>
+            <div className="basis-1/3 text-right">
+              <p>${totalDiscount}</p>
+            </div>
+          </div>
+
+          <div className="mt-4 flex pb-4 font-semibold">
+            <div className="basis-2/3">
+              <p> Total</p>
+            </div>
+            <div className="basis-1/3 text-right">
+              <p>${GrandTotal}</p>
+            </div>
+          </div>
           <p className="mt-4 font-bold text-slate-500">Your Payment Method</p>
           <RadioGroup
             defaultValue="comfortable "
