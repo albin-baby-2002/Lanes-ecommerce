@@ -24,6 +24,7 @@ const CartView = async() => {
 
   const resp = await getUserCartData();
   const cartItems = resp.data as unknown as TcartItems[];
+
   return (
     <div className="min-h-screen">
       <BreadCrumb routes={["Home", "Cart"]} />
@@ -34,7 +35,7 @@ const CartView = async() => {
 
       <div className="my-6 flex gap-6">
         <ProductsInCart items={cartItems} />
-        <OrderSummary />
+        <OrderSummary  items={cartItems}/>
       </div>
     </div>
   );

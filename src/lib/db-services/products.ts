@@ -8,7 +8,7 @@ import {
   productVariants,
   users,
 } from "@/drizzle/schema";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 type TProduct = typeof products.$inferInsert;
 
@@ -399,22 +399,18 @@ export const findAllUserCartItems = async (userId: string) => {
       color: productVariants.color,
       size: productVariants.size,
       price: productVariants.price,
-      imgUrls: sql`array_agg(${productVariantImages.imgUrl})`.as("imgUrls"), // Aggregating imgUrl into an array
-
+      imgUrls:
+        sql`array_agg(${productVariantImages.imgUrl} ORDER BY ${productVariantImages.imgUrl} ASC)`.as(
+          "imgUrls",
+        ),
     })
     .from(cartItems)
     .leftJoin(
-      // Use leftJoin if you expect nulls for missing image data
       productVariants,
       eq(cartItems.productVariantId, productVariants.productVariantId),
     )
+    .leftJoin(products, eq(products.productId, productVariants.productId))
     .leftJoin(
-      // Join with products
-      products,
-      eq(products.productId, productVariants.productId),
-    )
-    .leftJoin(
-      // Join with productVariantImages
       productVariantImages,
       eq(
         productVariantImages.productVariantId,
@@ -435,5 +431,22 @@ export const findAllUserCartItems = async (userId: string) => {
       productVariants.inventoryCount,
       productVariants.size,
       productVariants.price,
-    ); // Grouping by non-aggregated columns
+    );
+};
+
+export const deleteCartItem = async ({
+  productVariantId,
+  userId,
+}: {
+  productVariantId: string;
+  userId: string;
+}) => {
+  return await db
+    .delete(cartItems)
+    .where(
+      and(
+        eq(cartItems.productVariantId, productVariantId),
+        eq(cartItems.userId, userId),
+      ),
+    );
 };

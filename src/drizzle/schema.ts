@@ -157,3 +157,20 @@ export const productReviews = pgTable(
     };
   },
 );
+
+export const billingAddresses = pgTable("billingAddresses", {
+  addressId: uuid("addressId").defaultRandom().primaryKey(),
+  userId: uuid("userId")
+    .notNull()
+    .references(() => users.userId),
+  fullName: varchar({ length: 256 }).notNull(),
+  addressLine: varchar({ length: 256 }).notNull(),
+  city: varchar({ length: 256 }).notNull(),
+  district: varchar({ length: 256 }).notNull(),
+  state: varchar({ length: 256 }).notNull(),
+  zipCode: varchar({ length: 256 }).notNull(),
+  email: varchar({ length: 256 }).notNull(),
+  phone: varchar({ length: 256 }).notNull(),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});

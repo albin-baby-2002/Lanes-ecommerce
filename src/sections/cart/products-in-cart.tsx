@@ -5,19 +5,16 @@ import React, { useState } from "react";
 import { FaMinus, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { TcartItems } from "./views/cart-view";
 import { Pricing } from "@/components/pricing";
-import AddToCart from "../product-details/components/add-to-cart";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { addToCart } from "@/lib/actions/client";
+import { addToCart, deleteFromCart } from "@/lib/actions/client";
+import { hammingDistance } from "drizzle-orm";
+
+//-------------------------------------------------------------------------
 
 const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
-  const { pending } = useFormStatus();
-
   const router = useRouter();
-
-  // local states
-  const [submitting, setSubmitting] = useState(false);
 
   const handleAddToCart = async (
     count: number,
@@ -25,7 +22,6 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
     variantId: string,
   ) => {
     try {
-      setSubmitting(true);
       // submit logic for adding new category
 
       if (count > inventoryCount) {
@@ -35,21 +31,35 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
       let resp = await addToCart(variantId, count);
 
       if (!resp.success) {
-        setSubmitting(false);
         return toast.error(resp.message);
       }
 
       toast.success(resp.message);
 
       router.refresh();
-
-      setSubmitting(false);
     } catch (error) {
       toast.error("Unexpected error! Try Again !");
-      setSubmitting(false);
       console.log(error);
     }
   };
+
+  const handleRemoveFromCart = async (variantId: string) => {
+    try {
+      let resp = await deleteFromCart(variantId);
+
+      if (!resp.success) {
+        return toast.error(resp.message);
+      }
+
+      toast.success(resp.message);
+
+      router.refresh();
+    } catch (error) {
+      toast.error("Unexpected error! Try Again !");
+      console.log(error);
+    }
+  };
+
   return (
     <div className="h-max basis-3/5 rounded-3xl border border-black/10 p-6">
       {items?.map((item, idx) => (
@@ -84,7 +94,13 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
           </div>
 
           <div className="flex flex-col items-end justify-between">
-            <FaTrashAlt size={20} className="mt-2 text-red-500" />
+            <FaTrashAlt
+              onClick={() => {
+                handleRemoveFromCart(item.productVariantId);
+              }}
+              size={20}
+              className="mt-2 cursor-pointer text-red-500"
+            />
 
             <div className="flex items-center gap-3 rounded-full bg-ceramic px-3">
               <Button
@@ -105,14 +121,15 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
               </Button>
               <p>{item.quantity}</p>
 
-              <Button size={"icon"} variant={"ghost"}
-
+              <Button
+                size={"icon"}
+                variant={"ghost"}
                 onClick={() => {
                   console.log(item.quantity, "item quantity");
                   if (item.quantity >= 5) return;
 
                   handleAddToCart(
-                    item.quantity +1,
+                    item.quantity + 1,
                     item.inventoryCount,
                     item.productVariantId,
                   );

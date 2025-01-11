@@ -6,8 +6,34 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import ExistingAddresses from "../existing-addresses";
 import AddNewAddress from "../add-new-address";
+import { getAllUserAddress } from "@/lib/actions/client";
+import { useEffect, useState } from "react";
+import { billingAddresses } from "@/drizzle/schema";
+
+export type TAddress = typeof billingAddresses.$inferSelect;
 
 const CheckoutView = () => {
+
+  const [addresses, setAddresses] = useState<TAddress[] | null>(null);
+
+
+  useEffect(() => {
+    async function fetchAddresses() {
+
+      let resp = await getAllUserAddress();
+
+      if (!resp.success) {
+        return;
+      }
+
+      setAddresses(resp.data);
+    }
+
+    fetchAddresses();
+  }, []);
+
+
+
   return (
     <div className="min-h-[calc(100vh-90px)]">
       <BreadCrumb routes={["Home", "Cart", "CheckOut"]} />
@@ -24,7 +50,7 @@ const CheckoutView = () => {
             type="single"
             collapsible
           >
-            <ExistingAddresses />
+            <ExistingAddresses Addressess={addresses }/>
             <AddNewAddress/>
           </Accordion>
         </div>

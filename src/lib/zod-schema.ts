@@ -10,11 +10,11 @@ const validateDiscount = (val: string) => {
 };
 
 export const BillingAddressSchema = z.object({
-  name: z.string().min(2, {
+  fullName: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
 
-  address_line: z
+  addressLine: z
     .string()
     .min(5, { message: "Street address must be at least 5 characters long" }),
 
@@ -24,13 +24,16 @@ export const BillingAddressSchema = z.object({
 
   state: z.string().min(2, { message: "State is required" }),
 
-  postal_code: z.string().min(3, { message: "Postal code is required" }),
+  zipCode: z.string().min(3, { message: "Postal code is required" }),
 
   email: z.string().email("Enter a valid email address"),
 
   phone: z
     .string()
-    .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+    .refine(
+      (phone) => /^\+\d{10,15}$/.test(phone),
+      "Invalid phone number - include country code",
+    ),
 });
 
 export const UserProfileSchema = z.object({

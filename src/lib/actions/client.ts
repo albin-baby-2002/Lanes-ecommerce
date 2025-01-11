@@ -10,10 +10,21 @@ import {
   TCartItem,
 } from "../db-services/client";
 import {
+  deleteCartItem,
   findAllUserCartItems,
   getProductVariantReviewInfo,
   updateProductVariantAvgReview,
 } from "../db-services/products";
+import { getUserDetailsUsingSession } from "./auth-actions";
+import { users } from "@/drizzle/schema";
+import {
+  findBillingAddressByUserId,
+  insertBillingAddress,
+  TBillingAddressInsert,
+} from "../db-services/billing-address";
+import { TBillingAddressFormData } from "@/sections/checkout/add-new-address";
+
+export type TUserSelect = typeof users.$inferSelect;
 
 export const addToCart = async (productVariantId: string, quantity: number) => {
   const response = { success: false, message: "" };
@@ -50,7 +61,7 @@ export const addToCart = async (productVariantId: string, quantity: number) => {
       quantity,
     };
 
-    const cartItemAdded = await insertCartItem(cartItem);
+    await insertCartItem(cartItem);
 
     response.success = true;
     response.message = "Successfully added item to cart";
@@ -156,7 +167,6 @@ export const addReview = async (
     const { avgRating, ratingsCount } = variantReviewInfo[0];
 
     if (avgRating != null && ratingsCount != null) {
-      console.log("add avg rating");
       const newAvgRating = (avgRating + rating) / (ratingsCount + 1);
 
       await updateProductVariantAvgReview(
@@ -202,8 +212,6 @@ export const getUserCartData = async () => {
 
     const cartItems = await findAllUserCartItems(user[0].userId);
 
-    console.log("cartItems \n \n", cartItems);
-
     response.data = cartItems;
 
     response.success = true;
@@ -217,5 +225,129 @@ export const getUserCartData = async () => {
     response.message = "Sorry, something went wrong. Please try again later.";
     response.details = err.message;
     return response;
+  }
+};
+
+export const deleteFromCart = async (productVariantId: string) => {
+  const response = { success: false, message: "" };
+
+  try {
+    const { getUser, isAuthenticated } = getKindeServerSession();
+
+    const authenticated = await isAuthenticated();
+
+    if (!authenticated) {
+      response.message =
+        "Unexpected error - failed to identify user - try again";
+      return response;
+    }
+
+    const kindeUserDetails = await getUser();
+
+    if (!kindeUserDetails) {
+      response.message =
+        "Unexpected error - failed to identify user - try again";
+      return response;
+    }
+
+    const userDetails = await findUserByKindeId(kindeUserDetails.id);
+
+    if (!userDetails) {
+      response.message =
+        "Unexpected error - failed to identify user - try again";
+      return response;
+    }
+
+    const deleteResp = await deleteCartItem({
+      productVariantId,
+      userId: userDetails[0].userId,
+    });
+
+    response.success = true;
+
+    response.message = "Successfully deleted item from cart";
+
+    return response;
+  } catch (err: any) {
+    console.error("Error:", err);
+    return {
+      success: false,
+      message: "Sorry, something went wrong. Please try again later.",
+      details: err.message,
+    };
+  }
+};
+
+export const addNewBillingAddress = async (
+  address: TBillingAddressFormData,
+) => {
+  const response: TDataResponse = { success: false, message: "", data: null };
+
+  try {
+    let userDetails: TUserSelect | null = null;
+
+    try {
+      userDetails = await getUserDetailsUsingSession();
+
+      if (!userDetails) {
+        throw new Error("Failed to get user details");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      response.message =
+        "Unexpected error - failed to identify user - try again";
+      return response;
+    }
+
+    await insertBillingAddress({ ...address, userId: userDetails.userId });
+
+    response.success = true;
+    response.message = "Successfully added new billing address";
+
+    return response;
+  } catch (err: any) {
+    console.error("Error:", err);
+    return {
+      success: false,
+      message: "Sorry, something went wrong. Please try again later.",
+      details: err.message,
+    };
+  }
+};
+
+export const getAllUserAddress = async (
+) => {
+  const response: TDataResponse = { success: false, message: "", data: null };
+
+  try {
+    let userDetails: TUserSelect | null = null;
+
+    try {
+      userDetails = await getUserDetailsUsingSession();
+
+      if (!userDetails) {
+        throw new Error("Failed to get user details");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      response.message =
+        "Unexpected error - failed to identify user - try again";
+      return response;
+    }
+
+    const addresses = await findBillingAddressByUserId(userDetails.userId);
+
+    response.success = true;
+    response.data = addresses;
+    response.message = "Successfully added new billing address";
+
+    return response;
+  } catch (err: any) {
+    console.error("Error:", err);
+
+    response.message = "Sorry, something went wrong. Please try again later.";
+    response.details = err.message;
+    return response;
+
   }
 };

@@ -1,17 +1,7 @@
 import CustomInputField, { FormFieldType } from "@/components/custom-input";
 import { Form } from "@/components/ui/form";
-import { BillingAddressSchema } from "@/lib/zod-schema";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 
-type TData = z.infer<typeof BillingAddressSchema>;
-
-const AddNewAddressForm = () => {
-  const form = useForm<TData>({
-    resolver: zodResolver(BillingAddressSchema),
-  });
-
+const AddNewAddressForm = ({ form }: { form: UseFormReturn<any> }) => {
   return (
     <Form {...form}>
       <form className="grid w-full gap-4">
@@ -19,14 +9,14 @@ const AddNewAddressForm = () => {
           <CustomInputField
             control={form.control}
             fieldType={FormFieldType.INPUT}
-            name="name"
+            name="fullName"
             placeholder="John Doe"
             label="Full Name"
           />
           <CustomInputField
             control={form.control}
             fieldType={FormFieldType.INPUT}
-            name="address_line"
+            name="addressLine"
             placeholder="37-B, SkyLine Axios"
             label="AddressLine"
           />
@@ -55,7 +45,7 @@ const AddNewAddressForm = () => {
         <CustomInputField
           control={form.control}
           fieldType={FormFieldType.INPUT}
-          name="postal_code"
+          name="zipCode"
           placeholder="9898888"
           label="Postal Code"
         />

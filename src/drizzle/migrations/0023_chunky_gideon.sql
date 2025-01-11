@@ -1,0 +1,1 @@
+ALTER TABLE "billingAddresses" ADD COLUMN "fullName" varchar(256) NOT NULL;
