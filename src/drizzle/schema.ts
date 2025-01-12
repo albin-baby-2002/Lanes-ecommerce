@@ -1,12 +1,33 @@
 import {
   boolean,
   integer,
+  pgEnum,
   pgTable,
   primaryKey,
   timestamp,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+
+//----------------------------------------------------------------------------------
+
+export const paymentStatus = pgEnum("paymentStatus", [
+  "PENDING",
+  "PAID",
+  "FAILED",
+  "REFUNDED",
+  "CANCELLED",
+]);
+
+export const shippingStatus = pgEnum("shippingStatus", [
+  "PENDING",
+  "SHIPPED",
+  "DELIVERED",
+  "RETURNED",
+  "CANCELLED",
+]);
+
+//----------------------------------------------------------------------------------
 
 export const users = pgTable("users", {
   userId: uuid("userId").defaultRandom().primaryKey(),
@@ -25,6 +46,8 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
 
+//----------------------------------------------------------------------------------
+
 export const categories = pgTable("categories", {
   categoryId: uuid("categoryId").defaultRandom().primaryKey(),
   categoryInternalId: integer("categoryInternalId")
@@ -42,6 +65,8 @@ export const categories = pgTable("categories", {
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
 
+//----------------------------------------------------------------------------------
+
 export const products = pgTable("products", {
   productId: uuid("productId").defaultRandom().primaryKey(),
   productInternalId: integer("productInternalId")
@@ -57,6 +82,8 @@ export const products = pgTable("products", {
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
+
+//----------------------------------------------------------------------------------
 
 export const productCategories = pgTable(
   "productCategories",
@@ -77,6 +104,8 @@ export const productCategories = pgTable(
     };
   },
 );
+
+//----------------------------------------------------------------------------------
 
 export const productVariants = pgTable("productVariants", {
   productVariantId: uuid("productVariantId").defaultRandom().primaryKey(),
@@ -100,6 +129,8 @@ export const productVariants = pgTable("productVariants", {
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
 
+//----------------------------------------------------------------------------------
+
 export const productVariantImages = pgTable("productVariantImages", {
   productVariantImageId: uuid("productVariantImageId")
     .defaultRandom()
@@ -111,6 +142,8 @@ export const productVariantImages = pgTable("productVariantImages", {
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
+
+//----------------------------------------------------------------------------------
 
 export const cartItems = pgTable(
   "cartItems",
@@ -133,6 +166,8 @@ export const cartItems = pgTable(
     };
   },
 );
+
+//----------------------------------------------------------------------------------
 
 export const productReviews = pgTable(
   "productReviews",
@@ -158,6 +193,8 @@ export const productReviews = pgTable(
   },
 );
 
+//----------------------------------------------------------------------------------
+
 export const billingAddresses = pgTable("billingAddresses", {
   addressId: uuid("addressId").defaultRandom().primaryKey(),
   userId: uuid("userId")
@@ -171,6 +208,26 @@ export const billingAddresses = pgTable("billingAddresses", {
   zipCode: varchar({ length: 256 }).notNull(),
   email: varchar({ length: 256 }).notNull(),
   phone: varchar({ length: 256 }).notNull(),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+
+//----------------------------------------------------------------------------------
+
+export const order = pgTable("order", {
+  orderId: uuid("orderId").defaultRandom().primaryKey(),
+  userId: uuid("userId")
+    .notNull()
+    .references(() => users.userId),
+  addressId: uuid("addressId")
+    .notNull()
+    .references(() => billingAddresses.addressId),
+  total: integer("total").notNull(),
+  totalDiscount: integer("totalDiscount").notNull(),
+  paymentStatus: paymentStatus().notNull(),
+  shippingStatus: paymentStatus().notNull(),
+  deliveryFee: integer("deliveryFee").notNull(),
+  grandTotal: integer("grandTotal").notNull(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });

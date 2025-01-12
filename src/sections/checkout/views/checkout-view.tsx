@@ -1,8 +1,6 @@
 "use client";
 import BreadCrumb from "@/components/breadcrumb";
 import { Accordion } from "@/components/ui/accordion";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import ExistingAddresses from "../existing-addresses";
 import AddNewAddress from "../add-new-address";
@@ -10,8 +8,14 @@ import { getAllUserAddress, getUserCartData } from "@/lib/actions/client";
 import { useEffect, useState } from "react";
 import { billingAddresses } from "@/drizzle/schema";
 import { TcartItems } from "@/sections/cart/views/cart-view";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+
+//----------------------------------------------------------------------------------
 
 export type TAddress = typeof billingAddresses.$inferSelect;
+
+//----------------------------------------------------------------------------------
 
 const CheckoutView = () => {
   const [addresses, setAddresses] = useState<TAddress[] | null>(null);
@@ -61,7 +65,7 @@ const CheckoutView = () => {
 
       setCartItems(data);
 
-      setLoadingCartItems(true);
+      setLoadingCartItems(false);
     }
 
     fetchCartItems();
@@ -97,103 +101,87 @@ const CheckoutView = () => {
             <AddNewAddress />
           </Accordion>
         </div>
-        <div className="basis-[30%] border bg-ceramic p-6">
-          <p className="border-b border-black pb-4 font-bold">Your Order</p>
+        <div className="h-max basis-[30%] border bg-ceramic p-6">
+          {loadingCartItems ? (
+            <LoadingSkeleton />
+          ) : (
+            <>
+              <p className="border-b border-black pb-4 font-bold">Your Order</p>
 
-          <div className="mt-6 grid gap-4 border-b border-black/30 pb-4">
-            <div className="flex font-semibold">
-              <div className="basis-3/4">
-                <p>Product</p>
-              </div>
-              <div className="basis-1/4 text-right">
-                <p>Total</p>
-              </div>
-            </div>
-
-            {/* products */}
-
-            {cartItems?.map((item, idx) => {
-              return (
-                <div key={idx} className="flex">
+              <div className="mt-6 grid gap-4 border-b border-black/20 pb-4">
+                <div className="flex font-semibold">
                   <div className="basis-3/4">
-                    <p>
-                      {item.name} ( {item.quantity} )
-                    </p>
+                    <p>Product</p>
                   </div>
                   <div className="basis-1/4 text-right">
-                    <p>${item.price}</p>
+                    <p>Total</p>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-          <div className="mt-4 flex border-b border-black/30 pb-4 font-semibold text-slate-500">
-            <div className="basis-2/3">
-              <p> Shipping</p>
-            </div>
-            <div className="basis-1/3 text-right">
-              <p>${deliveryFee}</p>
-            </div>
-          </div>
 
-          <div className="mt-4 flex">
-            <div className="basis-2/3">
-              <p> Total</p>
-            </div>
-            <div className="basis-1/3 text-right">
-              <p>${total}</p>
-            </div>
-          </div>
+                {/* products */}
 
-          <div className="mt-4 border-b border-black/30 pb-4  flex text-red-600">
-            <div className="basis-2/3">
-              <p> Discount</p>
-            </div>
-            <div className="basis-1/3 text-right">
-              <p>${totalDiscount}</p>
-            </div>
-          </div>
+                {cartItems?.map((item, idx) => {
+                  return (
+                    <div key={idx} className="flex">
+                      <div className="basis-3/4">
+                        <p>
+                          {item.name} ( {item.quantity} )
+                        </p>
+                      </div>
+                      <div className="basis-1/4 text-right">
+                        <p>${item.price}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
 
-          <div className="mt-4 flex pb-4 font-semibold">
-            <div className="basis-2/3">
-              <p> Total</p>
-            </div>
-            <div className="basis-1/3 text-right">
-              <p>${GrandTotal}</p>
-            </div>
-          </div>
-          <p className="mt-4 font-bold text-slate-500">Your Payment Method</p>
-          <RadioGroup
-            defaultValue="comfortable "
-            className="space-y-2 py-4 text-lg"
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value={"cod"} id={"cod"} />
-              <Label
-                htmlFor={"cod"}
-                className="text-base font-bold text-black/60"
-              >
-                Cash On Delivery
-              </Label>
-            </div>
+              <div className="mt-4 flex">
+                <div className="basis-2/3">
+                  <p> Total</p>
+                </div>
+                <div className="basis-1/3 text-right">
+                  <p>${total}</p>
+                </div>
+              </div>
 
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value={"online payment"} id={"online payment"} />
-              <Label
-                htmlFor={"online payment"}
-                className="text-base font-bold text-black/60"
-              >
-                Online Payment
-              </Label>
-            </div>
-          </RadioGroup>
-          <p className="mt-4 text-slate-500">
-            Disclaimer: Cancelling the order after 2 days of placing the order
-            will attract cancellation charges
-          </p>
-          <Button className="mt-6 h-auto w-full py-4 text-base font-bold">
-            Place Your Order
-          </Button>
+              <div className="pb-4k mt-4 flex text-red-600">
+                <div className="basis-2/3">
+                  <p> Discount</p>
+                </div>
+                <div className="basis-1/3 text-right">
+                  <p>${totalDiscount}</p>
+                </div>
+              </div>
+
+              <div className="mt-4 flex border-b border-black/20 pb-4">
+                <div className="basis-2/3">
+                  <p> Shipping</p>
+                </div>
+                <div className="basis-1/3 text-right">
+                  <p>${deliveryFee}</p>
+                </div>
+              </div>
+
+              <div className="mt-4 flex pb-4 font-semibold">
+                <div className="basis-2/3">
+                  <p> Total</p>
+                </div>
+                <div className="basis-1/3 text-right">
+                  <p>${GrandTotal}</p>
+                </div>
+              </div>
+
+              <p className="mt-4 text-slate-500">
+                Disclaimer: Cancelling the order after 2 days of placing the
+                order will attract cancellation charges
+              </p>
+
+              <Button className="mt-6 h-auto w-full py-4 text-base font-bold">
+                Place Your Order
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>
@@ -201,3 +189,115 @@ const CheckoutView = () => {
 };
 
 export default CheckoutView;
+
+const LoadingSkeleton = () => {
+  return (
+    <div>
+      <Skeleton className="h-6 w-40 bg-black/20" />
+
+      <div className="mt-4 grid grid-cols-2 gap-6 border-y border-black/20 py-4">
+        {Array(2)
+          .fill(0)
+          .map((_, idx) => {
+            return (
+              <div
+                key={idx}
+                className={cn("flex w-full", {
+                  "justify-between": idx % 2 === 0,
+                  "justify-end": idx % 2 === 1,
+                })}
+              >
+                <Skeleton className="h-4 w-[40%] bg-black/20" />
+              </div>
+            );
+          })}
+
+        <div className={cn("flex w-full")}>
+          <Skeleton className="h-4 w-[80%] bg-black/20" />
+        </div>
+
+        <div className={cn("flex w-full justify-end")}>
+          <Skeleton className="h-4 w-1/2 bg-black/20" />
+        </div>
+
+        <div className={cn("flex w-full")}>
+          <Skeleton className="h-4 w-[70%] bg-black/20" />
+        </div>
+
+        <div className={cn("flex w-full justify-end")}>
+          <Skeleton className="h-4 w-1/2 bg-black/20" />
+        </div>
+
+        <div className={cn("flex w-full")}>
+          <Skeleton className="h-4 w-[70%] bg-black/20" />
+        </div>
+
+        <div className={cn("flex w-full justify-end")}>
+          <Skeleton className="h-4 w-1/2 bg-black/20" />
+        </div>
+
+        <div className={cn("flex w-full")}>
+          <Skeleton className="h-4 w-[80%] bg-black/20" />
+        </div>
+
+        <div className={cn("flex w-full justify-end")}>
+          <Skeleton className="h-4 w-1/2 bg-black/20" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-5 border-b border-black/20 py-4">
+        {Array(2)
+          .fill(0)
+          .map((_, idx) => {
+            return (
+              <div
+                key={idx}
+                className={cn("flex w-full", {
+                  "justify-between": idx % 2 === 0,
+                  "justify-end": idx % 2 === 1,
+                })}
+              >
+                <Skeleton className="h-4 w-1/2 bg-black/20" />
+              </div>
+            );
+          })}
+
+        <div className={cn("flex w-full")}>
+          <Skeleton className="h-4 w-[30%] bg-black/30" />
+        </div>
+
+        <div className={cn("flex w-full justify-end")}>
+          <Skeleton className="h-4 w-[25%] bg-black/20" />
+        </div>
+
+        <div className={cn("flex w-full")}>
+          <Skeleton className="h-4 w-[40%] bg-black/20" />
+        </div>
+
+        <div className={cn("flex w-full justify-end")}>
+          <Skeleton className="h-4 w-[35%] bg-black/20" />
+        </div>
+      </div>
+
+      <div className="mb-5 grid grid-cols-2 gap-5 border-black/20 py-4">
+        {Array(2)
+          .fill(0)
+          .map((_, idx) => {
+            return (
+              <div
+                key={idx}
+                className={cn("flex w-full", {
+                  "justify-between": idx % 2 === 0,
+                  "justify-end": idx % 2 === 1,
+                })}
+              >
+                <Skeleton className="h-5 w-1/2 bg-black/20" />
+              </div>
+            );
+          })}
+      </div>
+
+      <Skeleton className="h-8 w-full bg-black/20 px-4" />
+    </div>
+  );
+};
