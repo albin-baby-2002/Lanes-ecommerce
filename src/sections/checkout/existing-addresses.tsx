@@ -29,7 +29,7 @@ const ExistingAddresses = ({
       <AccordionTrigger className="font-bold hover:no-underline">
         Billing Addresses
       </AccordionTrigger>
-      <AccordionContent className="flex max-h-[764px] w-full  px-2 flex-wrap gap-3 overflow-y-auto border-t">
+      <AccordionContent className="flex max-h-[420px] w-full  px-2 flex-wrap gap-3 overflow-y-auto border-t">
         {loading ? (
           <LoadingAddressSkeleton />
         ) : (
@@ -44,7 +44,7 @@ const ExistingAddresses = ({
               return (
                 <div
                   key={idx}
-                  className="flex w-full space-x-4 border-t py-8 first:py-4 first:border-t-0"
+                  className="flex w-full space-x-4 border-t pt-8 pb-2 first:py-4 first:border-t-0"
                 >
                   <RadioGroupItem
                     className="mt-2"

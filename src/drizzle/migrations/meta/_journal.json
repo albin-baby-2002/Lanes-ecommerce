@@ -169,6 +169,13 @@
       "when": 1736577518004,
       "tag": "0023_chunky_gideon",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1736736366282,
+      "tag": "0024_opposite_blue_shield",
+      "breakpoints": true
     }
   ]
 }

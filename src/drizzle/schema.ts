@@ -214,7 +214,7 @@ export const billingAddresses = pgTable("billingAddresses", {
 
 //----------------------------------------------------------------------------------
 
-export const order = pgTable("order", {
+export const orders = pgTable("orders", {
   orderId: uuid("orderId").defaultRandom().primaryKey(),
   userId: uuid("userId")
     .notNull()
@@ -228,6 +228,25 @@ export const order = pgTable("order", {
   shippingStatus: paymentStatus().notNull(),
   deliveryFee: integer("deliveryFee").notNull(),
   grandTotal: integer("grandTotal").notNull(),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+
+//----------------------------------------------------------------------------------
+
+export const orderItems = pgTable("orderItems", {
+  orderItemId: uuid("orderItemId").defaultRandom().primaryKey(),
+  orderId: uuid("orderId")
+    .notNull()
+    .references(() => orders.orderId),
+  productVariantId: uuid("productVariantId")
+    .notNull()
+    .references(() => productVariants.productVariantId),
+  quantity: integer("quantity").notNull(),
+  price: integer("price").notNull(),
+  discount: integer("discount").notNull(),
+  totalDiscount: integer("totalDiscount").notNull(),
+  total: integer("total").notNull(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });

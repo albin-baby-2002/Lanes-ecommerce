@@ -4,12 +4,19 @@ import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import ExistingAddresses from "../existing-addresses";
 import AddNewAddress from "../add-new-address";
-import { getAllUserAddress, getUserCartData } from "@/lib/actions/client";
+import {
+  getAllUserAddress,
+  getUserCartData,
+  placeOrder,
+} from "@/lib/actions/client";
 import { useEffect, useState } from "react";
 import { billingAddresses } from "@/drizzle/schema";
 import { TcartItems } from "@/sections/cart/views/cart-view";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import Image from "next/image";
 
 //----------------------------------------------------------------------------------
 
@@ -18,6 +25,8 @@ export type TAddress = typeof billingAddresses.$inferSelect;
 //----------------------------------------------------------------------------------
 
 const CheckoutView = () => {
+  const router = useRouter();
+
   const [addresses, setAddresses] = useState<TAddress[] | null>(null);
 
   const [cartItems, setCartItems] = useState<TcartItems[] | null>(null);
@@ -27,6 +36,8 @@ const CheckoutView = () => {
   const [loadingCartItems, setLoadingCartItems] = useState(true);
 
   const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
+
+  const [submitting, setSubmitting] = useState(false);
 
   const total =
     cartItems?.reduce((acc, item) => {
@@ -73,6 +84,35 @@ const CheckoutView = () => {
 
   const handleSelectAddress = (addressId: string) => {
     setSelectedAddress(addressId);
+  };
+
+  const handlePlaceOrder = async () => {
+    try {
+      setSubmitting(true);
+
+      if (!selectedAddress) {
+        toast.error("Please select an address to place the order");
+        setSubmitting(false);
+        return;
+      }
+
+      const resp = await placeOrder(selectedAddress);
+
+      if (!resp.success) {
+        toast.error(resp.message);
+        setSubmitting(false);
+        return;
+      }
+
+      toast.success("Order Placed Successfully");
+
+      setSubmitting(false);
+      router.refresh();
+    } catch (error) {
+      toast.error("Unexpected error! Try Again !");
+      setSubmitting(false);
+      console.log(error);
+    }
   };
 
   return (
@@ -177,7 +217,19 @@ const CheckoutView = () => {
                 order will attract cancellation charges
               </p>
 
-              <Button className="mt-6 h-auto w-full py-4 text-base font-bold">
+              <Button
+                onClick={handlePlaceOrder}
+                className="mt-6 h-auto w-full py-4 text-base font-bold"
+              >
+                {submitting  && (
+                  <Image
+                    height={24}
+                    width={24}
+                    className="mr-2"
+                    alt="svg"
+                    src={"/loaders/circular-loader.svg"}
+                  />
+                )}
                 Place Your Order
               </Button>
             </>

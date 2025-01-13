@@ -3,6 +3,8 @@ import React from "react";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { TcartItems } from "./views/cart-view";
 import Link from "next/link";
+import { cartItems } from "@/drizzle/schema";
+import { cn } from "@/lib/utils";
 
 const OrderSummary = ({ items }: { items: TcartItems[] }) => {
   const total = items.reduce((acc, item) => {
@@ -41,24 +43,12 @@ const OrderSummary = ({ items }: { items: TcartItems[] }) => {
         <p className="font-bold">${GrandTotal}</p>
       </div>
 
-      {/* <div className="mt-4 flex items-center gap-3">
-
-        <div className="flex grow items-center gap-2 rounded-full bg-ceramic px-4 py-3">
-          <MdOutlineLocalOffer className="text-black/60" size={24} />
-          <input
-            className="bg-inherit text-lg"
-            type="text"
-            placeholder="Add promo code"
-          />
-        </div>
-
-        <Button className="m-0 h-12 min-h-full rounded-full px-10">
-          Apply
-        </Button>
-      </div>
- */}
-      <Link href="/checkout">
-        <Button className="m-0 mt-8 h-12 w-full rounded-full py-7">
+      <Link href={items.length == 0 ? "/checkout" : ""}>
+        <Button
+          className={cn("m-0 mt-8 h-12 w-full rounded-full py-7", {
+            "cursor-not-allowed ": items.length == 0,
+          })}
+        >
           Go to Checkout
         </Button>
       </Link>

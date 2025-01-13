@@ -2,10 +2,14 @@
 import { db } from "@/drizzle/db";
 import {
   cartItems,
+  orderItems,
+  orders,
+  paymentStatus,
   productReviews,
   products,
   productVariantImages,
   productVariants,
+  shippingStatus,
   users,
 } from "@/drizzle/schema";
 import { and, eq, sql } from "drizzle-orm";
@@ -449,4 +453,53 @@ export const deleteCartItem = async ({
         eq(cartItems.userId, userId),
       ),
     );
+};
+
+export interface TOrderItem {
+
+  orderItemId: string;
+  orderId: string;
+  userId: string;
+  paymentStatus: string;
+  orderDate: string;
+  shippingStatus: string;
+  name:string;
+  price:string;
+  qunatity:number;
+  imgUrls: string[];
+}
+
+export const findAllOrderItems = async (userId: string) => {
+  return await db
+    .select({
+      orderId: orders.orderId,
+      orderItemId: orderItems.orderItemId,
+      total: orderItems.total,
+      userId: orders.userId,
+      paymentStatus: orders.paymentStatus,
+      orderDate: orders.createdAt,
+      shippingStatus: orders.shippingStatus,
+      name: products.name,
+      qunatity: orderItems.quantity,
+
+      imgUrls:
+        sql`array_agg(${productVariantImages.imgUrl} ORDER BY ${productVariantImages.imgUrl} ASC)`.as(
+          "imgUrls",
+        ),
+
+    })
+    .from(orderItems)
+    .leftJoin(orders, eq(orders.orderId, orderItems.orderId))
+    .leftJoin(productVariants, eq(productVariants.productVariantId, orderItems.productVariantId))
+    .leftJoin(products, eq(products.productId, productVariants.productId))
+    .where(eq(orders.userId, userId))
+    .groupBy(
+      orders.orderId,
+      orderItems.orderItemId,
+      orderItems.price,
+      orders.userId,
+      orders.paymentStatus,
+      orders.createdAt,
+      orders.shippingStatus,
+    )
 };

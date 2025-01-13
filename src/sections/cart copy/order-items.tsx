@@ -3,71 +3,25 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import React, { useState } from "react";
 import { FaMinus, FaPlus, FaTrashAlt } from "react-icons/fa";
-import { TcartItems } from "./views/cart-view";
 import { Pricing } from "@/components/pricing";
-import { useFormStatus } from "react-dom";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { addToCart, deleteFromCart } from "@/lib/actions/client";
-import { hammingDistance } from "drizzle-orm";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingBag, ShoppingCart } from "lucide-react";
+import { TOrderItem } from "@/lib/db-services/products";
 
 //-------------------------------------------------------------------------
 
-const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
-  const router = useRouter();
+const OrderItems = ({ items }: { items: TOrderItem[] }) => {
 
-  const handleAddToCart = async (
-    count: number,
-    inventoryCount: number,
-    variantId: string,
-  ) => {
-    try {
-      // submit logic for adding new category
 
-      if (count > inventoryCount) {
-        return toast.error("Item not in stock");
-      }
-
-      let resp = await addToCart(variantId, count);
-
-      if (!resp.success) {
-        return toast.error(resp.message);
-      }
-
-      toast.success(resp.message);
-
-      router.refresh();
-    } catch (error) {
-      toast.error("Unexpected error! Try Again !");
-      console.log(error);
-    }
-  };
-
-  const handleRemoveFromCart = async (variantId: string) => {
-    try {
-      let resp = await deleteFromCart(variantId);
-
-      if (!resp.success) {
-        return toast.error(resp.message);
-      }
-
-      toast.success(resp.message);
-
-      router.refresh();
-    } catch (error) {
-      toast.error("Unexpected error! Try Again !");
-      console.log(error);
-    }
-  };
 
   return (
     <>
-      <div className="h-auto basis-3/5 rounded-3xl border border-black/10 p-6">
+      <div className="h-auto  w-full mt-8 min-h-[60vh] rounded-3xl border border-black/10 p-6">
         {items.length === 0 && (
           <div className="flex h-full flex-col items-center justify-center gap-4">
-            <ShoppingCart size={50} />
-            <p className="text-2xl font-bold">Your Cart Is Empty</p>
+            <ShoppingBag size={50} />
+            <p className="text-2xl font-bold">
+              You have not placed any orders yet
+            </p>
           </div>
         )}
       </div>
@@ -107,9 +61,6 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
 
               <div className="flex flex-col items-end justify-between">
                 <FaTrashAlt
-                  onClick={() => {
-                    handleRemoveFromCart(item.productVariantId);
-                  }}
                   size={20}
                   className="mt-2 cursor-pointer text-red-500"
                 />
@@ -118,16 +69,6 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
                   <Button
                     size={"icon"}
                     variant={"ghost"}
-                    onClick={() => {
-                      console.log(item.quantity, "item quantity");
-                      if (item.quantity <= 1) return;
-
-                      handleAddToCart(
-                        item.quantity - 1,
-                        item.inventoryCount,
-                        item.productVariantId,
-                      );
-                    }}
                   >
                     <FaMinus size={12} />
                   </Button>
@@ -136,16 +77,6 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
                   <Button
                     size={"icon"}
                     variant={"ghost"}
-                    onClick={() => {
-                      console.log(item.quantity, "item quantity");
-                      if (item.quantity >= 5) return;
-
-                      handleAddToCart(
-                        item.quantity + 1,
-                        item.inventoryCount,
-                        item.productVariantId,
-                      );
-                    }}
                   >
                     <FaPlus size={12} />
                   </Button>
@@ -159,4 +90,4 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
   );
 };
 
-export default ProductsInCart;
+export default  OrderItems;
