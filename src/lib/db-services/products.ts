@@ -464,8 +464,9 @@ export interface TOrderItem {
   orderDate: string;
   shippingStatus: string;
   name:string;
+  total:number;
   price:string;
-  qunatity:number;
+  quantity:number;
   imgUrls: string[];
 }
 
@@ -480,8 +481,7 @@ export const findAllOrderItems = async (userId: string) => {
       orderDate: orders.createdAt,
       shippingStatus: orders.shippingStatus,
       name: products.name,
-      qunatity: orderItems.quantity,
-
+      quantity: orderItems.quantity,
       imgUrls:
         sql`array_agg(${productVariantImages.imgUrl} ORDER BY ${productVariantImages.imgUrl} ASC)`.as(
           "imgUrls",
@@ -492,6 +492,7 @@ export const findAllOrderItems = async (userId: string) => {
     .leftJoin(orders, eq(orders.orderId, orderItems.orderId))
     .leftJoin(productVariants, eq(productVariants.productVariantId, orderItems.productVariantId))
     .leftJoin(products, eq(products.productId, productVariants.productId))
+    .leftJoin(productVariantImages, eq(productVariantImages.productVariantId, productVariants.productVariantId))
     .where(eq(orders.userId, userId))
     .groupBy(
       orders.orderId,
@@ -501,5 +502,6 @@ export const findAllOrderItems = async (userId: string) => {
       orders.paymentStatus,
       orders.createdAt,
       orders.shippingStatus,
+      products.name,
     )
 };

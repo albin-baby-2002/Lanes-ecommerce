@@ -94,7 +94,7 @@ const DataDisplayingInput = (data: { label: string; value: string }) => {
 const LoadingAddressSkeleton = () => {
   return (
     <div className="w-full py-4">
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-8">
         {Array(8)
           .fill(0)
           .map((_, idx) => {

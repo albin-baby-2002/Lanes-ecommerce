@@ -8,7 +8,7 @@ const SimilarProducts = async() => {
 
   return (
     <>
-      <p className="mt-4 py-6 text-center font-integral_cf text-4xl font-bold tracking-wide">
+      <p className="my-4 mb-7 py-6 text-center font-integral_cf text-4xl font-bold tracking-wide">
         YOU MIGHT ALSO LIKE
       </p>
 

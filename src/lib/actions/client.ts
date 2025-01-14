@@ -17,7 +17,13 @@ import {
   updateProductVariantAvgReview,
 } from "../db-services/products";
 import { getUserDetailsUsingSession } from "./auth-actions";
-import { cartItems, orderItems, orders, users } from "@/drizzle/schema";
+import {
+  cartItems,
+  orderItems,
+  orders,
+  productVariants,
+  users,
+} from "@/drizzle/schema";
 import {
   findBillingAddressByUserId,
   insertBillingAddress,
@@ -25,7 +31,7 @@ import {
 } from "../db-services/billing-address";
 import { TBillingAddressFormData } from "@/sections/checkout/add-new-address";
 import { db } from "@/drizzle/db";
-import { inArray } from "drizzle-orm";
+import { eq, inArray, sql } from "drizzle-orm";
 
 export type TUserSelect = typeof users.$inferSelect;
 
@@ -358,6 +364,8 @@ export const getAllUserAddress = async () => {
 export const placeOrder = async (addressId: string) => {
   const response = { success: false, message: "" };
 
+  console.log("\n \n", addressId, "addressId");
+
   try {
     let userDetails: TUserSelect | null = null;
 
@@ -374,12 +382,12 @@ export const placeOrder = async (addressId: string) => {
       return response;
     }
 
-    // Perform transaction
+    console.log("\n \n", userDetails, "userDetails");
 
+    // Perform transaction
     try {
       await db.transaction(async (tx) => {
         // Fetch user cart items
-
         const cartItemsData = await findAllUserCartItems(userDetails.userId);
 
         if (!cartItemsData.length) {
@@ -388,7 +396,7 @@ export const placeOrder = async (addressId: string) => {
 
         const newOrderItems: TOrderItemsInsert[] = cartItemsData.map((item) => {
           const total = (item.price || 0) * item.quantity;
-          const totalDiscount = (item.discount || 0) * total;
+          const totalDiscount = (item.discount || 0)/100 * total;
           const grandTotal = total - totalDiscount;
 
           return {
@@ -409,7 +417,6 @@ export const placeOrder = async (addressId: string) => {
           0,
         );
         const deliveryFee = 15;
-
         const grandTotal = total - totalDiscount + deliveryFee;
 
         const newOrder = await tx
@@ -437,16 +444,31 @@ export const placeOrder = async (addressId: string) => {
         await tx
           .delete(cartItems)
           .where(inArray(cartItems.cartItemId, cartItemsIds));
+
+        // Update inventory in parallel using Promise.all
+
+        await Promise.all(
+          newOrderItems.map((item) =>
+            tx
+              .update(productVariants)
+              .set({
+                inventoryCount: sql`${productVariants.inventoryCount} - ${item.quantity}`,
+              })
+              .where(
+                eq(productVariants.productVariantId, item.productVariantId),
+              ),
+          ),
+        );
+
+        console.log("\n \n", newOrderItems, "successfully updated");
       });
 
       // Success response
-
       response.success = true;
-      response.message = "Successfully placed order ";
+      response.message = "Successfully placed order";
     } catch (txError) {
       console.error("Transaction Error:", txError);
       response.message = "Failed to insert product. Please try again.";
-
       throw txError;
     }
 
@@ -465,7 +487,6 @@ export const getAllOrders = async () => {
   const response: TDataResponse = { success: false, message: "", data: null };
 
   try {
-
     let userDetails: TUserSelect | null = null;
 
     try {

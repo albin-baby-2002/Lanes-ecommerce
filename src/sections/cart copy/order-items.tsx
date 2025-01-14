@@ -10,77 +10,71 @@ import { TOrderItem } from "@/lib/db-services/products";
 //-------------------------------------------------------------------------
 
 const OrderItems = ({ items }: { items: TOrderItem[] }) => {
-
-
-
   return (
     <>
-      <div className="h-auto  w-full mt-8 min-h-[60vh] rounded-3xl border border-black/10 p-6">
-        {items.length === 0 && (
-          <div className="flex h-full flex-col items-center justify-center gap-4">
-            <ShoppingBag size={50} />
-            <p className="text-2xl font-bold">
-              You have not placed any orders yet
-            </p>
+      {!items ||
+        (items.length === 0 && (
+          <div className="mt-8 h-auto min-h-[60vh] w-full rounded-3xl border border-black/10 p-6">
+            <div className="flex h-full flex-col items-center justify-center gap-4">
+              <ShoppingBag size={52} />
+              <p className="text-[26px] font-bold">
+                You have&apos;t placed any orders yet
+              </p>
+            </div>
           </div>
-        )}
-      </div>
+        ))}
 
-      {items.length > 0 && (
-        <div className="h-max basis-3/5 rounded-3xl border border-black/10 p-6">
+      {items && items.length > 0 && (
+        <div className="grid h-max w-full grid-cols-2 gap-6 rounded-3xl">
           {items?.map((item, idx) => (
             <div
               key={idx}
-              className="flex justify-between border-black/10 [&:not(:first-of-type)]:pt-8 [&:not(:last-of-type)]:border-b [&:not(:last-of-type)]:pb-8"
+              className="flex w-full justify-between rounded-2xl border border-black/10 p-6"
             >
               <div className="flex gap-4">
-                <div className="relative size-32 rounded-2xl">
+                <div className="relative size-32">
                   <Image
-                    className="h-32 rounded-2xl object-cover"
+                    className="h-36 rounded-2xl object-cover"
                     fill
                     src={` https://res.cloudinary.com/dfm8vhuea/image/upload/${item.imgUrls[0]}`}
                     alt=" product"
                   />
                 </div>
-                <div>
-                  <p className="text-lg font-bold">{item.name}</p>
-                  <p className="pt-1 text-black/90">
-                    Size: <span className="text-black/30"> {item.size}</span>
-                  </p>
-                  <p className="pt-1 text-black/90">
-                    Color: <span className="text-black/40">{item.color}</span>
-                  </p>
 
-                  <Pricing
-                    price={item.price}
-                    discount={(item.onDiscount !== null && item.discount) || 0}
-                    className="mt-4 text-[16px]"
-                  />
+                <div className="flex flex-col text-black/60">
+                  <div className="space-y-[6px]">
+                    <p className="text-xl font-bold text-black">{item.name}</p>
+                    <p className="text-[17px] font-medium tracking-wide">
+                      Quantity: {item.quantity}
+                    </p>
+                    <p className="text-[17px] font-medium tracking-wide">
+                      Total: Rs.{item.total}
+                    </p>
+
+                    <p className="text-[17px] tracking-wide">
+                      Order Date :{" "}
+                      {new Date(item.orderDate).toLocaleDateString()}{" "}
+                    </p>
+                  </div>
+                  <div></div>
                 </div>
               </div>
 
-              <div className="flex flex-col items-end justify-between">
-                <FaTrashAlt
-                  size={20}
-                  className="mt-2 cursor-pointer text-red-500"
-                />
-
-                <div className="flex items-center gap-3 rounded-full bg-ceramic px-3">
-                  <Button
-                    size={"icon"}
-                    variant={"ghost"}
-                  >
-                    <FaMinus size={12} />
-                  </Button>
-                  <p>{item.quantity}</p>
-
-                  <Button
-                    size={"icon"}
-                    variant={"ghost"}
-                  >
-                    <FaPlus size={12} />
-                  </Button>
+              <div className="flex flex-col items-end justify-between font-bold text-black">
+                <div className="flex gap-1 pt-[3.2px]">
+                  <span className=" uppercase">Shipping : </span>{" "}
+                  <span className="pt-px] uppercase">
+                    {" "}
+                    {item.shippingStatus?.toLowerCase()}
+                  </span>
                 </div>
+
+                <Button
+                  className="rounded-full bg-ceramic px-8 py-5"
+                  variant={"outline"}
+                >
+                  Cancel
+                </Button>
               </div>
             </div>
           ))}
@@ -90,4 +84,4 @@ const OrderItems = ({ items }: { items: TOrderItem[] }) => {
   );
 };
 
-export default  OrderItems;
+export default OrderItems;

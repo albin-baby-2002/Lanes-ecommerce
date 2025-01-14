@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { addToCart, deleteFromCart } from "@/lib/actions/client";
 import { hammingDistance } from "drizzle-orm";
 import { ShoppingCart } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 //-------------------------------------------------------------------------
 
@@ -63,14 +64,23 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
 
   return (
     <>
-      <div className="h-auto basis-3/5 rounded-3xl border border-black/10 p-6">
-        {items.length === 0 && (
+      {items.length === 0 && (
+        <div
+          className={cn(
+            "h-auto basis-3/5 rounded-3xl border border-black/10 p-6",
+            {
+              "mt-8 min-h-[60vh] w-full basis-full": items.length === 0,
+            },
+          )}
+        >
           <div className="flex h-full flex-col items-center justify-center gap-4">
-            <ShoppingCart size={50} />
-            <p className="text-2xl font-bold">Your Cart Is Empty</p>
+            <ShoppingCart size={52} />
+            <p className="text-[26px] font-bold">
+              Your haven&apos;t added products to cart
+            </p>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {items.length > 0 && (
         <div className="h-max basis-3/5 rounded-3xl border border-black/10 p-6">

@@ -20,7 +20,7 @@ export const paymentStatus = pgEnum("paymentStatus", [
 ]);
 
 export const shippingStatus = pgEnum("shippingStatus", [
-  "PENDING",
+  "PROCESSING",
   "SHIPPED",
   "DELIVERED",
   "RETURNED",
@@ -225,7 +225,7 @@ export const orders = pgTable("orders", {
   total: integer("total").notNull(),
   totalDiscount: integer("totalDiscount").notNull(),
   paymentStatus: paymentStatus().notNull(),
-  shippingStatus: paymentStatus().notNull(),
+  shippingStatus: shippingStatus().notNull(),
   deliveryFee: integer("deliveryFee").notNull(),
   grandTotal: integer("grandTotal").notNull(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),

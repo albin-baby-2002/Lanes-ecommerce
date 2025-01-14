@@ -1,7 +1,7 @@
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
-const PROTECTED_ROUTES = ["/cart","/admin", "/checkout", "/settings"];
+const PROTECTED_ROUTES = ["/cart","/orders","/admin", "/checkout", "/settings"];
 
 export async function middleware(request: NextRequest) {
   const { isAuthenticated, getPermission } = getKindeServerSession();

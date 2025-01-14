@@ -107,7 +107,7 @@ const CheckoutView = () => {
       toast.success("Order Placed Successfully");
 
       setSubmitting(false);
-      router.refresh();
+      router.push("/orders");
     } catch (error) {
       toast.error("Unexpected error! Try Again !");
       setSubmitting(false);
@@ -141,7 +141,7 @@ const CheckoutView = () => {
             <AddNewAddress />
           </Accordion>
         </div>
-        <div className="h-max basis-[30%] border bg-ceramic p-6">
+        <div className="h-max min-h-[552px] basis-[30%] border bg-ceramic p-6">
           {loadingCartItems ? (
             <LoadingSkeleton />
           ) : (

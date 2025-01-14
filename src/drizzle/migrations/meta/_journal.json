@@ -176,6 +176,13 @@
       "when": 1736736366282,
       "tag": "0024_opposite_blue_shield",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1736826402831,
+      "tag": "0025_medical_salo",
+      "breakpoints": true
     }
   ]
 }

@@ -24,7 +24,7 @@ import {
 
 const links = [
   { href: "/search", label: "Shop" },
-  { href: "/search", label: "On Sale" },
+  { href: "/orders", label: "Orders" },
   { href: "/search", label: "New Arrivals" },
   { href: "/search", label: "Brands" },
 ];

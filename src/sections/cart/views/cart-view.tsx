@@ -5,23 +5,22 @@ import OrderSummary from "../order-summary";
 import { getUserCartData } from "@/lib/actions/client";
 
 export interface TcartItems {
-    cartItemId: string;
-    userId: string;
-    name: string | null;
-    description: string | null;
-    discount: number | null;
-    onDiscount: boolean | null;
-    productVariantId: string;
-    inventoryCount: number;
-    quantity: number;
-    color: string | null;
-    size: string | null;
-    price: number
-    imgUrls: string[];
+  cartItemId: string;
+  userId: string;
+  name: string | null;
+  description: string | null;
+  discount: number | null;
+  onDiscount: boolean | null;
+  productVariantId: string;
+  inventoryCount: number;
+  quantity: number;
+  color: string | null;
+  size: string | null;
+  price: number;
+  imgUrls: string[];
 }
 
-const CartView = async() => {
-
+const CartView = async () => {
   const resp = await getUserCartData();
   const cartItems = resp.data as unknown as TcartItems[];
 
@@ -35,7 +34,9 @@ const CartView = async() => {
 
       <div className="my-6 flex gap-6">
         <ProductsInCart items={cartItems} />
-        <OrderSummary  items={cartItems}/>
+        {cartItems && cartItems.length > 0 && (
+          <OrderSummary items={cartItems} />
+        )}
       </div>
     </div>
   );
