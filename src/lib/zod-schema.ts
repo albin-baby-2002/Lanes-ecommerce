@@ -37,14 +37,14 @@ export const BillingAddressSchema = z.object({
 });
 
 export const UserProfileSchema = z.object({
-  first_name: z.string().min(2, {
+  firstName: z.string().min(2, {
     message: "first_name should be alteast 2 char long",
   }),
-
-  last_name: z.string(),
-
+  lastName: z.string(),
   email: z.string().email("Enter a valid email address"),
-
+  birthDate: z.string().optional(),
+  age: z.number().optional(),
+  gender: z.string().optional(),
   phone: z
     .string()
     .refine(

@@ -14,6 +14,7 @@ import {
   findAllOrderItems,
   findAllUserCartItems,
   getProductVariantReviewInfo,
+  updateOrderItemShippingStatus,
   updateProductVariantAvgReview,
 } from "../db-services/products";
 import { getUserDetailsUsingSession } from "./auth-actions";
@@ -396,7 +397,7 @@ export const placeOrder = async (addressId: string) => {
 
         const newOrderItems: TOrderItemsInsert[] = cartItemsData.map((item) => {
           const total = (item.price || 0) * item.quantity;
-          const totalDiscount = (item.discount || 0)/100 * total;
+          const totalDiscount = ((item.discount || 0) / 100) * total;
           const grandTotal = total - totalDiscount;
 
           return {
@@ -407,6 +408,8 @@ export const placeOrder = async (addressId: string) => {
             discount: item.discount || 0,
             total: grandTotal,
             totalDiscount,
+            paymentStatus: "CASH_ON_DELIVERY",
+            shippingStatus: "PROCESSING",
           };
         });
 
@@ -426,8 +429,6 @@ export const placeOrder = async (addressId: string) => {
             addressId,
             total,
             totalDiscount,
-            paymentStatus: "PAID",
-            shippingStatus: "PENDING",
             deliveryFee,
             grandTotal,
           })
@@ -506,7 +507,44 @@ export const getAllOrders = async () => {
 
     response.success = true;
     response.data = ordersData;
-    response.message = "Successfully added new billing address";
+    response.message = "Successfully fetched orders data";
+
+    return response;
+  } catch (err: any) {
+    console.error("Error:", err);
+
+    response.message = "Sorry, something went wrong. Please try again later.";
+    response.details = err.message;
+    return response;
+  }
+};
+
+export const cancelOrder = async (orderItemId: string) => {
+  const response: TDataResponse = { success: false, message: "", data: null };
+
+  try {
+    let userDetails: TUserSelect | null = null;
+
+    try {
+      userDetails = await getUserDetailsUsingSession();
+
+      if (!userDetails) {
+        throw new Error("Failed to get user details");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      response.message =
+        "Unexpected error - failed to identify user - try again";
+      return response;
+    }
+
+    await updateOrderItemShippingStatus({
+      orderItemId,
+      shippingStatus: "CANCELLED",
+    });
+
+    response.success = true;
+    response.message = "Successfully cancelled order";
 
     return response;
   } catch (err: any) {

@@ -18,16 +18,33 @@ const ProfileForm = () => {
           <CustomInputField
             control={form.control}
             fieldType={FormFieldType.INPUT}
-            name="first_name"
+            name="firstName"
             placeholder="Johnk"
             label="First Name"
           />
           <CustomInputField
             control={form.control}
             fieldType={FormFieldType.INPUT}
-            name="last_name"
+            name="firstName"
             placeholder="Doe"
             label="Last Name"
+          />
+        </div>
+
+        <div className="flex w-full gap-5">
+          <CustomInputField
+            control={form.control}
+            fieldType={FormFieldType.INPUT}
+            name="age"
+            placeholder="25"
+            label="Age"
+          />
+          <CustomInputField
+            control={form.control}
+            fieldType={FormFieldType.INPUT}
+            name="gender"
+            placeholder="M/F"
+            label="Gender"
           />
         </div>
 
@@ -38,6 +55,7 @@ const ProfileForm = () => {
           placeholder="johndoe@gmail.com"
           label="Email"
         />
+
         <CustomInputField
           control={form.control}
           fieldType={FormFieldType.INPUT}
@@ -45,6 +63,16 @@ const ProfileForm = () => {
           placeholder="+91 XXX XXX XXXX"
           label="Phone Number"
         />
+
+        <CustomInputField
+          control={form.control}
+          fieldType={FormFieldType.INPUT}
+          name="birthDate"
+          placeholder="DD/MM/YYYY"
+          label="Birth Date"
+        />
+
+
       </form>
     </Form>
   );

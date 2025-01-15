@@ -45,7 +45,7 @@ const OrderSummary = ({ items }: { items: TcartItems[] }) => {
 
       <Link href={items.length > 0 ? "/checkout" : ""}>
         <Button
-          className={cn("m-0 mt-8 h-12 w-full rounded-full py-7", {
+          className={cn("m-0 mt-8 text-lg  font-semibold h-12 w-full rounded-full py-7", {
             "cursor-not-allowed ": items.length == 0,
           })}
         >

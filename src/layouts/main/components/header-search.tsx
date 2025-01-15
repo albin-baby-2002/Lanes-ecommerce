@@ -20,7 +20,7 @@ const Search = () => {
       <IoSearch />
 
       <input
-        className="bg-slate-200 text-sm outline-none placeholder:text-sm"
+        className="bg-slate-200 focus-within:bg-slate-200 text-sm outline-none placeholder:text-sm"
         placeholder="Search for products..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}

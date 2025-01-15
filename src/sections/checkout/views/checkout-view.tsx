@@ -213,15 +213,15 @@ const CheckoutView = () => {
               </div>
 
               <p className="mt-4 text-slate-500">
-                Disclaimer: Cancelling the order after 2 days of placing the
-                order will attract cancellation charges
+                Disclaimer: All orders will be cash On delivery (COD) sorry for
+                the inconvenience we are working on our online payment system
               </p>
 
               <Button
                 onClick={handlePlaceOrder}
                 className="mt-6 h-auto w-full py-4 text-base font-bold"
               >
-                {submitting  && (
+                {submitting && (
                   <Image
                     height={24}
                     width={24}

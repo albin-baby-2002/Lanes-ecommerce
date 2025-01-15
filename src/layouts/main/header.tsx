@@ -26,7 +26,7 @@ const links = [
   { href: "/search", label: "Shop" },
   { href: "/orders", label: "Orders" },
   { href: "/search", label: "New Arrivals" },
-  { href: "/search", label: "Brands" },
+  { href: "/search", label: "Top Selling" },
 ];
 
 const Header = () => {
@@ -84,7 +84,9 @@ const AccountDropDown = ({ authenticated }: { authenticated: boolean }) => {
           <>
             {/* profile */}
 
-            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <Link href={"/settings/profile"}>
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+            </Link>
 
             {/* logout */}
 

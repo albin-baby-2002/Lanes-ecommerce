@@ -17,6 +17,7 @@ export const paymentStatus = pgEnum("paymentStatus", [
   "FAILED",
   "REFUNDED",
   "CANCELLED",
+  "CASH_ON_DELIVERY",
 ]);
 
 export const shippingStatus = pgEnum("shippingStatus", [
@@ -26,6 +27,7 @@ export const shippingStatus = pgEnum("shippingStatus", [
   "RETURNED",
   "CANCELLED",
 ]);
+
 
 //----------------------------------------------------------------------------------
 
@@ -42,6 +44,9 @@ export const users = pgTable("users", {
   phone: varchar({ length: 256 }).unique(),
   firstName: varchar({ length: 256 }),
   lastName: varchar({ length: 256 }),
+  birthDate: varchar({ length: 256 }),
+  gender: varchar({ length: 256 }),
+  age: integer("age"),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
@@ -224,8 +229,6 @@ export const orders = pgTable("orders", {
     .references(() => billingAddresses.addressId),
   total: integer("total").notNull(),
   totalDiscount: integer("totalDiscount").notNull(),
-  paymentStatus: paymentStatus().notNull(),
-  shippingStatus: shippingStatus().notNull(),
   deliveryFee: integer("deliveryFee").notNull(),
   grandTotal: integer("grandTotal").notNull(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
@@ -247,6 +250,8 @@ export const orderItems = pgTable("orderItems", {
   discount: integer("discount").notNull(),
   totalDiscount: integer("totalDiscount").notNull(),
   total: integer("total").notNull(),
+  paymentStatus: paymentStatus().notNull(),
+  shippingStatus: shippingStatus().notNull(),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });

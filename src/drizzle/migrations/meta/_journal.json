@@ -183,6 +183,27 @@
       "when": 1736826402831,
       "tag": "0025_medical_salo",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1736906195474,
+      "tag": "0026_tidy_penance",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1736906294957,
+      "tag": "0027_chief_gargoyle",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1736910129848,
+      "tag": "0028_unusual_pete_wisdom",
+      "breakpoints": true
     }
   ]
 }

@@ -12,7 +12,7 @@ import {
   shippingStatus,
   users,
 } from "@/drizzle/schema";
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, ne, sql } from "drizzle-orm";
 
 type TProduct = typeof products.$inferInsert;
 
@@ -63,6 +63,8 @@ export interface TProductVariantData {
   onSale: boolean;
   productVariantImages: string[];
 }
+
+export type TshippingStatus = (typeof shippingStatus.enumValues)[number];
 
 export const getAllProducts = async () => {
   return await db.select().from(products);
@@ -456,17 +458,16 @@ export const deleteCartItem = async ({
 };
 
 export interface TOrderItem {
-
   orderItemId: string;
   orderId: string;
   userId: string;
   paymentStatus: string;
   orderDate: string;
   shippingStatus: string;
-  name:string;
-  total:number;
-  price:string;
-  quantity:number;
+  name: string;
+  total: number;
+  price: string;
+  quantity: number;
   imgUrls: string[];
 }
 
@@ -477,31 +478,57 @@ export const findAllOrderItems = async (userId: string) => {
       orderItemId: orderItems.orderItemId,
       total: orderItems.total,
       userId: orders.userId,
-      paymentStatus: orders.paymentStatus,
+      paymentStatus: orderItems.paymentStatus,
       orderDate: orders.createdAt,
-      shippingStatus: orders.shippingStatus,
+      shippingStatus: orderItems.shippingStatus,
       name: products.name,
       quantity: orderItems.quantity,
       imgUrls:
         sql`array_agg(${productVariantImages.imgUrl} ORDER BY ${productVariantImages.imgUrl} ASC)`.as(
           "imgUrls",
         ),
-
     })
     .from(orderItems)
     .leftJoin(orders, eq(orders.orderId, orderItems.orderId))
-    .leftJoin(productVariants, eq(productVariants.productVariantId, orderItems.productVariantId))
+    .leftJoin(
+      productVariants,
+      eq(productVariants.productVariantId, orderItems.productVariantId),
+    )
     .leftJoin(products, eq(products.productId, productVariants.productId))
-    .leftJoin(productVariantImages, eq(productVariantImages.productVariantId, productVariants.productVariantId))
-    .where(eq(orders.userId, userId))
+    .leftJoin(
+      productVariantImages,
+      eq(
+        productVariantImages.productVariantId,
+        productVariants.productVariantId,
+      ),
+    )
+    .where(
+      and(
+        eq(orders.userId, userId),
+        ne(orderItems.shippingStatus, "CANCELLED"),
+      ),
+    )
     .groupBy(
       orders.orderId,
       orderItems.orderItemId,
       orderItems.price,
       orders.userId,
-      orders.paymentStatus,
+      orderItems.paymentStatus,
       orders.createdAt,
-      orders.shippingStatus,
+      orderItems.shippingStatus,
       products.name,
-    )
+    );
+};
+
+export const updateOrderItemShippingStatus = async ({
+  orderItemId,
+  shippingStatus,
+}: {
+  orderItemId: string;
+  shippingStatus: TshippingStatus;
+}) => {
+  await db
+    .update(orderItems)
+    .set({ shippingStatus })
+    .where(eq(orderItems.orderItemId, orderItemId));
 };
