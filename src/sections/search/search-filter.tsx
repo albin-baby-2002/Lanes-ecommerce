@@ -19,17 +19,26 @@ import React, { useEffect, useMemo, useState } from "react";
 
 type TFilters = "category" | "gender" | "price-range";
 
-const CATEGORIES = ["T-shirts", "Shorts", "Shirts", "Jeans", "Hoodie"];
+const CATEGORIES = ["T-Shirts", "Shorts", "Shirts", "Jeans", "Hoodie"];
 
 const PRICE_RANGE = {
+  all: { min: 0, max: 99999 },
   "500-1000": { min: 500, max: 1000 },
   "1000-1500": { min: 1000, max: 1500 },
   "1500-2000": { min: 1500, max: 2000 },
 };
 
-const SIZES = ["XX-Small", "X-Small", "Small", "Medium", "Large"] as const;
+const SIZES = ["S", "M", "L", "XL", "XXL"] as const;
 
 const STYLES = ["Casual", "Formal", "Party", "Gym"] as const;
+
+const SIZES_MAP = {
+  S: "Small",
+  M: "Medium",
+  L: "Large",
+  XL: "Extra Large",
+  XXL: "XXL",
+};
 
 type TPriceRangeKeys = keyof typeof PRICE_RANGE;
 
@@ -149,6 +158,12 @@ const SearchFilter = () => {
           value={searchParams.get("category") || ""}
           className="space-y-2 border-b py-4"
         >
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value={""} id={"all"} />
+            <Label htmlFor={"all"} className="text-black/60">
+              All Products
+            </Label>
+          </div>
           {CATEGORIES.map((val, idx) => {
             return (
               <div key={idx} className="flex items-center space-x-2">
@@ -177,16 +192,23 @@ const SearchFilter = () => {
                 className="space-y-2 pb-4"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"Male"} id={"Male"} />
-                  <Label htmlFor={"Male"} className="text-black/60">
-                    Male
+                  <RadioGroupItem value={""} id={"all"} />
+                  <Label htmlFor={"all"} className="text-black/60">
+                    All
                   </Label>
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"Female"} id={"Female"} />
-                  <Label htmlFor={"Female"} className="text-black/60">
-                    Female
+                  <RadioGroupItem value={"Men"} id={"Men"} />
+                  <Label htmlFor={"Men"} className="text-black/60">
+                    Men
+                  </Label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value={"Women"} id={"Women"} />
+                  <Label htmlFor={"Women"} className="text-black/60">
+                    Women
                   </Label>
                 </div>
               </RadioGroup>
@@ -209,9 +231,20 @@ const SearchFilter = () => {
                 value={selectedPriceRange}
                 className="space-y-2 pb-4"
               >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value={"all"} id={"all"} />
+                  <Label htmlFor={"all"} className="text-black/60">
+                    All Range
+                  </Label>
+                </div>
+
                 {Object.keys(PRICE_RANGE).map((val, idx) => {
+                  if (val === "all") return null;
                   return (
-                    <div key={idx} className="flex items-center space-x-2">
+                    <div
+                      key={idx + val}
+                      className="flex items-center space-x-2"
+                    >
                       <RadioGroupItem value={val} id={val} />
                       <Label htmlFor={val} className="text-black/60">
                         {"₹" + val}
@@ -236,7 +269,7 @@ const SearchFilter = () => {
                 return (
                   <div
                     onClick={() => handleSizeChange(val)}
-                    key={idx}
+                    key={idx + val}
                     className={cn(
                       "cursor-pointer rounded-3xl bg-ceramic px-4 py-2 text-sm text-black/70",
                       {
@@ -244,7 +277,7 @@ const SearchFilter = () => {
                       },
                     )}
                   >
-                    {val}
+                    {SIZES_MAP[val] || val}
                   </div>
                 );
               })}

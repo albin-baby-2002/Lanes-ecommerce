@@ -1,18 +1,22 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { KeyboardEvent, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 
 const Search = () => {
- const router = useRouter()
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(searchParams.get("name") || "");
 
   const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     const isEnter = e.key === "Enter";
 
-    if (isEnter) router.push('/search')
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("name", search);
+
+    if (isEnter) router.push("/search?" + params.toString());
   };
 
   return (
@@ -20,7 +24,7 @@ const Search = () => {
       <IoSearch />
 
       <input
-        className="bg-slate-200 focus-within:bg-slate-200 text-sm outline-none placeholder:text-sm"
+        className="bg-slate-200 text-sm outline-none placeholder:text-sm focus-within:bg-slate-200"
         placeholder="Search for products..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}

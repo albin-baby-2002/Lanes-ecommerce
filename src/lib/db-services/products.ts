@@ -1,4 +1,5 @@
 "use server";
+import { TProductSearchParams } from "@/app/search/page";
 import { db } from "@/drizzle/db";
 import {
   cartItems,
@@ -201,7 +202,20 @@ export interface TProductVariantWithDetails {
   productVariantImages: string[];
 }
 
-export const getAllIndividualVariantsWithDetails = async () => {
+export const getAllIndividualVariantsWithDetails = async (
+  searchParams: Partial<TProductSearchParams>,
+) => {
+  const searchPattern = searchParams.name ? `%${searchParams.name}%` : "%";
+  const genderPattern = searchParams.gender ? `%${searchParams.gender}%` : "%";
+
+  const minPrice = searchParams["min-price"] || 0;
+  const maxPrice = searchParams["max-price"] || 99999;
+  const size = searchParams.sizes;
+
+  const categoryPattern = searchParams.category
+    ? `%${searchParams.category}%`
+    : "%";
+
   const productVariants = await db.execute(
     sql`
    WITH
@@ -213,7 +227,9 @@ export const getAllIndividualVariantsWithDetails = async () => {
             'categoryId',
             c."categoryId",
             'categoryInternalId',
-            c."categoryInternalId"
+            c."categoryInternalId",
+            'categoryName',
+            c."name"
           )
         ) AS categories
       FROM
@@ -261,6 +277,27 @@ export const getAllIndividualVariantsWithDetails = async () => {
       products p
       JOIN category_agg cat ON cat."productId" = p."productId"
       LEFT JOIN product_variant_agg pv_agg ON pv_agg."productId" = p."productId"
+    WHERE
+      (p."name" ILIKE ${searchPattern}
+      OR p."description" ILIKE ${searchPattern}
+      OR EXISTS (
+        SELECT 1
+        FROM jsonb_array_elements(cat.categories::jsonb) AS category
+        WHERE category->>'categoryName' ILIKE ${searchPattern}
+      )) AND EXISTS (
+        SELECT 1
+        FROM jsonb_array_elements(cat.categories::jsonb) AS category
+        WHERE category->>'categoryName' LIKE ${genderPattern}
+     )
+      AND EXISTS (
+        SELECT 1
+        FROM jsonb_array_elements(cat.categories::jsonb) AS category
+        WHERE category->>'categoryName' LIKE ${categoryPattern}
+      )
+      AND (pv_agg.price >= ${minPrice} AND pv_agg.price <= ${maxPrice})
+      AND (${size ? `pv_agg.size IN (${size.split(',').map(v=>`'${v}'`).join(',')})` : "1=1"})
+
+
     ORDER BY
       p."productId"; `,
   );

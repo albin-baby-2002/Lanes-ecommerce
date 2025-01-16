@@ -2,11 +2,14 @@ import ProductCard from "@/components/product-card";
 import React from "react";
 import ProductGridHeader from "./product-grid-header";
 import ProductPagination from "./products-pagination";
-import { getAllIndividualVariantsWithDetails } from "@/lib/db-services/products";
+import { TProductVariantWithDetails } from "@/lib/db-services/products";
 
-const ProductsGrid = async ({ totalPageSize }: { totalPageSize: number }) => {
-  const products = await getAllIndividualVariantsWithDetails();
+interface TProps {
+  totalPageSize: number;
+  products: TProductVariantWithDetails[];
+}
 
+const ProductsGrid: React.FC<TProps> = async ({ totalPageSize, products }) => {
   return (
     <div className="mt-2">
       <ProductGridHeader />
