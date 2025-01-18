@@ -210,11 +210,12 @@ export const getAllIndividualVariantsWithDetails = async (
 
   const minPrice = searchParams["min-price"] || 0;
   const maxPrice = searchParams["max-price"] || 99999;
-  const size = searchParams.sizes;
 
   const categoryPattern = searchParams.category
     ? `%${searchParams.category}%`
     : "%";
+
+  const sizes = searchParams.sizes?.split(",").filter(Boolean);
 
   const productVariants = await db.execute(
     sql`
@@ -295,13 +296,15 @@ export const getAllIndividualVariantsWithDetails = async (
         WHERE category->>'categoryName' LIKE ${categoryPattern}
       )
       AND (pv_agg.price >= ${minPrice} AND pv_agg.price <= ${maxPrice})
-      AND (${size ? `pv_agg.size IN (${size.split(',').map(v=>`'${v}'`).join(',')})` : "1=1"})
 
 
     ORDER BY
       p."productId"; `,
   );
-  return productVariants as unknown as TProductVariantWithDetails[];
+
+  return (productVariants as unknown as TProductVariantWithDetails[]).filter(
+    (val) => (sizes && sizes?.length > 0 ? sizes?.includes(val.size) : true),
+  );
 };
 
 //---------------------------------------------------------------------------------

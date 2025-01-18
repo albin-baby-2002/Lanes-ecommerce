@@ -8,6 +8,8 @@ interface TProps {
 }
 
 const SearchView: React.FC<TProps> = ({ products }) => {
+
+  console.log(products,' \n \n search product \n \n')
   return (
     <>
       <BreadCrumb routes={["Home", "Search"]} />
