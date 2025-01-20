@@ -10,7 +10,13 @@ const SORT_OPTIONS = [
 
 type TSortValues = (typeof SORT_OPTIONS)[number]["value"];
 
-const ProductGridHeader = () => {
+const ProductGridHeader = ({
+  total,
+  countOfProducts,
+}: {
+  total: number;
+  countOfProducts: number;
+}) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -19,9 +25,17 @@ const ProductGridHeader = () => {
     params.set("sortby", val);
     router.push("/search?" + params, { scroll: false });
   };
+
+  const page = Number(searchParams.get("page")) || 0;
+
+  const startRange = (page ? page - 1 : 0) * 10;
+
   return (
     <div className="flex items-center justify-between">
-      <p>Showing 1-10 of 100 products</p>
+      <p>
+        Showing {startRange + 1} - {startRange + countOfProducts} of {total}{" "}
+        products
+      </p>
       <div>
         <Combobox
           label="Sort By"

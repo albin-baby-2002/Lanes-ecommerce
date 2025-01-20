@@ -6,13 +6,21 @@ import { TProductVariantWithDetails } from "@/lib/db-services/products";
 
 interface TProps {
   totalPageSize: number;
+  total: number;
   products: TProductVariantWithDetails[];
 }
 
-const ProductsGrid: React.FC<TProps> = async ({ totalPageSize, products }) => {
+const ProductsGrid: React.FC<TProps> = async ({
+  total,
+  totalPageSize,
+  products,
+}) => {
   return (
     <div className="mt-2">
-      <ProductGridHeader />
+      <ProductGridHeader
+        total={total}
+        countOfProducts={products?.length || 0}
+      />
       {/* products  */}
 
       <div className="my-6 grid grid-cols-4 justify-center gap-10">

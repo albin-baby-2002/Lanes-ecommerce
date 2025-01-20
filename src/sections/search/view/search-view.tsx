@@ -5,18 +5,22 @@ import ProductsGrid from "../products-grid";
 
 interface TProps {
   products: TProductVariantWithDetails[];
+  total: number;
+  totalPages: number;
 }
 
-const SearchView: React.FC<TProps> = ({ products }) => {
-
-  console.log(products,' \n \n search product \n \n')
+const SearchView: React.FC<TProps> = ({ products, total, totalPages }) => {
   return (
     <>
       <BreadCrumb routes={["Home", "Search"]} />
 
       <div className="grid min-h-[calc(100vh-200px)] grid-cols-[2.5fr_9.5fr] gap-10">
         <SearchFilter />
-        <ProductsGrid totalPageSize={20} products={products} />
+        <ProductsGrid
+          total={total}
+          totalPageSize={totalPages || 0}
+          products={products}
+        />
       </div>
     </>
   );

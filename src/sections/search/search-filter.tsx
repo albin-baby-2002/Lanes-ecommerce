@@ -101,6 +101,7 @@ const SearchFilter = () => {
         break;
     }
 
+    params.set("page", "1");
     router.push("/search?" + params, { scroll: false });
   };
 
@@ -129,6 +130,7 @@ const SearchFilter = () => {
     const params = new URLSearchParams(searchParams.toString());
 
     params.set("sizes", sizes.join(","));
+    params.set("page", "1");
     router.push("/search?" + params, { scroll: false });
   }, [sizes]);
 
@@ -136,6 +138,7 @@ const SearchFilter = () => {
     const params = new URLSearchParams(searchParams.toString());
 
     params.set("styles", styles.join(","));
+    params.set("page", "1");
     router.push("/search?" + params, { scroll: false });
   }, [styles]);
 

@@ -14,6 +14,8 @@ import {
   users,
 } from "@/drizzle/schema";
 import { and, eq, ne, sql } from "drizzle-orm";
+import { convertIndexToString } from "drizzle-orm/mysql-core";
+import { pages } from "next/dist/build/templates/app-page";
 
 type TProduct = typeof products.$inferInsert;
 
@@ -33,6 +35,7 @@ export interface TProductsWithVariantsAndImages {
 export interface TCategory {
   categoryId: string;
   categoryInternalId: number;
+  categoryName: string;
 }
 export interface ProductVariant {
   productVariantId: string;
@@ -172,7 +175,7 @@ export const getProductsWithVariants = async ({
     ${productId ? sql`WHERE p."productId" = ${productId}` : sql``}  -- Apply filter if productId is provided
     ORDER BY
       p."createdAt"
-    LIMIT ${limit || 10};
+    LIMIT ${limit || 1000};
   `;
 
   // Execute the query and return the result
@@ -207,9 +210,19 @@ export const getAllIndividualVariantsWithDetails = async (
 ) => {
   const searchPattern = searchParams.name ? `%${searchParams.name}%` : "%";
   const genderPattern = searchParams.gender ? `%${searchParams.gender}%` : "%";
+  const styles = searchParams.styles?.split(",").filter(Boolean);
 
   const minPrice = searchParams["min-price"] || 0;
   const maxPrice = searchParams["max-price"] || 99999;
+
+  const pageNumber = Number(searchParams.page) || 1;
+
+  const sortyByPrice =
+    searchParams?.sortby === "high-low"
+      ? sql`pv_agg.price DESC,`
+      : searchParams.sortby === "low-high"
+        ? sql`pv_agg.price ASC,`
+        : "";
 
   const categoryPattern = searchParams.category
     ? `%${searchParams.category}%`
@@ -299,12 +312,52 @@ export const getAllIndividualVariantsWithDetails = async (
 
 
     ORDER BY
-      p."productId"; `,
+     ${sortyByPrice};`,
   );
 
-  return (productVariants as unknown as TProductVariantWithDetails[]).filter(
-    (val) => (sizes && sizes?.length > 0 ? sizes?.includes(val.size) : true),
+  let totalTrueCount = 0;
+
+  let totalCount = 0;
+
+  let skip = (pageNumber - 1) * 10;
+
+  console.log(skip, "skip \n \n \n");
+
+  const products =  (productVariants as unknown as TProductVariantWithDetails[]).filter(
+    (val) => {
+      // check size of prod included in size filter
+
+      if (sizes && sizes.length > 0) {
+        if (!sizes.includes(val.size)) {
+          return false;
+        }
+      }
+
+      if (styles && styles.length > 0) {
+        if (!val.categories.some((cat) => styles.includes(cat.categoryName))) {
+          return false;
+        }
+      }
+
+      totalTrueCount++;
+
+      console.log(totalTrueCount <= skip || totalCount >= 10, "skipped");
+
+      if (totalTrueCount <= skip || totalCount >= 10) return false;
+
+      totalCount++;
+
+      return true;
+    },
   );
+
+  console.log(totalTrueCount)
+
+  return {
+    products,
+    total:totalTrueCount,
+    totalPages: Math.round(totalTrueCount/10),
+  }
 };
 
 //---------------------------------------------------------------------------------

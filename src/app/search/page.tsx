@@ -14,13 +14,15 @@ export type TProductSearchParams = {
   "min-price": string;
   "max-price": string;
   sizes: string;
+  sortby:'low-high' | 'high-low' | ''
+  page:number;
 };
 
 const SearchPage = async ({ searchParams }: TProps) => {
 
-  const products = await getAllIndividualVariantsWithDetails(searchParams);
+  const {products,total,totalPages} = await getAllIndividualVariantsWithDetails(searchParams);
 
-  return <SearchView products={products} />;
+  return <SearchView products={products} total={total} totalPages={totalPages} />;
 };
 
 export default SearchPage;
