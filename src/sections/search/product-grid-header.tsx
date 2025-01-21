@@ -28,7 +28,7 @@ const ProductGridHeader = ({
 
   const page = Number(searchParams.get("page")) || 0;
 
-  const startRange = (page ? page - 1 : 0) * 10;
+  const startRange = (page ? page - 1 : 0) * 20;
 
   return (
     <div className="flex items-center justify-between">

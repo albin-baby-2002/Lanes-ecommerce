@@ -66,7 +66,7 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
 
   return (
     <div
-      className={`relative z-50 h-[185px] w-[135px] cursor-pointer rounded-[4px] border-[1px] border-input`}
+      className={`relative z-40 h-[185px] w-[135px] cursor-pointer rounded-[4px] border-[1px] border-input`}
     >
       {imageUrl ? (
         <>

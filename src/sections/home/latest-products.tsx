@@ -4,7 +4,7 @@ import ExploreNow from "./components/explore-now-btn";
 import { getProductsWithVariants } from "@/lib/db-services/products";
 
 const LatestProducts = async () => {
-  const products = await getProductsWithVariants({});
+  const products = await getProductsWithVariants({limit:10});
 
   return (
     <div className="grid gap-8 px-10 pt-14">

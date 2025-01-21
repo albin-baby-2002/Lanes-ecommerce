@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { ON_DISCOUNT_OPTIONS } from "./add-edit-category";
 import { SelectItem } from "../ui/select";
-import { LuPlus } from "react-icons/lu";
 import ImageUploader from "../image-uploader";
 import { TProductData } from "@/sections/admin/products/add-edit-product-modal";
 import { productsReducers } from "@/store/slices/admin/products";

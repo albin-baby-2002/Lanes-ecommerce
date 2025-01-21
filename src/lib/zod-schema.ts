@@ -69,13 +69,16 @@ export const ResetPasswordSchema = z
   });
 
 export const CategorySchema = z.object({
-  name: z.string().min(4, {
+  name: z.string().min(3, {
     message: "Name must be atleast 4 char long.",
   }),
 
-  description: z.string().min(8, {
-    message: "Description must be alteast 8 char long",
-  }),
+  description: z
+    .string()
+    .min(8, {
+      message: "Description must be alteast 8 char long",
+    })
+    .max(256, { message: "max length should be 256 char" }),
 
   onOffer: z.boolean().default(false),
   offerName: z.string().min(4, {
@@ -108,9 +111,12 @@ export const ProductSchema = z.object({
   name: z.string().min(4, {
     message: "Name must be atleast 4 char long.",
   }),
-  description: z.string().min(8, {
-    message: "Description must be alteast 8 char long",
-  }),
+  description: z
+    .string()
+    .min(8, {
+      message: "Description must be alteast 8 char long",
+    })
+    .max(256, { message: "max length should be 256 char" }),
   categories: z.array(z.string()).min(1, "Select a category "),
   discount: z.number(),
   onDiscount: z.boolean().default(false),

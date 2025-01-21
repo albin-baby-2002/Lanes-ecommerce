@@ -319,45 +319,39 @@ export const getAllIndividualVariantsWithDetails = async (
 
   let totalCount = 0;
 
-  let skip = (pageNumber - 1) * 10;
+  let skip = (pageNumber - 1) * 20;
 
-  console.log(skip, "skip \n \n \n");
+  const products = (
+    productVariants as unknown as TProductVariantWithDetails[]
+  ).filter((val) => {
+    // check size of prod included in size filter
 
-  const products =  (productVariants as unknown as TProductVariantWithDetails[]).filter(
-    (val) => {
-      // check size of prod included in size filter
-
-      if (sizes && sizes.length > 0) {
-        if (!sizes.includes(val.size)) {
-          return false;
-        }
+    if (sizes && sizes.length > 0) {
+      if (!sizes.includes(val.size)) {
+        return false;
       }
+    }
 
-      if (styles && styles.length > 0) {
-        if (!val.categories.some((cat) => styles.includes(cat.categoryName))) {
-          return false;
-        }
+    if (styles && styles.length > 0) {
+      if (!val.categories.some((cat) => styles.includes(cat.categoryName))) {
+        return false;
       }
+    }
 
-      totalTrueCount++;
+    totalTrueCount++;
 
-      console.log(totalTrueCount <= skip || totalCount >= 10, "skipped");
+    if (totalTrueCount <= skip || totalCount >= 20) return false;
 
-      if (totalTrueCount <= skip || totalCount >= 10) return false;
+    totalCount++;
 
-      totalCount++;
-
-      return true;
-    },
-  );
-
-  console.log(totalTrueCount)
+    return true;
+  });
 
   return {
     products,
-    total:totalTrueCount,
-    totalPages: Math.round(totalTrueCount/10),
-  }
+    total: totalTrueCount,
+    totalPages: Math.ceil(totalTrueCount / 20),
+  };
 };
 
 //---------------------------------------------------------------------------------
@@ -624,4 +618,83 @@ export const updateOrderItemShippingStatus = async ({
     .update(orderItems)
     .set({ shippingStatus })
     .where(eq(orderItems.orderItemId, orderItemId));
+};
+
+export const getTopSellingProducts = async () => {
+  const productVariants = await db.execute(
+    sql`
+   WITH
+    category_agg AS (
+      SELECT
+        pc."productId",
+        JSON_AGG(
+          JSON_BUILD_OBJECT(
+            'categoryId',
+            c."categoryId",
+            'categoryInternalId',
+            c."categoryInternalId",
+            'categoryName',
+            c."name"
+          )
+        ) AS categories
+      FROM
+        "productCategories" pc
+        JOIN "categories" c ON c."categoryId" = pc."categoryId"
+      GROUP BY
+        pc."productId"
+    ),
+
+    product_variant_agg AS (
+      SELECT
+        pv."productId",
+        pv."productVariantId",
+        pv."productVariantInternalId",
+        pv.color,
+        pv.price,
+        pv.size,
+        pv."inventoryCount",
+        pvi_agg."productVariantImages",
+        pv."createdAt"
+      FROM
+        "productVariants" pv
+        LEFT JOIN (
+          SELECT
+            pvi."productVariantId",
+            ARRAY_AGG(pvi."imgUrl") AS "productVariantImages"
+          FROM
+            "productVariantImages" pvi
+          GROUP BY
+            pvi."productVariantId"
+        ) AS pvi_agg ON pvi_agg."productVariantId" = pv."productVariantId"
+    ),
+
+    sales AS (
+      SELECT
+     orders."productVariantId",
+     COUNT(*) AS sales
+      FROM
+      "orderItems" orders
+      GROUP BY orders."productVariantId"
+    )
+
+    SELECT
+      p."productId",
+      p."productInternalId",
+      p."name",
+      p."description",
+      p."discount",
+      p."onDiscount",
+      p."createdAt",
+      cat.categories,
+      pv_agg.*,
+      sales.salse
+    FROM
+      products p
+      JOIN category_agg cat ON cat."productId" = p."productId"
+      LEFT JOIN product_variant_agg pv_agg ON pv_agg."productId" = p."productId"
+      LEFT JOIN sales ON sales."productVariantId" = pv_agg."productVariantId"
+      ;`,
+  );
+
+  return productVariants;
 };
