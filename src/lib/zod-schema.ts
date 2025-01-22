@@ -1,13 +1,6 @@
-import { categories, productVariantImages } from "@/drizzle/schema";
 import { z } from "zod";
 
-const validateDigits = (val: string) => {
-  return /^\d+$/.test(val);
-};
-
-const validateDiscount = (val: string) => {
-  return validateDigits(val) && Number(val) >= 0;
-};
+const datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d\d$/;
 
 export const BillingAddressSchema = z.object({
   fullName: z.string().min(2, {
@@ -42,7 +35,12 @@ export const UserProfileSchema = z.object({
   }),
   lastName: z.string(),
   email: z.string().email("Enter a valid email address"),
-  birthDate: z.string().optional(),
+  birthDate: z
+    .string()
+    .optional()
+    .refine((val) => val && datePattern.test(val), {
+      message: "Date must be in the format dd/mm/yyyy",
+    }),
   age: z.number().optional(),
   gender: z.string().optional(),
   phone: z

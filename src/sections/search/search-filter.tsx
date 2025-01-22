@@ -11,6 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
+import { X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import React, { useEffect, useMemo, useState } from "react";
@@ -143,181 +144,188 @@ const SearchFilter = () => {
   }, [styles]);
 
   return (
-    <div className="h-max rounded-2xl border border-black/10 px-4 pt-4">
-      <div>
-        {/* heading  */}
+    <div>
+      <div className="h-max rounded-2xl border border-black/10 px-4 pt-4">
+        <div>
+          {/* heading  */}
 
-        <div className="flex items-center justify-between border-b border-black/10 pb-4">
-          <p className="font-bold">Filters</p>
-          <FilterIcon />
-        </div>
-
-        {/* select category */}
-
-        <RadioGroup
-          onValueChange={(val) => {
-            handleFilterChange(val, "category");
-          }}
-          value={searchParams.get("category") || ""}
-          className="space-y-2 border-b py-4"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value={""} id={"all"} />
-            <Label htmlFor={"all"} className="text-black/60">
-              All Products
-            </Label>
+          <div className="flex items-center justify-between border-b border-black/10 pb-4">
+            <p className="font-bold">Filters</p>
+            <FilterIcon />
           </div>
-          {CATEGORIES.map((val, idx) => {
-            return (
-              <div key={idx} className="flex items-center space-x-2">
-                <RadioGroupItem value={val} id={val} />
-                <Label htmlFor={val} className="text-black/60">
-                  {val}
-                </Label>
-              </div>
-            );
-          })}
-        </RadioGroup>
 
-        {/* gender select */}
-        <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="font-bold hover:no-underline">
-              Gender
-            </AccordionTrigger>{" "}
-            <AccordionContent>
-              {" "}
-              <RadioGroup
-                onValueChange={(val) => {
-                  handleFilterChange(val, "gender");
-                }}
-                value={searchParams.get("gender") || ""}
-                className="space-y-2 pb-4"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={""} id={"all"} />
-                  <Label htmlFor={"all"} className="text-black/60">
-                    All
+          {/* select category */}
+
+          <RadioGroup
+            onValueChange={(val) => {
+              handleFilterChange(val, "category");
+            }}
+            value={searchParams.get("category") || ""}
+            className="space-y-2 border-b py-4"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value={""} id={"all"} />
+              <Label htmlFor={"all"} className="text-black/60">
+                All Products
+              </Label>
+            </div>
+            {CATEGORIES.map((val, idx) => {
+              return (
+                <div key={idx} className="flex items-center space-x-2">
+                  <RadioGroupItem value={val} id={val} />
+                  <Label htmlFor={val} className="text-black/60">
+                    {val}
                   </Label>
                 </div>
+              );
+            })}
+          </RadioGroup>
 
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"Men"} id={"Men"} />
-                  <Label htmlFor={"Men"} className="text-black/60">
-                    Men
-                  </Label>
-                </div>
+          {/* gender select */}
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="font-bold hover:no-underline">
+                Gender
+              </AccordionTrigger>{" "}
+              <AccordionContent>
+                {" "}
+                <RadioGroup
+                  onValueChange={(val) => {
+                    handleFilterChange(val, "gender");
+                  }}
+                  value={searchParams.get("gender") || ""}
+                  className="space-y-2 pb-4"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value={""} id={"all"} />
+                    <Label htmlFor={"all"} className="text-black/60">
+                      All
+                    </Label>
+                  </div>
 
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"Women"} id={"Women"} />
-                  <Label htmlFor={"Women"} className="text-black/60">
-                    Women
-                  </Label>
-                </div>
-              </RadioGroup>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value={"Men"} id={"Men"} />
+                    <Label htmlFor={"Men"} className="text-black/60">
+                      Men
+                    </Label>
+                  </div>
 
-        {/* price select */}
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value={"Women"} id={"Women"} />
+                    <Label htmlFor={"Women"} className="text-black/60">
+                      Women
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
 
-        <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="font-bold hover:no-underline">
-              Price
-            </AccordionTrigger>
-            <AccordionContent>
-              <RadioGroup
-                onValueChange={(val) => {
-                  handleFilterChange(val, "price-range");
-                }}
-                value={selectedPriceRange}
-                className="space-y-2 pb-4"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"all"} id={"all"} />
-                  <Label htmlFor={"all"} className="text-black/60">
-                    All Range
-                  </Label>
-                </div>
+          {/* price select */}
 
-                {Object.keys(PRICE_RANGE).map((val, idx) => {
-                  if (val === "all") return null;
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="font-bold hover:no-underline">
+                Price
+              </AccordionTrigger>
+              <AccordionContent>
+                <RadioGroup
+                  onValueChange={(val) => {
+                    handleFilterChange(val, "price-range");
+                  }}
+                  value={selectedPriceRange}
+                  className="space-y-2 pb-4"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value={"all"} id={"all"} />
+                    <Label htmlFor={"all"} className="text-black/60">
+                      All Range
+                    </Label>
+                  </div>
+
+                  {Object.keys(PRICE_RANGE).map((val, idx) => {
+                    if (val === "all") return null;
+                    return (
+                      <div
+                        key={idx + val}
+                        className="flex items-center space-x-2"
+                      >
+                        <RadioGroupItem value={val} id={val} />
+                        <Label htmlFor={val} className="text-black/60">
+                          {"₹" + val}
+                        </Label>
+                      </div>
+                    );
+                  })}
+                </RadioGroup>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          {/* sizes */}
+
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="font-bold hover:no-underline">
+                Sizes
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-wrap gap-3">
+                {SIZES.map((val, idx) => {
                   return (
                     <div
+                      onClick={() => handleSizeChange(val)}
                       key={idx + val}
-                      className="flex items-center space-x-2"
+                      className={cn(
+                        "cursor-pointer rounded-3xl bg-ceramic px-4 py-2 text-sm text-black/70",
+                        {
+                          "bg-black text-white": sizes && sizes.includes(val),
+                        },
+                      )}
                     >
-                      <RadioGroupItem value={val} id={val} />
-                      <Label htmlFor={val} className="text-black/60">
-                        {"₹" + val}
-                      </Label>
+                      {SIZES_MAP[val] || val}
                     </div>
                   );
                 })}
-              </RadioGroup>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
 
-        {/* sizes */}
+          {/* dress style */}
 
-        <Accordion type="single" collapsible>
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="font-bold hover:no-underline">
-              Sizes
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-wrap gap-3">
-              {SIZES.map((val, idx) => {
-                return (
-                  <div
-                    onClick={() => handleSizeChange(val)}
-                    key={idx + val}
-                    className={cn(
-                      "cursor-pointer rounded-3xl bg-ceramic px-4 py-2 text-sm text-black/70",
-                      {
-                        "bg-black text-white": sizes && sizes.includes(val),
-                      },
-                    )}
-                  >
-                    {SIZES_MAP[val] || val}
-                  </div>
-                );
-              })}
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+          <Accordion type="single" collapsible>
+            <AccordionItem className="border-b" value="item-1">
+              <AccordionTrigger className="font-bold hover:no-underline">
+                Dress Style
+              </AccordionTrigger>
+              <AccordionContent className="Grid gap-3 space-y-4">
+                {STYLES.map((val, idx) => {
+                  return (
+                    <div key={idx} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={val}
+                        checked={styles.includes(val)}
+                        onCheckedChange={() => {
+                          handleStylesChange(val);
+                        }}
+                      />
+                      <label
+                        htmlFor={val}
+                        className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {val}
+                      </label>
+                    </div>
+                  );
+                })}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
 
-        {/* dress style */}
-
-        <Accordion type="single" collapsible>
-          <AccordionItem className="border-b-0" value="item-1">
-            <AccordionTrigger className="font-bold hover:no-underline">
-              Dress Style
-            </AccordionTrigger>
-            <AccordionContent className="Grid gap-3 space-y-4">
-              {STYLES.map((val, idx) => {
-                return (
-                  <div key={idx} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={val}
-                      checked={styles.includes(val)}
-                      onCheckedChange={() => {
-                        handleStylesChange(val);
-                      }}
-                    />
-                    <label
-                      htmlFor={val}
-                      className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {val}
-                    </label>
-                  </div>
-                );
-              })}
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+          <div onClick={()=>{router.push("/search")}} className="  text-black/80 gap-3 cursor-pointer flex items-center justify-center  py-[20px] mb-1">
+            <p className=" font-bold ">Clear Filters</p>
+            <X  size={20} strokeWidth={2.8} className=" mt-[2px]" />
+          </div>
+        </div>
       </div>
     </div>
   );

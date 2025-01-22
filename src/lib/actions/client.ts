@@ -555,3 +555,36 @@ export const cancelOrder = async (orderItemId: string) => {
     return response;
   }
 };
+
+export const getUserProfileInfo = async () => {
+  const response: TDataResponse = { success: false, message: "", data: null };
+
+  try {
+    let userDetails: TUserSelect | null = null;
+
+    try {
+      userDetails = await getUserDetailsUsingSession();
+
+      if (!userDetails) {
+        throw new Error("Failed to get user details");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      response.message =
+        "Unexpected error - failed to identify user - try again";
+      return response;
+    }
+
+    response.data = userDetails;
+    response.success = true;
+    response.message = "Successfully Retrived User Info";
+
+    return response;
+  } catch (err: any) {
+    console.error("Error:", err);
+
+    response.message = "Sorry, something went wrong. Please try again later.";
+    response.details = err.message;
+    return response;
+  }
+};

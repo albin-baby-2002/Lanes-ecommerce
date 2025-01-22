@@ -1,6 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { db } from "@/drizzle/db";
-import { users } from "@/drizzle/schema";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -9,7 +6,7 @@ const HeroSection = () => {
   return (
     <div className="relative flex rounded-xl bg-ceramic ps-20">
       <div className="basis-1/2 py-28">
-        <p  className="absolute max-w-[60%] font-integral_cf text-6xl font-bold">
+        <p className="absolute max-w-[60%] font-integral_cf text-6xl font-bold">
           FIND CLOTHES THAT MATCHES YOUR STYLE
         </p>
 
@@ -21,21 +18,23 @@ const HeroSection = () => {
           </p>
 
           <Link href={"/search"}>
-            <div className="bg-black text-white w-max py-[14px] px-16 rounded-full text-sm  ">Shop Now</div>
+            <div className="w-max rounded-full bg-black px-16 py-[14px] text-sm text-white">
+              Shop Now
+            </div>
           </Link>
 
           <div className="flex divide-x">
             <div className="pr-5">
-              <p className="font-satoshi text-3xl font-bold">200+</p>
-              <p className="text-sm text-black/60">International Brands</p>
+              <p className="font-satoshi text-3xl font-bold">10,000+</p>
+              <p className="text-sm text-black/60">Orders Delivered</p>
             </div>
             <div className="px-5">
-              <p className="font-satoshi text-3xl font-bold">200+</p>
+              <p className="font-satoshi text-3xl font-bold">100+</p>
               <p className="text-sm text-black/60">International Brands</p>
             </div>
             <div className="ps-5">
-              <p className="font-satoshi text-3xl font-bold">200+</p>
-              <p className="text-sm text-black/60">International Brands</p>
+              <p className="font-satoshi text-3xl font-bold">1500+</p>
+              <p className="text-sm text-black/60">Happy Customers</p>
             </div>
           </div>
         </div>

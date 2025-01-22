@@ -1,7 +1,11 @@
+"use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const BrowseByStyle = () => {
+  const router = useRouter();
+
   return (
     <div className="mx-10 my-16 rounded-2xl bg-ceramic py-16">
       <p className="pb-14 text-center font-integral_cf text-3xl">
@@ -9,7 +13,12 @@ const BrowseByStyle = () => {
       </p>
 
       <div className="grid h-[600px] grid-cols-12 grid-rows-2 gap-6 px-16">
-        <div className="relative col-span-5 rounded-xl bg-black">
+        <div
+          onClick={() => {
+            router.push("/search/?styles=Casual");
+          }}
+          className="relative col-span-5 cursor-pointer rounded-xl bg-black"
+        >
           <p className="absolute left-[5%] top-[5%] text-2xl font-bold">
             Casual
           </p>
@@ -21,7 +30,12 @@ const BrowseByStyle = () => {
             alt="casual"
           />
         </div>
-        <div className="relative col-span-7 rounded-xl bg-black">
+        <div
+          onClick={() => {
+            router.push("/search/?styles=Formal");
+          }}
+          className="relative col-span-7 cursor-pointer rounded-xl bg-black"
+        >
           <p className="absolute left-[5%] top-[5%] text-2xl font-bold">
             Formal
           </p>
@@ -33,7 +47,11 @@ const BrowseByStyle = () => {
             alt="casual"
           />
         </div>
-        <div className="relative col-span-7 rounded-xl bg-black">
+        <div
+          onClick={() => {
+            router.push("/search/?styles=Party");
+          }}
+        className="relative cursor-pointer col-span-7 rounded-xl bg-black">
           <p className="absolute left-[5%] top-[5%] text-2xl font-bold">
             Party
           </p>
@@ -45,7 +63,12 @@ const BrowseByStyle = () => {
             alt="casual"
           />
         </div>
-        <div className="relative col-span-5 rounded-xl bg-black">
+        <div
+
+          onClick={() => {
+            router.push("/search/?styles=Gym");
+          }}
+        className="relative col-span-5 cursor-pointer rounded-xl bg-black">
           <p className="absolute left-[5%] top-[5%] text-2xl font-bold">Gym</p>
           <Image
             src={"/images/dress-styles/gym.svg"}

@@ -5,7 +5,6 @@ import {
   cartItems,
   orderItems,
   orders,
-  paymentStatus,
   productReviews,
   products,
   productVariantImages,
@@ -14,8 +13,6 @@ import {
   users,
 } from "@/drizzle/schema";
 import { and, eq, ne, sql } from "drizzle-orm";
-import { convertIndexToString } from "drizzle-orm/mysql-core";
-import { pages } from "next/dist/build/templates/app-page";
 
 type TProduct = typeof products.$inferInsert;
 
@@ -108,7 +105,7 @@ export const getProductsWithVariants = async ({
   productId?: string;
   limit?: number;
 }) => {
-  // Construct the base SQL query
+
   const query = sql`
     WITH
       category_agg AS (
@@ -219,9 +216,9 @@ export const getAllIndividualVariantsWithDetails = async (
 
   const sortyByPrice =
     searchParams?.sortby === "high-low"
-      ? sql`pv_agg.price DESC,`
+      ? sql`pv_agg.price DESC`
       : searchParams.sortby === "low-high"
-        ? sql`pv_agg.price ASC,`
+        ? sql`pv_agg.price ASC`
         : "";
 
   const categoryPattern = searchParams.category
@@ -674,6 +671,7 @@ export const getTopSellingProducts = async () => {
      COUNT(*) AS sales
       FROM
       "orderItems" orders
+      WHERE orders."shippingStatus" != 'CANCELLED'
       GROUP BY orders."productVariantId"
     )
 
@@ -687,14 +685,16 @@ export const getTopSellingProducts = async () => {
       p."createdAt",
       cat.categories,
       pv_agg.*,
-      sales.salse
+      COALESCE(CAST(sales.sales AS INTEGER), 0) AS sales
     FROM
       products p
       JOIN category_agg cat ON cat."productId" = p."productId"
       LEFT JOIN product_variant_agg pv_agg ON pv_agg."productId" = p."productId"
       LEFT JOIN sales ON sales."productVariantId" = pv_agg."productVariantId"
+      ORDER BY sales DESC
+      LIMIT 10
       ;`,
   );
 
-  return productVariants;
+  return productVariants as unknown as TProductVariantWithDetails[];
 };
