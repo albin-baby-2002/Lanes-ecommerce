@@ -29,7 +29,7 @@ const ExistingAddresses = ({
       <AccordionTrigger className="font-bold hover:no-underline">
         Billing Addresses
       </AccordionTrigger>
-      <AccordionContent className="flex max-h-[420px] w-full  px-2 flex-wrap gap-3 overflow-y-auto border-t">
+      <AccordionContent className="flex max-h-[420px] w-full flex-wrap gap-3 overflow-y-auto border-t px-2">
         {loading ? (
           <LoadingAddressSkeleton />
         ) : (
@@ -44,7 +44,7 @@ const ExistingAddresses = ({
               return (
                 <div
                   key={idx}
-                  className="flex w-full space-x-4 border-t pt-8 pb-2 first:py-4 first:border-t-0"
+                  className="flex w-full space-x-4 border-t pb-2 pt-8 first:border-t-0 first:py-4"
                 >
                   <RadioGroupItem
                     className="mt-2"
@@ -53,6 +53,7 @@ const ExistingAddresses = ({
                   />
 
                   <div className="grid w-full grid-cols-2 gap-4 pr-4 font-medium">
+                    {" "}
                     {Object.keys(address).map((key, idx) => {
                       if (filedsNotTOShow.includes(key)) return null;
 
@@ -82,7 +83,7 @@ export default ExistingAddresses;
 //-------------------------------------------------------------------------
 // child components
 
-const DataDisplayingInput = (data: { label: string; value: string }) => {
+export const DataDisplayingInput = (data: { label: string; value: string }) => {
   return (
     <div className="w-full flex-1 space-y-2">
       <p className="text-[15px] capitalize">{data.label}</p>

@@ -20,6 +20,7 @@ export const createUser = async (user: TParsedUser) => {
   try {
     init();
 
+
     // create a resp obj
 
     const response = { success: false, message: "" };
@@ -184,7 +185,7 @@ export const EditUser = async (user: TParsedUser) => {
 export const deleteUser = async (id: string) => {
   try {
     init();
-    
+
     // create a resp obj
 
     const response = { success: false, message: "" };

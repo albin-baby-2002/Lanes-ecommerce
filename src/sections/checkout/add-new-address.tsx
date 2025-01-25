@@ -8,7 +8,6 @@ import { BillingAddressSchema } from "@/lib/zod-schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import AddNewAddressForm from "@/components/forms/add-new-address";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
@@ -16,8 +15,7 @@ import { toast } from "sonner";
 import { addNewBillingAddress } from "@/lib/actions/client";
 import Image from "next/image";
 import { z } from "zod";
-import { not } from "drizzle-orm";
-import { check } from "drizzle-orm/mysql-core";
+import AddEditAddressForm from "@/components/forms/add-edit-address";
 
 export type TBillingAddressFormData = z.infer<typeof BillingAddressSchema>;
 
@@ -70,7 +68,7 @@ const AddNewAddress = () => {
         Add New Address
       </AccordionTrigger>
       <AccordionContent className="flex flex-wrap gap-3 border-t px-1 py-4">
-        <AddNewAddressForm form={form} />
+        <AddEditAddressForm form={form} />
 
         <Button
           className="my-4"

@@ -187,7 +187,6 @@ const AddOrEditProductModal: React.FC<TProps> = ({
       switch (type) {
         case "add": {
           // submit logic for adding new category
-
           let resp = await createProductWithVariantsAndCategory(values);
 
           if (!resp.success) {

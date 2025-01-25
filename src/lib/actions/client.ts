@@ -1,13 +1,16 @@
 "use server";
 
 import { findUserByKindeId } from "@/lib/db-services/user";
+import bcrypt from "bcrypt";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { Users, init } from "@kinde/management-api-js";
 import {
   findCartItemsIdByUser,
   findReviewByUserIdAndVariantId,
   insertCartItem,
   insertNewReview,
   TCartItem,
+  updateUser,
 } from "../db-services/client";
 import {
   deleteCartItem,
@@ -29,10 +32,12 @@ import {
   findBillingAddressByUserId,
   insertBillingAddress,
   TBillingAddressInsert,
+  updateBillingAddress,
 } from "../db-services/billing-address";
 import { TBillingAddressFormData } from "@/sections/checkout/add-new-address";
 import { db } from "@/drizzle/db";
 import { eq, inArray, sql } from "drizzle-orm";
+import { TProfileFormData } from "@/sections/settings/view/user-profile";
 
 export type TUserSelect = typeof users.$inferSelect;
 
@@ -586,5 +591,133 @@ export const getUserProfileInfo = async () => {
     response.message = "Sorry, something went wrong. Please try again later.";
     response.details = err.message;
     return response;
+  }
+};
+
+export const updateUserProfileInfo = async (
+  updatedUserDetails: TProfileFormData,
+) => {
+  const response: TDataResponse = { success: false, message: "", data: null };
+
+  try {
+    let userDetails: TUserSelect | null = null;
+
+    try {
+      userDetails = await getUserDetailsUsingSession();
+
+      if (!userDetails) {
+        throw new Error("Failed to get user details");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      response.message =
+        "Unexpected error - failed to identify user - try again";
+      return response;
+    }
+
+    await updateUser({
+      userDetails: updatedUserDetails,
+      userId: userDetails.userId,
+    });
+
+    response.success = true;
+    response.message = "Successfully Retrived User Info";
+
+    return response;
+  } catch (err: any) {
+    console.error("Error:", err);
+
+    response.message = "Sorry, something went wrong. Please try again later.";
+    response.details = err.message;
+    return response;
+  }
+};
+
+export const editBillingAddress = async ({
+  address,
+  addressId,
+}: {
+  address: TBillingAddressFormData;
+  addressId: string;
+}) => {
+  const response: TDataResponse = { success: false, message: "", data: null };
+
+  try {
+    let userDetails: TUserSelect | null = null;
+
+    try {
+      userDetails = await getUserDetailsUsingSession();
+
+      if (!userDetails) {
+        throw new Error("Failed to get user details");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      response.message =
+        "Unexpected error - failed to identify user - try again";
+      return response;
+    }
+
+    await updateBillingAddress({
+      billingAddress: { ...address, userId: userDetails.userId },
+      addressId: addressId,
+    });
+
+    response.success = true;
+    response.message = "Successfully updated billing address";
+
+    return response;
+  } catch (err: any) {
+    console.error("Error:", err);
+    return {
+      success: false,
+      message: "Sorry, something went wrong. Please try again later.",
+      details: err.message,
+    };
+  }
+};
+
+export const resetPassword = async (newPassword: string) => {
+  const response: TDataResponse = { success: false, message: "", data: null };
+
+  try {
+    init();
+    let userDetails: TUserSelect | null = null;
+
+    try {
+      userDetails = await getUserDetailsUsingSession();
+
+      if (!userDetails) {
+        throw new Error("Failed to get user details");
+      }
+
+      const hashed_password = await bcrypt.hash(newPassword, 10);
+
+      const resp = await Users.setUserPassword({
+        userId: userDetails.kindeId,
+        requestBody: { hashed_password },
+      });
+
+      response.success = true;
+      response.message = 'successfully reset password'
+
+    } catch (error) {
+      console.error("Error:", error);
+      response.message =
+        "Unexpected error - failed to identify user - try again";
+      return response;
+    }
+
+    response.success = true;
+    response.message = "Successfully updated billing address";
+
+    return response;
+  } catch (err: any) {
+    console.error("Error:", err);
+    return {
+      success: false,
+      message: "Sorry, something went wrong. Please try again later.",
+      details: err.message,
+    };
   }
 };

@@ -1,6 +1,7 @@
 "use server";
 import { db } from "@/drizzle/db";
-import { cartItems, productReviews } from "@/drizzle/schema";
+import { cartItems, productReviews, users } from "@/drizzle/schema";
+import { TProfileFormData } from "@/sections/settings/view/user-profile";
 import { and, eq } from "drizzle-orm";
 
 export type TCartItem = typeof cartItems.$inferInsert;
@@ -40,4 +41,17 @@ export const findReviewByUserIdAndVariantId = async (
 
 export const insertNewReview = async (reviewData: TReviewItem) => {
   return await db.insert(productReviews).values(reviewData);
+};
+
+export const updateUser = async ({
+  userDetails,
+  userId,
+}: {
+  userDetails: TProfileFormData;
+  userId: string;
+}) => {
+  return await db
+    .update(users)
+    .set(userDetails)
+    .where(eq(users.userId, userId));
 };

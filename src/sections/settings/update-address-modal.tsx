@@ -17,38 +17,29 @@ import { cn } from "@/lib/utils";
 import AddEditUserForm from "@/components/forms/add-edit-users";
 import { createUser, EditUser } from "@/lib/actions/admin/users-actions";
 import { useForm } from "react-hook-form";
-import { UserProfileSchema } from "@/lib/zod-schema";
-import { TUser } from "./views/users-view";
+import { BillingAddressSchema, UserProfileSchema } from "@/lib/zod-schema";
 import { TParsedUser } from "@/lib/helpers/data-validation";
+import { TAddress } from "../checkout/views/checkout-view";
+import { TBillingAddressFormData } from "../checkout/add-new-address";
+import AddEditAddressForm from "@/components/forms/add-edit-address";
+import { editBillingAddress } from "@/lib/actions/client";
 
 //-----------------------------------------------------------------------------------
 
 interface TProps {
-  type: "add" | "edit";
   open: boolean;
   toggleClose: () => void;
-  userToEdit?: TUser;
+  addressToEdit?: TAddress;
 }
 
 //-----------------------------------------------------------------------------------
 
-const LABELS = {
-  add: "Add User",
-  edit: "Edit User",
-};
-
-const H1 = {
-  add: "Add A New User",
-  edit: "Edit User",
-};
-
 //-----------------------------------------------------------------------------------
 
-const AddOrEditUserModal: React.FC<TProps> = ({
-  type,
+const UpdateAddressModal: React.FC<TProps> = ({
   open = false,
   toggleClose,
-  userToEdit,
+  addressToEdit,
 }) => {
   //-----------------------------------------------------------------------------------
 
@@ -63,34 +54,15 @@ const AddOrEditUserModal: React.FC<TProps> = ({
 
   // react-hook form
 
-  const form = useForm<TParsedUser>({
-    mode: "onChange",
-    resolver: zodResolver(UserProfileSchema),
+  const form = useForm<TBillingAddressFormData>({
+    resolver: zodResolver(BillingAddressSchema),
   });
 
   // useEffect to set the initial state for edit modal
 
   useEffect(() => {
-    if (userToEdit && type === "edit") {
-      const {
-        kindeId,
-        userId,
-        userInternalId,
-        createdAt,
-        updatedAt,
-        ...userInfo
-      } = userToEdit;
-
-      const userData: TParsedUser = {
-        firstName: userInfo.firstName || "",
-        lastName: userInfo.lastName || "",
-        email: userInfo.email || "",
-        phone: userInfo.phone || "",
-      };
-
-      form.reset(userData);
-    }
-  }, [userToEdit, type, form]);
+    form.reset(addressToEdit);
+  }, [form, addressToEdit]);
 
   //-----------------------------------------------------------------------------------
 
@@ -111,49 +83,21 @@ const AddOrEditUserModal: React.FC<TProps> = ({
 
   // fn to handle submit form edit or add
 
-  async function onSubmit(values: TParsedUser) {
+  async function onSubmit(values: TBillingAddressFormData) {
     try {
       setSubmitting(true);
-      switch (type) {
-        case "add": {
-          // submit logic for adding new category
 
-          let resp = await createUser(values);
+      const resp = await editBillingAddress({
+        address: values,
+        addressId: addressToEdit?.addressId || "",
+      });
 
-          if (!resp.success) {
-            setSubmitting(false);
-            return toast.error(resp.message);
-          }
-
-          toast.success("Successfully Created User");
-
-          break;
-        }
-
-        case "edit": {
-          // submit logic for editing existing category
-          if (!userToEdit) {
-            return toast.error("Unexpected error: User data not found");
-          }
-
-          let resp = await EditUser(values);
-
-          // if (!resp.success) {
-          //   setSubmitting(false);
-          //   return toast.error(resp.message);
-          // }
-
-          toast.success("Successfully Updated User");
-          break;
-        }
-
-        default: {
-          return toast.error("Invalid operation type");
-        }
+      if (!resp.success) {
+        toast.error("Unexpected error Failed to update address");
       }
 
-      // Refresh the page and toggle the modal after the operation is successful
-      router.refresh();
+      toast.success("Successfully updated address");
+
       toggleShow();
 
       setSubmitting(false);
@@ -169,21 +113,18 @@ const AddOrEditUserModal: React.FC<TProps> = ({
   //-----------------------------------------------------------------------------------
 
   return (
-    <Dialog
-      open={show}
-      onOpenChange={type === "edit" ? toggleClose : toggleShow}
-    >
+    <Dialog open={show} onOpenChange={toggleClose}>
       <DialogContent className="max-w-[600px]">
         {/* header */}
 
         <DialogHeader>
-          <DialogTitle className="text-xl">{H1[type]}</DialogTitle>
+          <DialogTitle className="text-xl">Edit Address</DialogTitle>
         </DialogHeader>
 
         {/* form */}
 
-        <div className="max-h-[600px] overflow-hidden overflow-y-auto px-2 pt-2">
-          <AddEditUserForm form={form} type={type} />
+        <div className="max-h-[50vh] overflow-hidden overflow-y-auto px-2 pb-3 pt-2">
+          <AddEditAddressForm form={form} />
         </div>
 
         {/* footer with actions */}
@@ -200,7 +141,7 @@ const AddOrEditUserModal: React.FC<TProps> = ({
                   src={"/loaders/circular-loader.svg"}
                 />
               )}
-              {LABELS[type]}
+              Edit Address
             </Button>
           </div>
         </DialogFooter>
@@ -209,4 +150,4 @@ const AddOrEditUserModal: React.FC<TProps> = ({
   );
 };
 
-export default AddOrEditUserModal;
+export default UpdateAddressModal;

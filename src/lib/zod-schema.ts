@@ -39,7 +39,7 @@ export const UserProfileSchema = z.object({
     .string()
     .optional()
     .refine((val) => val && datePattern.test(val), {
-      message: "Date must be in the format dd/mm/yyyy",
+      message: "Date must be in the format DD/MM/YYYY",
     }),
   age: z.number().optional(),
   gender: z.string().optional(),
@@ -53,9 +53,6 @@ export const UserProfileSchema = z.object({
 
 export const ResetPasswordSchema = z
   .object({
-    current_password: z.string().min(2, {
-      message: "Enter your current password",
-    }),
     new_password: z.string().min(8, {
       message: "New Password Should be atleast 8 char long",
     }),

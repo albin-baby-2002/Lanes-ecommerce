@@ -1,7 +1,8 @@
 import CustomInputField, { FormFieldType } from "@/components/custom-input";
 import { Form } from "@/components/ui/form";
+import { UseFormReturn } from "react-hook-form";
 
-const AddNewAddressForm = ({ form }: { form: UseFormReturn<any> }) => {
+const AddEditAddressForm = ({ form }: { form: UseFormReturn<any> }) => {
   return (
     <Form {...form}>
       <form className="grid w-full gap-4">
@@ -68,4 +69,4 @@ const AddNewAddressForm = ({ form }: { form: UseFormReturn<any> }) => {
   );
 };
 
-export default AddNewAddressForm;
+export default AddEditAddressForm;

@@ -8,11 +8,11 @@ interface TProps {
 
 const SettingsLayout: React.FC<TProps> = ({ children }) => {
   return (
-    <div className="flex h-screen w-full flex-col">
+    <div className="flex max-h-screen w-full flex-col overflow-hidden">
       <Header />
-      <div className="flex h-[calc(100vh-75px)]">
+      <div className="flex">
         <SideBar />
-        <div className="grow">{children}</div>
+        <div className="max-h-[calc(100vh-75px)] grow overflow-y-scroll">{children}</div>
       </div>
     </div>
   );

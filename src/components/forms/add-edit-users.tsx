@@ -1,8 +1,6 @@
 import React from "react";
 import { Form } from "../ui/form";
 import CustomInputField, { FormFieldType } from "../custom-input";
-import { ON_DISCOUNT_OPTIONS } from "./add-edit-category";
-import { SelectItem } from "../ui/select";
 import { UseFormReturn } from "react-hook-form";
 //----------------------------------------------------------------------------------------------------
 
