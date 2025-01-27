@@ -28,7 +28,6 @@ export const shippingStatus = pgEnum("shippingStatus", [
   "CANCELLED",
 ]);
 
-
 //----------------------------------------------------------------------------------
 
 export const users = pgTable("users", {
@@ -221,6 +220,13 @@ export const billingAddresses = pgTable("billingAddresses", {
 
 export const orders = pgTable("orders", {
   orderId: uuid("orderId").defaultRandom().primaryKey(),
+
+  orderInternalId: integer("orderInternalId")
+    .generatedAlwaysAsIdentity({
+      startWith: 1000,
+      increment: 1,
+    })
+    .unique(),
   userId: uuid("userId")
     .notNull()
     .references(() => users.userId),
@@ -239,6 +245,13 @@ export const orders = pgTable("orders", {
 
 export const orderItems = pgTable("orderItems", {
   orderItemId: uuid("orderItemId").defaultRandom().primaryKey(),
+
+  orderItemInternalId: integer("orderItemInternalId")
+    .generatedAlwaysAsIdentity({
+      startWith: 1000,
+      increment: 1,
+    })
+    .unique(),
   orderId: uuid("orderId")
     .notNull()
     .references(() => orders.orderId),

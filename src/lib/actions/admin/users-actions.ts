@@ -9,7 +9,7 @@ import {
   findUserById,
   insertUser,
   updateUserById,
-} from "@/lib/db-services/user";
+} from "@/lib/db-services/users";
 import { Users, init } from "@kinde/management-api-js";
 
 //-----------------------------------------------------------------------------------------
@@ -19,7 +19,6 @@ import { Users, init } from "@kinde/management-api-js";
 export const createUser = async (user: TParsedUser) => {
   try {
     init();
-
 
     // create a resp obj
 
@@ -57,8 +56,8 @@ export const createUser = async (user: TParsedUser) => {
     const newKindeUser = await Users.createUser({
       requestBody: {
         profile: {
-          given_name: parsedUser.first_name,
-          family_name: parsedUser.last_name,
+          given_name: parsedUser.firstName,
+          family_name: parsedUser.lastName,
         },
         identities: [{ type: "email", details: { email: parsedUser.email } }],
       },
@@ -77,6 +76,7 @@ export const createUser = async (user: TParsedUser) => {
       email: newKindeUserData.preferred_email!,
       kindeId: newKindeUserData.id!,
       phone: parsedUser.phone,
+      birthDate: parsedUser.birthDate,
     });
 
     // if insert success end success repsonse
@@ -142,8 +142,8 @@ export const EditUser = async (user: TParsedUser) => {
     const updatedUser = await Users.updateUser({
       id: existingUser[0].kindeId,
       requestBody: {
-        given_name: parsedUser.first_name,
-        family_name: parsedUser.last_name,
+        given_name: parsedUser.firstName,
+        family_name: parsedUser.lastName,
       },
     });
 
@@ -157,6 +157,7 @@ export const EditUser = async (user: TParsedUser) => {
       lastName: updatedUser.family_name!,
       phone: parsedUser.phone,
       email: updatedUser.email || "",
+      birthDate: parsedUser.birthDate || "",
     });
 
     // if insert success end success repsonse

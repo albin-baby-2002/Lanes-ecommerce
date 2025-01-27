@@ -1,0 +1,4 @@
+ALTER TABLE "orderItems" ADD COLUMN "orderItemInternalId" integer NOT NULL GENERATED ALWAYS AS IDENTITY (sequence name "orderItems_orderItemInternalId_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1000 CACHE 1);--> statement-breakpoint
+ALTER TABLE "orders" ADD COLUMN "orderInternalId" integer NOT NULL GENERATED ALWAYS AS IDENTITY (sequence name "orders_orderInternalId_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1000 CACHE 1);--> statement-breakpoint
+ALTER TABLE "orderItems" ADD CONSTRAINT "orderItems_orderItemInternalId_unique" UNIQUE("orderItemInternalId");--> statement-breakpoint
+ALTER TABLE "orders" ADD CONSTRAINT "orders_orderInternalId_unique" UNIQUE("orderInternalId");

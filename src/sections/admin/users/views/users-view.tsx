@@ -1,7 +1,7 @@
 import { DataTable } from "@/components/table/data-table";
 import React from "react";
 import SearchAndActions from "../search-and-actions";
-import { getAllUsers } from "@/lib/db-services/user";
+import { getAllUsers } from "@/lib/db-services/users";
 import { usersColumns } from "../datatable-columns";
 import { users } from "@/drizzle/schema";
 import UserActionModels from "../users-action-modals";

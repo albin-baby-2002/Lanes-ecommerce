@@ -1,4 +1,4 @@
-import { findUserByKindeId, insertUser } from "@/lib/db-services/user";
+import { findUserByKindeId, insertUser } from "@/lib/db-services/users";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { NextResponse } from "next/server";
 

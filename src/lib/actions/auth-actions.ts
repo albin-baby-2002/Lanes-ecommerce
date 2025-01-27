@@ -1,13 +1,12 @@
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { findUserByKindeId } from "../db-services/user";
+import { findUserByKindeId } from "../db-services/users";
 
 //--------------------------------------------
 
 export const checkIsAdmin = async () => {
-  const {getPermission} = getKindeServerSession()
+  const { getPermission } = getKindeServerSession();
   const adminPermission = await getPermission("admin:permission");
   return adminPermission?.isGranted;
-
 };
 
 //--------------------------------------------

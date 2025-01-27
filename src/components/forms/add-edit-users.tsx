@@ -23,7 +23,7 @@ const AddEditUserForm: React.FC<TProps> = ({ type, form }) => {
           <CustomInputField
             control={form.control}
             fieldType={FormFieldType.INPUT}
-            name="first_name"
+            name="firstName"
             placeholder="Enter First Name"
             label="First Name"
           />
@@ -31,7 +31,7 @@ const AddEditUserForm: React.FC<TProps> = ({ type, form }) => {
           <CustomInputField
             control={form.control}
             fieldType={FormFieldType.INPUT}
-            name="last_name"
+            name="lastName"
             placeholder="Enter Last Name"
             label="Last Name"
           />
@@ -51,6 +51,14 @@ const AddEditUserForm: React.FC<TProps> = ({ type, form }) => {
             name="phone"
             placeholder="Enter Phone Number"
             label="Phone"
+          />
+
+          <CustomInputField
+            control={form.control}
+            fieldType={FormFieldType.INPUT}
+            name="birthDate"
+            placeholder="Enter Date of Birth"
+            label="Birth Date"
           />
         </>
       </form>

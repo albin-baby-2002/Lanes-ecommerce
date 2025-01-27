@@ -8,7 +8,7 @@ import { TUser } from "./views/users-view";
 import ConfirmationModal from "@/components/ui/confirmation-modal";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { deleteUserById } from "@/lib/db-services/user";
+import { deleteUserById } from "@/lib/db-services/users";
 import { deleteUser } from "@/lib/actions/admin/users-actions";
 
 const UserActionModels = ({ userData }: { userData: TUser[] }) => {
@@ -33,9 +33,7 @@ const UserActionModels = ({ userData }: { userData: TUser[] }) => {
     return userData.find((usr) => usr.userId === userToDelete);
   }, [userData, userToDelete]);
 
-  const handleDelete = async() => {
-
-
+  const handleDelete = async () => {
     dispatch(usersReducers.togglePendingDeleting());
 
     if (!userToDelete) return toast.error("Unexpected error try again");

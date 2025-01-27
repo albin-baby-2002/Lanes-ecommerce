@@ -190,7 +190,13 @@ const AddOrEditUserModal: React.FC<TProps> = ({
 
         <DialogFooter>
           <div className={cn("mt-2 flex w-full justify-end")}>
-            <Button onClick={form.handleSubmit(onSubmit)} className="">
+            <Button
+              onClick={form.handleSubmit(onSubmit, (err) => {
+                console.log(err);
+                toast.error("error");
+              })}
+              className=""
+            >
               {(submitting || pending) && (
                 <Image
                   height={24}

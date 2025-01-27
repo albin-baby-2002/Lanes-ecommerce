@@ -56,7 +56,7 @@ const ResetPasswordForm = () => {
         <CustomInputField
           control={form.control}
           fieldType={FormFieldType.INPUT}
-          name="confirm_new_password"
+          name="confirm_new_assword"
           placeholder="confirm new password"
           label="Confirm Password"
         />

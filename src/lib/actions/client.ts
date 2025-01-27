@@ -1,6 +1,6 @@
 "use server";
 
-import { findUserByKindeId } from "@/lib/db-services/user";
+import { findUserByKindeId } from "@/lib/db-services/users";
 import bcrypt from "bcrypt";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Users, init } from "@kinde/management-api-js";
@@ -699,8 +699,7 @@ export const resetPassword = async (newPassword: string) => {
       });
 
       response.success = true;
-      response.message = 'successfully reset password'
-
+      response.message = "successfully reset password";
     } catch (error) {
       console.error("Error:", error);
       response.message =

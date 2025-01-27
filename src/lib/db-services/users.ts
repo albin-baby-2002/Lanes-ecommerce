@@ -9,6 +9,7 @@ type TUserUpdatePaylod = {
   firstName: string;
   lastName: string;
   phone: string;
+  birthDate:string;
 };
 
 export const findUserByKindeId = async (kindeId: string) => {
