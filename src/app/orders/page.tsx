@@ -1,4 +1,4 @@
-import OrdersView from "@/sections/cart copy/views/orders-view";
+import OrdersView from "@/sections/admin/orders/views/orders-view";
 
 const Cart = async () => {
   return <OrdersView />;

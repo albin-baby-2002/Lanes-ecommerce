@@ -15,7 +15,7 @@ const OrdersView = async () => {
         <p className="font-Inter text-2xl font-bold">Orders</p>
       </div>
 
-      <SearchAndActions />
+      <SearchAndActions orders={orders} />
 
       <div className="mt-8">
         <DataTable

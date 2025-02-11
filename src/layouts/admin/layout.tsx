@@ -46,11 +46,7 @@ const Links = [
     icon: <FaCartShopping />,
     path: "/admin/orders",
   },
-  {
-    label: "Payments",
-    icon: <FaMoneyBills />,
-    path: "/admin/payments",
-  },
+ 
 ];
 
 const Navigation = [

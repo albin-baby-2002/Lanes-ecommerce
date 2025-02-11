@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { TOrderItemsSelect } from "@/lib/db-services/orders";
 import { categoriesReducers } from "@/store/slices/admin/categories";
+import { ordersReducers } from "@/store/slices/admin/orders";
 import { AppDispatch } from "@/store/store";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import { MdEdit } from "react-icons/md";
@@ -92,10 +93,9 @@ const ActionsCell = ({ row }: { row: Row<TOrderItemsSelect> }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const showEdit = () => {
-    dispatch(categoriesReducers.setCategoryToEdit(row.getValue("categoryId")));
-    dispatch(categoriesReducers.toggleShowEditCategory());
+    dispatch(ordersReducers.toggleShowEditOrder());
+    dispatch(ordersReducers.setOrderToEdit(row.getValue("orderItemId")));
   };
-
 
   return (
     <div className="flex justify-center gap-4">
@@ -106,8 +106,6 @@ const ActionsCell = ({ row }: { row: Row<TOrderItemsSelect> }) => {
       >
         <MdEdit />
       </Button>
-
-
     </div>
   );
 };

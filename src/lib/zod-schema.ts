@@ -2,6 +2,23 @@ import { z } from "zod";
 
 const datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d\d$/;
 
+export const PaymentStatusEnum = z.enum([
+  "PENDING",
+  "PAID",
+  "FAILED",
+  "REFUNDED",
+  "CANCELLED",
+  "CASH_ON_DELIVERY"
+]);
+
+export const ShippingStatusEnum = z.enum([
+  "PROCESSING",
+  "SHIPPED",
+  "DELIVERED",
+  "RETURNED",
+  "CANCELLED"
+]);
+
 export const BillingAddressSchema = z.object({
   fullName: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -116,4 +133,19 @@ export const ProductSchema = z.object({
   discount: z.number(),
   onDiscount: z.boolean().default(false),
   productVariants: z.array(ProductVariantSchema),
+});
+
+
+
+export const orderItemSchema = z.object({
+  orderItemId: z.string(),
+  orderItemInternalId: z.number(),
+  total: z.number(),
+  discount: z.number(),
+  totalDiscount: z.number(),
+  price: z.number(),
+  quantity: z.number(),
+  paymentStatus: PaymentStatusEnum,
+  shippingStatus: ShippingStatusEnum,
+  productVariantInternalId: z.number().nullable()
 });

@@ -6,16 +6,16 @@ import { useDispatch } from "react-redux";
 import { usersReducers } from "@/store/slices/admin/users";
 
 const SearchAndActions = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>()
 
   return (
     <>
       <div className="flex justify-between gap-6">
-        <div className="flex grow items-center rounded-md border border-gray-200 bg-white px-4 focus-within:border-black">
+        <div className="flex grow items-center rounded-md border focus-within:bg-ceramic border-gray-200 bg-white px-4 focus-within:border-black">
           <FaSearch className="text-gray-400" />
           <input
             className="ml-2 w-full border-none py-3 font-Inter text-[15px] outline-none focus:border-none"
-            placeholder="Search Categories "
+            placeholder="Search Users "
           />
         </div>
 
