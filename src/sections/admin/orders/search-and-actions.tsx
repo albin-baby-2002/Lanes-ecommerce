@@ -33,7 +33,7 @@ const { showEditOrder, orderToEdit } = useSelector(
           Export Data
         </Button>
       </div>
-      <EditOrderModal open={showEditOrder} toggleClose={()=>{
+      <EditOrderModal orderToEdit={orders.find((order)=>order.orderItemId === orderToEdit)} open={showEditOrder} toggleClose={()=>{
         dispatch(ordersReducers.toggleShowEditOrder())
       }}/>
     </>

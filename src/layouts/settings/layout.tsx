@@ -10,7 +10,7 @@ const SettingsLayout: React.FC<TProps> = ({ children }) => {
   return (
     <div className="flex max-h-screen w-full flex-col overflow-hidden">
       <Header />
-      <div className="flex">
+      <div className="flex ">
         <SideBar />
         <div className="max-h-[calc(100vh-75px)] grow overflow-y-scroll">{children}</div>
       </div>

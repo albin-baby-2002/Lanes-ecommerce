@@ -1,5 +1,6 @@
 import { db } from "@/drizzle/db";
 import { orderItems, productVariants } from "@/drizzle/schema";
+import { TOrderItemForm } from "@/sections/admin/orders/edit-order-modal";
 import { eq } from "drizzle-orm";
 
 export interface TOrderItemsSelect {
@@ -29,10 +30,10 @@ export interface TOrderItemsSelect {
 export const findAllOrdersByAdmin = async () => {
   return await db
     .select({
-      orderItemId: orderItems.orderId,
+      orderItemId: orderItems.orderItemId,
       orderItemInternalId: orderItems.orderItemInternalId,
-      price:orderItems.price,
-      quantity:orderItems.quantity,
+      price: orderItems.price,
+      quantity: orderItems.quantity,
       total: orderItems.total,
       discount: orderItems.discount,
       totalDiscount: orderItems.totalDiscount,
@@ -45,4 +46,29 @@ export const findAllOrdersByAdmin = async () => {
       productVariants,
       eq(productVariants.productVariantId, orderItems.productVariantId),
     );
+};
+export const updateOrderItemById = async ({
+  orderItemId,
+  price,
+  quantity,
+  total,
+  discount,
+  totalDiscount,
+  paymentStatus,
+  shippingStatus,
+}: TOrderItemForm) => {
+  console.log("orderItemId", orderItemId , '\n \n \n ');
+   await db
+    .update(orderItems)
+    .set({
+      price,
+      quantity,
+      total,
+      discount,
+      totalDiscount,
+      paymentStatus,
+      shippingStatus,
+      updatedAt: new Date(),
+    })
+    .where(eq(orderItems.orderItemId, orderItemId));
 };

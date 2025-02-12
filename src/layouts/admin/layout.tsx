@@ -46,7 +46,7 @@ const Links = [
     icon: <FaCartShopping />,
     path: "/admin/orders",
   },
- 
+
 ];
 
 const Navigation = [
@@ -73,7 +73,7 @@ const Navigation = [
 ];
 const AdminLayout: React.FC<TProps> = ({ children }) => {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen max-h-screen overflow-hidden">
       <div className=" bg-yellow-200 md:bg-white lg:min-w-[300px] border-r">
         <div className="px-6 py-8">
           <Image
@@ -105,7 +105,7 @@ const AdminLayout: React.FC<TProps> = ({ children }) => {
         </div>
       </div>
 
-      <div className="grow">{children}</div>
+      <div className="grow max-h-screen overflow-auto">{children}</div>
     </div>
   );
 };

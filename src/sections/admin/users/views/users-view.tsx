@@ -8,8 +8,8 @@ import UserActionModels from "../users-action-modals";
 
 export type TUser = typeof users.$inferSelect;
 
-const UsersView = async () => {
-  const userData = await getAllUsers();
+const UsersView = async ({search}:{search:string}) => {
+  const userData = await getAllUsers(search);
 
   return (
     <div className="h-full bg-slate-50 p-8">

@@ -7,7 +7,6 @@ import { ordersColumns } from "../datatable-columns";
 const OrdersView = async () => {
   const orders = await findAllOrdersByAdmin();
 
-  console.log(orders[0],' orders ')
 
   return (
     <div className="h-full bg-slate-50 p-8">

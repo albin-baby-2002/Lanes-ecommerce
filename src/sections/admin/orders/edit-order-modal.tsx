@@ -18,15 +18,18 @@ import { useRouter } from "next/navigation";
 import { orderItemSchema } from "@/lib/zod-schema";
 import { cn } from "@/lib/utils";
 import EditOrderForm from "@/components/forms/edit-order";
+import { TOrderItemsSelect } from "@/lib/db-services/orders";
+import { updateOrder } from "@/lib/actions/admin/others";
+
 //-----------------------------------------------------------------------------------
 
 interface TProps {
   open: boolean;
   toggleClose: () => void;
-  orderToEdit?: TOrderItem;
+  orderToEdit: TOrderItemsSelect | undefined;
 }
 
-export type TOrderItem = z.infer<typeof orderItemSchema>;
+export type TOrderItemForm = z.infer<typeof orderItemSchema>;
 
 //-----------------------------------------------------------------------------------
 
@@ -46,7 +49,7 @@ const EditOrderModal: React.FC<TProps> = ({
 
   // react-hook form
 
-  const form = useForm<TOrderItem>({
+  const form = useForm<TOrderItemForm>({
     mode: "onChange",
     resolver: zodResolver(orderItemSchema),
     defaultValues: {},
@@ -56,6 +59,7 @@ const EditOrderModal: React.FC<TProps> = ({
 
   useEffect(() => {
     if (orderToEdit) {
+      form.reset(orderToEdit);
     }
   }, [orderToEdit, form]);
 
@@ -63,11 +67,12 @@ const EditOrderModal: React.FC<TProps> = ({
 
   // fn to handle submit form edit or add
 
-  async function onSubmit(values: TOrderItem) {
+  async function onSubmit(values: TOrderItemForm) {
     try {
       setSubmitting(true);
 
-      const resp = { success: true };
+
+      const resp = await updateOrder(values);
 
       if (!resp.success) {
         setSubmitting(false);

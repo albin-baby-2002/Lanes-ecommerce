@@ -1,27 +1,22 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { FaSearch } from "react-icons/fa";
 import { AppDispatch } from "@/store/store";
 import { useDispatch } from "react-redux";
 import { usersReducers } from "@/store/slices/admin/users";
+import DashboardSearch from "@/components/admin/search";
 
 const SearchAndActions = () => {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
+
 
   return (
     <>
       <div className="flex justify-between gap-6">
-        <div className="flex grow items-center rounded-md border focus-within:bg-ceramic border-gray-200 bg-white px-4 focus-within:border-black">
-          <FaSearch className="text-gray-400" />
-          <input
-            className="ml-2 w-full border-none py-3 font-Inter text-[15px] outline-none focus:border-none"
-            placeholder="Search Users "
-          />
-        </div>
+        <DashboardSearch />
 
         <Button
           onClick={() => {
-            console.log(true)
+            console.log(true);
             dispatch(usersReducers.toggleShowAddUser());
           }}
           className="h-auto min-h-full rounded-md bg-black px-5 text-white"

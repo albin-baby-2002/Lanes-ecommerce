@@ -2,6 +2,7 @@ import BreadCrumb from "@/components/breadcrumb";
 import React from "react";
 import SearchFilter from "../search-filter";
 import ProductsGrid from "../products-grid";
+import { TProductVariantWithDetails } from "@/lib/db-services/products";
 
 interface TProps {
   products: TProductVariantWithDetails[];

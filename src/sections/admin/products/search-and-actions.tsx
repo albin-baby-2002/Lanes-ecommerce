@@ -1,9 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { FaSearch } from "react-icons/fa";
 import { AppDispatch } from "@/store/store";
 import { useDispatch } from "react-redux";
 import { productsReducers } from "@/store/slices/admin/products";
+import DashboardSearch from "@/components/admin/search";
 
 const SearchAndActions = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -11,13 +11,7 @@ const SearchAndActions = () => {
   return (
     <>
       <div className="flex justify-between gap-6">
-        <div className="flex grow items-center rounded-md focus-within:bg-ceramic border border-gray-200 bg-white px-4 focus-within:border-black">
-          <FaSearch className="text-gray-400" />
-          <input
-            className="ml-2 w-full border-none py-3 font-Inter text-[15px] outline-none focus:border-none"
-            placeholder="Search Products"
-          />
-        </div>
+        <DashboardSearch />
 
         <Button
           onClick={() => {

@@ -33,6 +33,7 @@ const EditOrderForm = ({ form }: { form: UseFormReturn<any> }) => {
           control={form.control}
           fieldType={FormFieldType.INPUT}
           name="quantity"
+          disabled
           label="Quantity"
           dataType="number"
         />
@@ -40,6 +41,7 @@ const EditOrderForm = ({ form }: { form: UseFormReturn<any> }) => {
           control={form.control}
           fieldType={FormFieldType.INPUT}
           name="total"
+          disabled
           label="Total"
           dataType="number"
         />
@@ -49,6 +51,7 @@ const EditOrderForm = ({ form }: { form: UseFormReturn<any> }) => {
           fieldType={FormFieldType.INPUT}
           name="totalDiscount"
           label="Total Discount"
+          disabled
           dataType="number"
         />
 

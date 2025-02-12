@@ -1,6 +1,6 @@
 import { db } from "@/drizzle/db";
 import { users } from "@/drizzle/schema";
-import { eq } from "drizzle-orm";
+import { eq, like, or, sql } from "drizzle-orm";
 import { TParsedUser } from "../helpers/data-validation";
 
 type TUser = typeof users.$inferInsert;
@@ -9,7 +9,7 @@ type TUserUpdatePaylod = {
   firstName: string;
   lastName: string;
   phone: string;
-  birthDate:string;
+  birthDate: string;
 };
 
 export const findUserByKindeId = async (kindeId: string) => {
@@ -24,8 +24,20 @@ export const insertUser = async (user: TUser) => {
   return await db.insert(users).values(user);
 };
 
-export const getAllUsers = async () => {
-  return await db.select().from(users);
+export const getAllUsers = async (search?: string) => {
+  console.log(search, "search \n \n");
+
+  return await db
+    .select()
+    .from(users)
+    .where(
+      or(
+        like(users.email, `%${search}%`),
+        like(users.firstName, `%${search}%`),
+        like(users.lastName, `%${search}%`),
+        like(sql`CAST(${users.userInternalId} AS TEXT)`, `%${search}%`),
+      ),
+    );
 };
 
 export const findUserByEmail = async (email: string) => {
