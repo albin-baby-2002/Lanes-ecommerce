@@ -1,7 +1,7 @@
 import CategoryView from "@/sections/admin/categories/views/category-view";
 
-const CategoriesPage = async () => {
-  return <CategoryView />;
+const CategoriesPage = async ({searchParams}:{searchParams:{search:string}}) => {
+  return <CategoryView  search={searchParams.search ||''}/>;
 };
 
 export default CategoriesPage;

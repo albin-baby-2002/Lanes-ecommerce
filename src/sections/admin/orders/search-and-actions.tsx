@@ -7,35 +7,37 @@ import { FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import EditOrderModal from "./edit-order-modal";
 import { ordersReducers } from "@/store/slices/admin/orders";
+import { exportToExcel } from "@/lib/helpers/export-to-excel";
+import DashboardSearch from "@/components/admin/search";
 
-const SearchAndActions = ({orders}:{orders:TOrderItemsSelect[]}) => {
-
+const SearchAndActions = ({ orders }: { orders: TOrderItemsSelect[] }) => {
   const dispatch = useDispatch<AppDispatch>();
 
-const { showEditOrder, orderToEdit } = useSelector(
+  const { showEditOrder, orderToEdit } = useSelector(
     (state: RootState) => state.orders,
   );
 
   return (
     <>
       <div className="flex justify-between gap-6">
-        <div className="flex grow items-center rounded-md border border-gray-200 bg-white px-4 focus-within:border-black focus-within:bg-ceramic">
-          <FaSearch className="text-gray-400" />
-          <input
-            className="ml-2 w-full border-none py-3 font-Inter text-[15px] outline-none focus:border-none"
-            placeholder="Search Orders "
-          />
-        </div>
+        <DashboardSearch/>
         <Button
           variant={"outline"}
+          onClick={() => {
+            exportToExcel(orders);
+          }}
           className="h-auto min-h-full border-2 border-black px-5"
         >
           Export Data
         </Button>
       </div>
-      <EditOrderModal orderToEdit={orders.find((order)=>order.orderItemId === orderToEdit)} open={showEditOrder} toggleClose={()=>{
-        dispatch(ordersReducers.toggleShowEditOrder())
-      }}/>
+      <EditOrderModal
+        orderToEdit={orders.find((order) => order.orderItemId === orderToEdit)}
+        open={showEditOrder}
+        toggleClose={() => {
+          dispatch(ordersReducers.toggleShowEditOrder());
+        }}
+      />
     </>
   );
 };

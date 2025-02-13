@@ -4,8 +4,9 @@ import { findAllOrdersByAdmin } from "@/lib/db-services/orders";
 import { DataTable } from "@/components/table/data-table";
 import { ordersColumns } from "../datatable-columns";
 
-const OrdersView = async () => {
-  const orders = await findAllOrdersByAdmin();
+const OrdersView = async ({search}:{search:string}) => {
+
+  const orders = await findAllOrdersByAdmin(search ||'');
 
 
   return (
@@ -16,7 +17,7 @@ const OrdersView = async () => {
 
       <SearchAndActions orders={orders} />
 
-      <div className="mt-8">
+      <div className="mt-8 h-[calc(100vh-200px)]">
         <DataTable
           data={orders}
           columns={ordersColumns}

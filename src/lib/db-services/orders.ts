@@ -1,9 +1,9 @@
 import { db } from "@/drizzle/db";
 import { orderItems, productVariants } from "@/drizzle/schema";
 import { TOrderItemForm } from "@/sections/admin/orders/edit-order-modal";
-import { eq } from "drizzle-orm";
+import { eq, ilike, sql } from "drizzle-orm";
 
-export interface TOrderItemsSelect {
+export interface TOrderItemsSelect extends Record<string, unknown> {
   orderItemId: string;
   orderItemInternalId: number;
   total: number;
@@ -27,7 +27,7 @@ export interface TOrderItemsSelect {
   productVariantInternalId: number | null;
 }
 
-export const findAllOrdersByAdmin = async () => {
+export const findAllOrdersByAdmin = async (search?: string) => {
   return await db
     .select({
       orderItemId: orderItems.orderItemId,
@@ -45,6 +45,12 @@ export const findAllOrdersByAdmin = async () => {
     .leftJoin(
       productVariants,
       eq(productVariants.productVariantId, orderItems.productVariantId),
+    )
+    .where(
+      ilike(
+        sql`CAST(${orderItems.orderItemInternalId} AS TEXT)`,
+        `%${search || ''}%`,
+      ),
     );
 };
 export const updateOrderItemById = async ({
@@ -57,8 +63,8 @@ export const updateOrderItemById = async ({
   paymentStatus,
   shippingStatus,
 }: TOrderItemForm) => {
-  console.log("orderItemId", orderItemId , '\n \n \n ');
-   await db
+  console.log("orderItemId", orderItemId, "\n \n \n ");
+  await db
     .update(orderItems)
     .set({
       price,

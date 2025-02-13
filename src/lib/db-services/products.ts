@@ -16,7 +16,8 @@ import { and, eq, ne, sql } from "drizzle-orm";
 
 type TProduct = typeof products.$inferInsert;
 
-export interface TProductsWithVariantsAndImages {
+export interface TProductsWithVariantsAndImages
+  extends Record<string, unknown> {
   productId: string;
   productInternalId: number;
   name: string;
@@ -101,11 +102,12 @@ export const deleteProductById = async (id: string) => {
 export const getProductsWithVariants = async ({
   productId,
   limit,
+  search,
 }: {
   productId?: string;
   limit?: number;
+  search?: string;
 }) => {
-
   const query = sql`
     WITH
       category_agg AS (
@@ -169,9 +171,13 @@ export const getProductsWithVariants = async ({
       products p
       JOIN category_agg cat ON cat."productId" = p."productId"
       LEFT JOIN product_variant_agg pv_agg ON pv_agg."productId" = p."productId"
-    ${productId ? sql`WHERE p."productId" = ${productId}` : sql``}  -- Apply filter if productId is provided
-    ORDER BY
-      p."createdAt"
+    WHERE
+    (${productId ? sql`p."productId" = ${productId}` : sql`TRUE`})
+    AND
+(${search ? sql`p."name" ILIKE ${`%${search}%`}` : sql`TRUE`})
+
+
+    ORDER BY p."createdAt"
     LIMIT ${limit || 1000};
   `;
 

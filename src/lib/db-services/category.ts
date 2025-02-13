@@ -1,16 +1,23 @@
 "use server";
 import { db } from "@/drizzle/db";
 import { categories } from "@/drizzle/schema";
-import { Column, eq,  SelectedFields,  Table } from "drizzle-orm";
+import { Column, eq, ilike, or, SelectedFields, sql, Table } from "drizzle-orm";
 
 type TCategory = typeof categories.$inferInsert;
 
-export const getAllCategories = async () => {
-  return await db.select().from(categories);
+export const getAllCategories = async (search?: string) => {
+  return await db
+    .select()
+    .from(categories)
+    .where(
+      or(
+        ilike(sql`CAST(${categories.categoryInternalId} AS TEXT)`, `%${search}%`),
+        ilike(categories.name, `%${search}%`),
+      ),
+    );
 };
 
-
-export const getAllCategoriesWithSpecificFields = async (filter?:any) => {
+export const getAllCategoriesWithSpecificFields = async (filter?: any) => {
   return await db.select(filter).from(categories);
 };
 

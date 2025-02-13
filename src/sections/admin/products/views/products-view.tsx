@@ -39,13 +39,14 @@ export interface ProductVariant {
   productVariantImages: string[];
 }
 
-const ProductsView = async () => {
+const ProductsView = async ({ search }: { search: string }) => {
+
   const categoriesOptions = (await getAllCategoriesWithSpecificFields({
     label: categories.name,
     value: categories.categoryId,
   })) as unknown as TCategoryOptions[];
 
-  const productsData = await getProductsWithVariants({});
+  const productsData = await getProductsWithVariants({search});
 
   return (
     <div className="h-full bg-slate-50 p-8">
@@ -53,14 +54,14 @@ const ProductsView = async () => {
         <p className="font-Inter text-2xl font-bold">Products</p>
       </div>
 
-      <SearchAndActions />
+      <SearchAndActions  data={productsData}/>
 
       <ProductActionsModals
         productsData={productsData}
         categoryOptions={categoriesOptions}
       />
 
-      <div className="mt-8">
+      <div className="mt-8 h-[calc(100vh-200px)] overflow-hidden">
         <DataTable<TProductsWithVariantsAndImages>
           columns={productsColumns}
           data={productsData}

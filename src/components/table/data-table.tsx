@@ -38,9 +38,9 @@ export function DataTable<TData>({
   });
 
   return (
-    <div className="rounded-md border">
-      <Table style={{tableLayout:'fixed'}} className="bg-white ">
-        <TableHeader>
+    <div className="h-full rounded-md overflow-y-auto border">
+      <Table style={{ tableLayout: "fixed" }} className="max-h-full bg-white">
+        <TableHeader className=" sticky top-0 bg-white z-50">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -61,7 +61,7 @@ export function DataTable<TData>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
+        <TableBody >
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow

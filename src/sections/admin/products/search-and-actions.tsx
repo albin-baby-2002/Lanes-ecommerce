@@ -4,8 +4,9 @@ import { AppDispatch } from "@/store/store";
 import { useDispatch } from "react-redux";
 import { productsReducers } from "@/store/slices/admin/products";
 import DashboardSearch from "@/components/admin/search";
+import { exportToExcel } from "@/lib/helpers/export-to-excel";
 
-const SearchAndActions = () => {
+const SearchAndActions = ({data}:{data:Record<string,unknown>[]}) => {
   const dispatch = useDispatch<AppDispatch>();
 
   return (
@@ -24,6 +25,7 @@ const SearchAndActions = () => {
 
         <Button
           variant={"outline"}
+          onClick={()=>{exportToExcel(data)}}
           className="h-auto min-h-full border-2 border-black px-5"
         >
           Export Data
