@@ -61,7 +61,6 @@ const productSlice = createSlice({
     },
 
     toggleDeleteProductConfirmation: (state) => {
-      console.log("toggled", state.showDeleteProductConfirmation);
       state.showDeleteProductConfirmation =
         !state.showDeleteProductConfirmation;
     },

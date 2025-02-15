@@ -370,7 +370,6 @@ export const getAllUserAddress = async () => {
 export const placeOrder = async (addressId: string) => {
   const response = { success: false, message: "" };
 
-  console.log("\n \n", addressId, "addressId");
 
   try {
     let userDetails: TUserSelect | null = null;
@@ -388,7 +387,6 @@ export const placeOrder = async (addressId: string) => {
       return response;
     }
 
-    console.log("\n \n", userDetails, "userDetails");
 
     // Perform transaction
     try {
@@ -466,7 +464,6 @@ export const placeOrder = async (addressId: string) => {
           ),
         );
 
-        console.log("\n \n", newOrderItems, "successfully updated");
       });
 
       // Success response

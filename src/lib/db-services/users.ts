@@ -25,7 +25,6 @@ export const insertUser = async (user: TUser) => {
 };
 
 export const getAllUsers = async (search?: string) => {
-  console.log(search, "search \n \n");
 
   return await db
     .select()

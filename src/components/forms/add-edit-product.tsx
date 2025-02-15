@@ -216,7 +216,6 @@ const ProductVariant = ({
     imageIdx,
   }: HandleImageParams) => {
     try {
-      console.log(image, operationType, "add image fn");
       const currentVariant = productVariants[currentPage - 1];
 
       if (!currentVariant) return;
@@ -238,7 +237,6 @@ const ProductVariant = ({
           }
 
           if (operationType === "add" && image) {
-            console.log("Adding image", image);
             return [...(variant.productVariantImages || []), image];
           }
 

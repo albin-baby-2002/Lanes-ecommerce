@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { TOrderItemsSelect } from "@/lib/db-services/orders";
 import { AppDispatch, RootState } from "@/store/store";
-import { FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import EditOrderModal from "./edit-order-modal";
 import { ordersReducers } from "@/store/slices/admin/orders";

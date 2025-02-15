@@ -27,7 +27,6 @@ const categoriesSlice = createSlice({
       state.categoryToEdit = action.payload;
     },
     toggleDeleteCategoryConfirmation: (state) => {
-      console.log("toggled", state.showDeleteCategoryConfirmation);
       state.showDeleteCategoryConfirmation =
         !state.showDeleteCategoryConfirmation;
     },

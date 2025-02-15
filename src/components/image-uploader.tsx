@@ -48,7 +48,6 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
               toggleModal();
             }
             if (result.info.public_id) {
-              console.log(result, "result of img");
               try {
                 onSuccessfullUpload(result.info.public_id);
               } catch (err: any) {

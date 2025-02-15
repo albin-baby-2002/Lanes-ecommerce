@@ -81,7 +81,6 @@ const ActionsCell = ({ row }: { row: Row<TColumns> }) => {
   };
 
   const showDeleteCategoryConfirmation = () => {
-    console.log(row.getValue("categoryId"))
     dispatch(
       categoriesReducers.setCategoryToDelete(
         row.getValue("categoryId"),

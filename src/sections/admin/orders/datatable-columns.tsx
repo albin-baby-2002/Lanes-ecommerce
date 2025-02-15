@@ -42,7 +42,6 @@ export const ordersColumns: ColumnDef<TOrderItemsSelect>[] = [
     accessorKey: "Total",
     header: "Total Order Value",
     cell: ({ row }) => {
-      console.log(row, "row");
       const quantity = row.getValue("quantity") as number;
       const price = row.getValue("price") as number;
 

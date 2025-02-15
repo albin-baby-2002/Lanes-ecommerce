@@ -6,6 +6,7 @@ import { ordersColumns } from "../datatable-columns";
 
 const OrdersView = async ({search}:{search:string}) => {
 
+
   const orders = await findAllOrdersByAdmin(search ||'');
 
 

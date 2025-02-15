@@ -129,7 +129,6 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
                     size={"icon"}
                     variant={"ghost"}
                     onClick={() => {
-                      console.log(item.quantity, "item quantity");
                       if (item.quantity <= 1) return;
 
                       handleAddToCart(
@@ -147,7 +146,6 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
                     size={"icon"}
                     variant={"ghost"}
                     onClick={() => {
-                      console.log(item.quantity, "item quantity");
                       if (item.quantity >= 5) return;
 
                       handleAddToCart(

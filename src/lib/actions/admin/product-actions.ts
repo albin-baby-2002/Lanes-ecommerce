@@ -132,7 +132,6 @@ export const createProductWithVariantsAndCategory = async (
 export const EditProduct = async (product: TProductData) => {
   const response = { success: false, message: "" };
 
-  console.log("\n", product, "edit input \n");
 
   try {
     // Check admin

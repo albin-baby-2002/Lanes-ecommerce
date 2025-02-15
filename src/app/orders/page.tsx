@@ -1,16 +1,11 @@
-import OrdersView from "@/sections/admin/orders/views/orders-view";
 
-interface TProps {
-  searchParams: {
-    search?: string;
-  };
-}
 
-const Cart = async ({ searchParams }: TProps) => {
+const Cart = async () => {
 
-  const searchValue = searchParams.search || "";
 
-  return <OrdersView search={searchValue} />;
+
+
+  return <OrdersView />;
 };
 
 export default Cart;

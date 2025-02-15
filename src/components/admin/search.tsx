@@ -24,7 +24,6 @@ const DashboardSearch = () => {
   useEffect(() => {
     const timeOutId = setTimeout(() => {
       const params = updateSearchParams(search);
-      console.log(params.toString());
 
       router.replace(`${pathName}?${params.toString()}`);
     }, 300);

@@ -22,7 +22,6 @@ const SearchPage = async ({ searchParams }: TProps) => {
 
   const {products,total,totalPages} = await getAllIndividualVariantsWithDetails(searchParams);
 
-  console.log(totalPages,'pages total')
 
   return <SearchView products={products} total={total} totalPages={totalPages} />;
 };

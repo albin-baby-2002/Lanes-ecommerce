@@ -4,19 +4,19 @@ const CircularLoader = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
       <linearGradient id="a4">
-        <stop offset="0" stop-color="#040002" stop-opacity="0"></stop>
-        <stop offset="1" stop-color="#040002"></stop>
+        <stop offset="0" stopColor="#040002" stopOpacity="0"></stop>
+        <stop offset="1" stopColor="#040002"></stop>
       </linearGradient>
       <circle
         fill="none"
         stroke="url(#a4)"
-        stroke-width="15"
-        stroke-linecap="round"
-        stroke-dasharray="0 44 0 44 0 44 0 44 0 360"
+        strokeWidth="15"
+        strokeLinecap="round"
+        strokeDasharray="0 44 0 44 0 44 0 44 0 360"
         cx="100"
         cy="100"
         r="70"
-        transform-origin="center"
+        style={{ transformOrigin: "center" }}
       >
         <animateTransform
           type="rotate"

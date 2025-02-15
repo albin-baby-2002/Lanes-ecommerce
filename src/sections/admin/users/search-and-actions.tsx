@@ -17,7 +17,6 @@ const SearchAndActions = ({data}:{data:Record<string,unknown>[]}) => {
 
         <Button
           onClick={() => {
-            console.log(true);
             dispatch(usersReducers.toggleShowAddUser());
           }}
           className="h-auto min-h-full rounded-md bg-black px-5 text-white"

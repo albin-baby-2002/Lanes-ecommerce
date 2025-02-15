@@ -63,7 +63,6 @@ export const updateOrderItemById = async ({
   paymentStatus,
   shippingStatus,
 }: TOrderItemForm) => {
-  console.log("orderItemId", orderItemId, "\n \n \n ");
   await db
     .update(orderItems)
     .set({

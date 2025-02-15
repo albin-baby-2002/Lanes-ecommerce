@@ -36,8 +36,6 @@ const AddNewAddress = () => {
     try {
       setSubmitting(true);
 
-      console.log(data);
-      console.log("Submitting");
 
       let resp = await addNewBillingAddress(data);
 
