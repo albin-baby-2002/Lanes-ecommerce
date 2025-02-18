@@ -9,9 +9,10 @@ import Image from "next/image";
 import React, { useState } from "react";
 import Link from "next/link";
 import { IoSearch } from "react-icons/io5";
-import { PiShoppingCart } from "react-icons/pi";
+import { PiShoppingCart, PiShoppingCartBold } from "react-icons/pi";
 import { FaRegUserCircle } from "react-icons/fa";
 import HeaderContainer from "./components/header-container";
+import { GiHamburgerMenu } from "react-icons/gi";
 import Search from "./components/header-search";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import {
@@ -19,6 +20,7 @@ import {
   LogoutLink,
   RegisterLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
+import { Menu, SearchIcon } from "lucide-react";
 
 //--------------------------------------------------------------------------------
 
@@ -30,10 +32,14 @@ const links = [
 ];
 
 const Header = () => {
-  const { user, isAuthenticated } = useKindeBrowserClient();
+  const { permissions, user, isAuthenticated } = useKindeBrowserClient();
+
+  const isAdmin = permissions?.permissions?.includes("admin:permission");
+
   return (
     <HeaderContainer>
-      <div className="flex grow items-center gap-10">
+      <div className="flex grow items-center gap-3 lg:gap-10">
+        <GiHamburgerMenu size={28}/>
         <Link href={"/"}>
           <Image
             src="/logos/lanes.svg"
@@ -44,7 +50,7 @@ const Header = () => {
           />
         </Link>
 
-        <div className="flex items-center gap-8 text-sm">
+        <div className="flex hidden items-center gap-8 text-sm">
           {links.map((link, idx) => {
             return (
               <Link href={link.href} key={idx} className="hover:underline">
@@ -54,15 +60,30 @@ const Header = () => {
           })}
         </div>
 
-        <Search />
+        <Search  />
       </div>
 
       <div className="flex items-center gap-5">
+
+
+        <Link href={"/search"}>
+          <IoSearch size={"24px"} color="black" />
+        </Link>
+
         <Link href={"/cart"}>
-          <PiShoppingCart size={"24px"} color="black" />
+          <PiShoppingCartBold size={"24px"} color="black" />
         </Link>
 
         <AccountDropDown authenticated={isAuthenticated!} />
+
+        {isAdmin && (
+          <Link
+            href={"/admin"}
+            className="rounded-sm hidden md:block border-2 border-black p-1 px-2"
+          >
+            <p className="text-sm">Admin</p>
+          </Link>
+        )}
       </div>
     </HeaderContainer>
   );

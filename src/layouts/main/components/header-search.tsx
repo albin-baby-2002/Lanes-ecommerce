@@ -20,7 +20,7 @@ const Search = () => {
   };
 
   return (
-    <div className="flex max-w-[600px] grow items-center gap-4 rounded-3xl bg-slate-200 px-4 py-2.5">
+    <div className=" hidden md:flex max-w-[600px] grow items-center gap-4 rounded-3xl bg-slate-200 px-4 py-2.5">
       <IoSearch />
 
       <input

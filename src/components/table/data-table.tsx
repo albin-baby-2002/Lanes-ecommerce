@@ -40,7 +40,7 @@ export function DataTable<TData>({
   return (
     <div className="h-full rounded-md overflow-y-auto border">
       <Table style={{ tableLayout: "fixed" }} className="max-h-full bg-white">
-        <TableHeader className=" sticky top-0 bg-white z-50">
+        <TableHeader className=" sticky top-0 border-b z-10  bg-white ">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {

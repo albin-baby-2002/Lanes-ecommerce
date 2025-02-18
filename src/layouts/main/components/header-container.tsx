@@ -14,7 +14,7 @@ const HeaderContainer: React.FC<TProps> = ({ children }) => {
   return (
     <div
       className={cn(
-        "contain sticky top-0 z-10  flex items-center justify-between gap-10 bg-white px-20 py-6",
+        "contain sticky top-0 z-10  flex items-center justify-between gap-10 bg-white  p-4  lg:px-20 lg:py-6 py-5",
         showBorderBottom && "border-b",
       )}
     >

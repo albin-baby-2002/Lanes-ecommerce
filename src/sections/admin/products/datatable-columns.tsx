@@ -38,8 +38,8 @@ export const productsColumns: ColumnDef<TProductsWithVariantsAndImages>[] = [
       const productID = "#PRD" + row.getValue("productInternalId");
 
       return (
-        <div className="flex items-center gap-4">
-          <div className="relative h-10 w-10">
+        <div className="flex items-center z-0 gap-4">
+          <div className="relative h-10 z-0 w-10">
             <Image
               fill
               className="h-full w-full rounded-lg object-cover"

@@ -94,17 +94,17 @@ export function SalesAndProfitChart() {
             <Area
               dataKey="profit"
               type="natural"
-              fill="#4e4c4c"
-              fillOpacity={0.4}
-              stroke="#424040"
+              fill="#b4b4b4"
+              fillOpacity={1}
+              stroke="#b5b3b3"
               stackId="a"
               />
             <Area
               dataKey="sales"
               stroke="#898989"
               type="natural"
-              fill="#afadad5c"
-              fillOpacity={0.4}
+              fill="#3d3c3c"
+              fillOpacity={1}
               stackId="a"
             />
           </AreaChart>
