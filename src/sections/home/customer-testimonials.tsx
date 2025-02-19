@@ -88,7 +88,7 @@ const CustomerTestimonials = () => {
 
   return (
     <div className="mb-14">
-      <h2 className="px-10 font-integral_cf text-3xl font-bold tracking-wide">
+      <h2 className="px-10 text-center lg:text-left font-integral_cf text-3xl font-bold tracking-wide">
         OUR HAPPY CUSTOMERS
       </h2>
 

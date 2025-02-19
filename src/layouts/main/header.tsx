@@ -39,7 +39,7 @@ const Header = () => {
   return (
     <HeaderContainer>
       <div className="flex grow items-center gap-3 lg:gap-10">
-        <GiHamburgerMenu size={28}/>
+        <GiHamburgerMenu className=" lg:hidden" size={28}/>
         <Link href={"/"}>
           <Image
             src="/logos/lanes.svg"
@@ -50,7 +50,7 @@ const Header = () => {
           />
         </Link>
 
-        <div className="flex hidden items-center gap-8 text-sm">
+        <div className="lg:flex hidden items-center gap-8 text-sm">
           {links.map((link, idx) => {
             return (
               <Link href={link.href} key={idx} className="hover:underline">
@@ -66,7 +66,7 @@ const Header = () => {
       <div className="flex items-center gap-5">
 
 
-        <Link href={"/search"}>
+        <Link href={"/search"} className=" lg:hidden">
           <IoSearch size={"24px"} color="black" />
         </Link>
 
@@ -79,7 +79,7 @@ const Header = () => {
         {isAdmin && (
           <Link
             href={"/admin"}
-            className="rounded-sm hidden md:block border-2 border-black p-1 px-2"
+            className="rounded-sm hidden lg:block border-2 border-black p-1 px-2"
           >
             <p className="text-sm">Admin</p>
           </Link>

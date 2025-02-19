@@ -7,17 +7,17 @@ const BrowseByStyle = () => {
   const router = useRouter();
 
   return (
-    <div className="mx-10 my-16 rounded-2xl bg-ceramic py-16">
+    <div className="mx-5 my-10 rounded-2xl bg-ceramic py-16 px-5 sm:px-10 lg:px-0 lg:mx-10 lg:my-16">
       <p className="pb-14 text-center font-integral_cf text-3xl">
         BROWSE BY DRESS STYLE
       </p>
 
-      <div className="grid h-[600px] grid-cols-12 grid-rows-2 gap-6 px-16">
+      <div className="grid grid-cols-12 gap-6 lg:h-[600px] lg:grid-rows-2 lg:px-16">
         <div
           onClick={() => {
             router.push("/search/?styles=Casual");
           }}
-          className="relative col-span-5 cursor-pointer rounded-xl bg-black"
+          className="relative col-span-12  h-[200px] cursor-pointer rounded-xl bg-black md:col-span-5 md:h-auto"
         >
           <p className="absolute left-[5%] top-[5%] text-2xl font-bold">
             Casual
@@ -34,7 +34,7 @@ const BrowseByStyle = () => {
           onClick={() => {
             router.push("/search/?styles=Formal");
           }}
-          className="relative col-span-7 cursor-pointer rounded-xl bg-black"
+          className="relative col-span-12 h-[200px] cursor-pointer rounded-xl bg-black md:col-span-7 md:h-auto"
         >
           <p className="absolute left-[5%] top-[5%] text-2xl font-bold">
             Formal
@@ -51,7 +51,8 @@ const BrowseByStyle = () => {
           onClick={() => {
             router.push("/search/?styles=Party");
           }}
-        className="relative cursor-pointer col-span-7 rounded-xl bg-black">
+          className="relative col-span-12 h-[200px] cursor-pointer rounded-xl bg-black md:col-span-7 md:h-auto"
+        >
           <p className="absolute left-[5%] top-[5%] text-2xl font-bold">
             Party
           </p>
@@ -64,11 +65,11 @@ const BrowseByStyle = () => {
           />
         </div>
         <div
-
           onClick={() => {
             router.push("/search/?styles=Gym");
           }}
-        className="relative col-span-5 cursor-pointer rounded-xl bg-black">
+          className="relative col-span-12 h-[200px] cursor-pointer rounded-xl bg-black md:col-span-5 md:h-auto"
+        >
           <p className="absolute left-[5%] top-[5%] text-2xl font-bold">Gym</p>
           <Image
             src={"/images/dress-styles/gym.svg"}

@@ -44,13 +44,13 @@ const Footer = () => {
       <div className="relative">
         <div className="absolute inset-0 top-2/4 -z-10 bg-ceramic"></div>
 
-        <div className="mx-auto flex w-[90%] justify-between rounded-3xl bg-black px-16 py-12">
-          <p className="basis-3/5 font-integral_cf text-[36px] text-white">
+        <div className="mx-auto flex w-[90%] flex-col justify-between gap-6 rounded-3xl bg-black px-5 py-12 md:flex-row lg:gap-0 md:px-10 lg:px-16">
+          <p className="basis-3/5 font-integral_cf text-[36px] md:text-[30px] lg:text-[36px] text-white">
             STAY UPTO DATE ABOUT OUR LATEST OFFERS
           </p>
 
-          <div className="flex flex-col gap-4">
-            <div className="flex w-72 items-center gap-3 rounded-full bg-white p-2 px-4">
+          <div className="flex flex-col gap-4 md:mt-3">
+            <div className="flex items-center gap-3 rounded-full bg-white p-2 px-4 lg:w-72">
               <MdOutlineMail color="black" size={"22px"} />
               <input
                 className="max-w-52 text-sm outline-none placeholder:text-black/40"
@@ -59,7 +59,7 @@ const Footer = () => {
             </div>
 
             <Button
-              className="h-[42px] w-72 rounded-full"
+              className="h-[42px] rounded-full lg:w-72"
               variant={"secondary"}
             >
               Subscrible to Newsletter
@@ -70,12 +70,12 @@ const Footer = () => {
 
       {/* resource links and socials */}
 
-      <div className="bg-ceramic px-20">
-        <div className="flex justify-between border-b py-10">
+      <div className="bg-ceramic px-10 lg:px-20">
+        <div className="flex flex-col justify-between gap-y-4 border-b py-10 lg:flex-row">
           {/* socials */}
 
           <div className="basis-[20%] space-y-6">
-            <Link href={'/'}>
+            <Link href={"/"}>
               <Image
                 src="/logos/lanes.svg"
                 height={1000}
@@ -99,61 +99,62 @@ const Footer = () => {
 
           {/* links */}
 
-          <div className="basis-[10%]">
-            <h3 className="mb-4 tracking-widest">COMPANY</h3>
+          <div className=" grid grid-cols-2 gap-y-4">
+            <div className="basis-[10%]">
+              <h3 className="mb-4 tracking-widest">COMPANY</h3>
 
-            <div>
-              {companyLinks.map((link, idx) => {
-                return (
-                  <FooterLink key={idx} label={link.label} href={link.href} />
-                );
-              })}
+              <div>
+                {companyLinks.map((link, idx) => {
+                  return (
+                    <FooterLink key={idx} label={link.label} href={link.href} />
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          <div className="basis-[15%]">
-            <h3 className="mb-4 tracking-widest">HELP</h3>
+            <div className="basis-[15%]">
+              <h3 className="mb-4 tracking-widest">HELP</h3>
 
-            <div>
-              {helpLinks.map((link, idx) => {
-                return (
-                  <FooterLink key={idx} label={link.label} href={link.href} />
-                );
-              })}
+              <div>
+                {helpLinks.map((link, idx) => {
+                  return (
+                    <FooterLink key={idx} label={link.label} href={link.href} />
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          <div className="basis-[15%]">
-            <h3 className="mb-4 tracking-widest">FAQ</h3>
+            <div className="basis-[15%]">
+              <h3 className="mb-4 tracking-widest">FAQ</h3>
 
-            <div>
-              {faqLinks.map((link, idx) => {
-                return (
-                  <FooterLink key={idx} label={link.label} href={link.href} />
-                );
-              })}
+              <div>
+                {faqLinks.map((link, idx) => {
+                  return (
+                    <FooterLink key={idx} label={link.label} href={link.href} />
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          <div className="basis-[%]">
-            <h3 className="mb-4 tracking-widest">RESOURCES</h3>
+            <div className="basis-[%]">
+              <h3 className="mb-4 tracking-widest">RESOURCES</h3>
 
-            <div>
-              {resourcesLinks.map((link, idx) => {
-                return (
-                  <FooterLink key={idx} label={link.label} href={link.href} />
-                );
-              })}
+              <div>
+                {resourcesLinks.map((link, idx) => {
+                  return (
+                    <FooterLink key={idx} label={link.label} href={link.href} />
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
-
         {/* copy rights and payments */}
 
-        <div className="flex justify-between py-4 pb-10 text-sm text-black/60">
+        <div className="flex flex-col justify-center md:flex-row text-center gap-y-4 md:justify-between md:items-center py-4 pb-10 text-sm text-black/60">
           <p>Shop.co © 2000-2023, All Rights Reserved</p>
 
-          <div className="flex">
+          <div className="flex justify-center">
             {payments.map((val, idx) => {
               return <PaymentImg key={idx} val={val} />;
             })}
