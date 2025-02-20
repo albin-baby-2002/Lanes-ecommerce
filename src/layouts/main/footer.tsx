@@ -44,8 +44,8 @@ const Footer = () => {
       <div className="relative">
         <div className="absolute inset-0 top-2/4 -z-10 bg-ceramic"></div>
 
-        <div className="mx-auto flex w-[90%] flex-col justify-between gap-6 rounded-3xl bg-black px-5 py-12 md:flex-row lg:gap-0 md:px-10 lg:px-16">
-          <p className="basis-3/5 font-integral_cf text-[36px] md:text-[30px] lg:text-[36px] text-white">
+        <div className="mx-auto flex w-[90%] flex-col justify-between gap-6 rounded-3xl bg-black px-5 py-12 md:flex-row md:px-10 lg:gap-0 lg:px-16">
+          <p className="basis-3/5 font-integral_cf text-[36px] text-white md:text-[30px] lg:text-[36px]">
             STAY UPTO DATE ABOUT OUR LATEST OFFERS
           </p>
 
@@ -70,11 +70,11 @@ const Footer = () => {
 
       {/* resource links and socials */}
 
-      <div className="bg-ceramic px-10 lg:px-20">
+      <div className="bg-ceramic px-10 lg:px-14 xl:px-20">
         <div className="flex flex-col justify-between gap-y-4 border-b py-10 lg:flex-row">
           {/* socials */}
 
-          <div className="basis-[20%] space-y-6">
+          <div className="space-y-6 sm:max-w-[80%] md:max-w-[50%] lg:max-w-none lg:basis-[30%] xl:basis-[20%]">
             <Link href={"/"}>
               <Image
                 src="/logos/lanes.svg"
@@ -99,7 +99,7 @@ const Footer = () => {
 
           {/* links */}
 
-          <div className=" grid grid-cols-2 gap-y-4">
+          <div className="grid grid-cols-2 gap-y-4 lg:flex lg:basis-[60%] lg:justify-between xl:basis-[70%]">
             <div className="basis-[10%]">
               <h3 className="mb-4 tracking-widest">COMPANY</h3>
 
@@ -151,7 +151,7 @@ const Footer = () => {
         </div>
         {/* copy rights and payments */}
 
-        <div className="flex flex-col justify-center md:flex-row text-center gap-y-4 md:justify-between md:items-center py-4 pb-10 text-sm text-black/60">
+        <div className="flex flex-col justify-center gap-y-4 py-4 pb-10 text-center text-sm text-black/60 md:flex-row md:items-center md:justify-between">
           <p>Shop.co © 2000-2023, All Rights Reserved</p>
 
           <div className="flex justify-center">

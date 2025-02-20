@@ -8,13 +8,14 @@ const ProfileForm = ({ form }: { form: UseFormReturn<any> }) => {
   return (
     <Form {...form}>
       <form className="grid w-full gap-4">
-        <div className="flex w-full gap-5">
+        <div className="flex flex-wrap w-full gap-5">
           <CustomInputField
             control={form.control}
             fieldType={FormFieldType.INPUT}
             name="firstName"
             placeholder="John"
             label="First Name"
+            className=" basis-full sm:basis-[45%]"
           />
           <CustomInputField
             control={form.control}
@@ -22,10 +23,11 @@ const ProfileForm = ({ form }: { form: UseFormReturn<any> }) => {
             name="lastName"
             placeholder="Doe"
             label="Last Name"
+            className=" basis-full sm:basis-[45%]"
           />
         </div>
 
-        <div className="flex w-full gap-5">
+        <div className="flex flex-wrap w-full gap-5">
           <CustomInputField
             control={form.control}
             fieldType={FormFieldType.INPUT}
@@ -33,6 +35,7 @@ const ProfileForm = ({ form }: { form: UseFormReturn<any> }) => {
             placeholder="25"
             label="Age"
             dataType="number"
+            className=" basis-full sm:basis-[45%]"
           />
           <CustomInputField
             control={form.control}
@@ -40,6 +43,7 @@ const ProfileForm = ({ form }: { form: UseFormReturn<any> }) => {
             name="gender"
             placeholder="M/F"
             label="Gender"
+            className=" basis-full sm:basis-[45%]"
           />
         </div>
 

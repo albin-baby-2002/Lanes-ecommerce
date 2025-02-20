@@ -27,11 +27,11 @@ const UpdateAddressView = ({ addresses }: { addresses: TAddress[] }) => {
   const [addressToEditId, setAddressToEditId] = useState("");
 
   return (
-    <div className="w-[60%] p-8 font-medium">
+    <div className="lg:w-[60%] p-8 font-medium">
       {addresses.map((address: TAddress, addressIndex: number) => (
         <div key={addressIndex} className="mb-8">
           <p className="pb-8 text-lg font-bold">Address {addressIndex + 1}</p>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {Object.keys(address)
               .filter((key) => !filedsNotTOShow.includes(key))
               .map((key) => (

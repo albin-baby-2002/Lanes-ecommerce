@@ -1,6 +1,6 @@
 import React from "react";
 
-import {  UserCircle } from "lucide-react";
+import { UserCircle, X } from "lucide-react";
 import {
   TbClipboardCheck,
   TbHomeEdit,
@@ -11,6 +11,7 @@ import {
 } from "react-icons/tb";
 import Tab from "./components/tab";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const Tabs = [
   {
@@ -40,9 +41,14 @@ const Navigation = [
     icon: <TbClipboardCheck size={22} />,
   },
 ];
-const SideBar = () => {
+const SideBar = ({ showMobileMenu }: { showMobileMenu: boolean }) => {
   return (
-    <div className="w-[280px] border-r px-2 pr-1 pt-10">
+    <div
+      className={cn(
+        "absolute z-50 min-h-screen w-[280px] md:w-[240px] lg:w-[280px] translate-x-0 border-r bg-white px-2 pr-1 pt-10 transition-all duration-500 ease-in md:static",
+        { "-translate-x-[100%] md:translate-x-0": !showMobileMenu },
+      )}
+    >
       <p className="mb-3 px-6 font-Inter text-[14px] font-semibold text-black/50">
         Main Menu
       </p>

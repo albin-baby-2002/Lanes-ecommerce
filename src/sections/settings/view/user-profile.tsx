@@ -60,8 +60,8 @@ const UserProfileView = ({ userDetails }: { userDetails: TUserSelect }) => {
   return (
     <div className="h-[calc(100vh-75px)]">
       <div className="h-[calc(100vh-130px)] rounded-md bg-white">
-        <p className="px-8 pt-8 text-lg font-bold">Profile Details</p>
-        <div className="w-[60%] rounded-xl bg-white p-8">
+        <p className=" px-5  sm:px-8 pt-8 text-xl lg:text-lg font-bold">Profile Details</p>
+        <div className="lg:w-[60%] rounded-xl bg-white p-5 sm:p-8">
           <ProfileForm form={form} />
           <div className="mt-8">
             <Button onClick={form.handleSubmit(onSubmit, onError)}>
