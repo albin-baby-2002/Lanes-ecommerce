@@ -10,18 +10,21 @@ interface TProps {
   totalPageSize: number;
   total: number;
   products: TProductVariantWithDetails[];
+  toggleFilters: () => void;
 }
 
 const ProductsGrid: React.FC<TProps> = async ({
   total,
   totalPageSize,
   products,
+  toggleFilters,
 }) => {
   return (
-    <div className="mt-2">
+    <div className=" mt-2">
       <ProductGridHeader
         total={total}
         countOfProducts={products?.length || 0}
+        toggleFilters={toggleFilters}
       />
       {/* products  */}
 
@@ -43,7 +46,7 @@ const ProductsGrid: React.FC<TProps> = async ({
         </div>
       )}
 
-      <div className="my-6 grid grid-cols-4 justify-center gap-10">
+      <div className="my-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-center gap-10">
         {products.map((product, idx) => {
           return (
             <ProductCard
@@ -59,7 +62,7 @@ const ProductsGrid: React.FC<TProps> = async ({
         })}
       </div>
 
-      <ProductPagination totalPageSize={totalPageSize} />
+      {/* <ProductPagination totalPageSize={totalPageSize} /> */}
     </div>
   );
 };

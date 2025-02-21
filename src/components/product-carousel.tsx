@@ -39,7 +39,7 @@ const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
   }, [emblaApi, scrollTrigger, length]);
 
   return (
-    <div className="group relative">
+    <div className="group relative ">
       <div
         className={cn("overflow-hidden rounded-[8px]", className)}
         ref={emblaRef}

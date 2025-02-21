@@ -27,7 +27,7 @@ const UpdateAddressView = ({ addresses }: { addresses: TAddress[] }) => {
   const [addressToEditId, setAddressToEditId] = useState("");
 
   return (
-    <div className="lg:w-[60%] p-8 font-medium">
+    <div className=" lg:w-[90%] xl:w-[60%] p-8 font-medium">
       {addresses.map((address: TAddress, addressIndex: number) => (
         <div key={addressIndex} className="mb-8">
           <p className="pb-8 text-lg font-bold">Address {addressIndex + 1}</p>

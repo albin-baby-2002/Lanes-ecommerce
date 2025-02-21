@@ -46,6 +46,15 @@ const ResetPasswordForm = () => {
   return (
     <Form {...form}>
       <form className="grid w-full gap-4">
+
+        <CustomInputField
+          control={form.control}
+          fieldType={FormFieldType.INPUT}
+          name="current_password"
+          placeholder="enter current password"
+          label="Current Password"
+        />
+
         <CustomInputField
           control={form.control}
           fieldType={FormFieldType.INPUT}

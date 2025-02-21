@@ -45,7 +45,7 @@ export const Combobox: React.FC<TProps> = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn("w-[200px] justify-between",className)}
+          className={cn("lg:w-[200px] justify-between",className)}
         >
           {value
             ? options.find((option) => option.value === value)?.label
@@ -53,7 +53,7 @@ export const Combobox: React.FC<TProps> = ({
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className=" w-[150px] lg:w-[200px] ml-[18px] sm:ml-0 sm:mr-[18px]  p-0">
         <Command>
           {showSearch && (
             <CommandInput placeholder="Search option..." className="h-9" />

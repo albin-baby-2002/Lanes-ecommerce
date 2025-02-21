@@ -30,7 +30,7 @@ const ProductCard: React.FC<TProps> = ({
         router.push('/product-detail/'+variantId)
       }}
     >
-      {" "}
+
       <ProductCarousel images={images} />
       {/* product details */}
       <div className="my-3 grid text-sm">

@@ -1,5 +1,6 @@
 "use client";
 import { Combobox } from "@/components/ui/combobox";
+import { Filter, ListFilter } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
@@ -12,10 +13,12 @@ type TSortValues = (typeof SORT_OPTIONS)[number]["value"];
 
 const ProductGridHeader = ({
   total,
+  toggleFilters,
   countOfProducts,
 }: {
   total: number;
   countOfProducts: number;
+  toggleFilters: () => void;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -32,9 +35,9 @@ const ProductGridHeader = ({
 
   return (
     <div className="flex items-center justify-between">
-      <p>
+      <p className=" hidden md:block">
         Showing {startRange + 1} - {startRange + countOfProducts} of {total}{" "}
-        products
+        <span className="hidden lg:inline-block">products</span>
       </p>
       <div>
         <Combobox
@@ -43,6 +46,10 @@ const ProductGridHeader = ({
           value={searchParams.get("sortby") || ""}
           onChange={handleSortChange}
         />
+      </div>
+
+      <div onClick={toggleFilters} className=" cursor-pointer hover:text-black/60 mt-1 mr-1 md:hidden text-black/40 " >
+        <ListFilter size={24}/>
       </div>
     </div>
   );

@@ -47,10 +47,18 @@ type TSizes = (typeof SIZES)[number];
 type TStyles = (typeof STYLES)[number];
 //------------------------------------------------------------------------
 
-const SearchFilter = () => {
+const SearchFilter = ({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) => {
   const searchParams = useSearchParams();
 
   const router = useRouter();
+  const sizesParams = searchParams.get("sizes");
+  const stylesParams = searchParams.get("styles");
 
   const [sizes, setSizes] = useState<TSizes[]>([]);
   const [styles, setStyles] = useState<TStyles[]>([]);
@@ -119,12 +127,10 @@ const SearchFilter = () => {
   };
 
   useEffect(() => {
-    const sizes = searchParams.get("sizes");
-    setSizes((sizes?.split(",") as TSizes[]) || []);
+    setSizes((sizesParams?.split(",") as TSizes[]) || []);
 
-    const styles = searchParams.get("styles");
-    setStyles((styles?.split(",") as TStyles[]) || []);
-  }, []);
+    setStyles((stylesParams?.split(",") as TStyles[]) || []);
+  }, [sizesParams, stylesParams]);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
@@ -143,14 +149,31 @@ const SearchFilter = () => {
   }, [styles]);
 
   return (
-    <div>
-      <div className="h-max rounded-2xl border border-black/10 px-4 pt-4">
+    <div
+      className={cn(
+        "absolute left-0 top-0 z-50 md:z-0 block min-h-screen w-screen -translate-y-[100%] bg-white p-4 md:p-0 transition-all ease-in md:static md:w-auto md:translate-y-0",
+        {
+          "translate-y-0": open,
+        },
+      )}
+    >
+      <div className="h-max rounded-2xl border-black/10 px-4 pt-4 md:border">
         <div>
           {/* heading  */}
 
           <div className="flex items-center justify-between border-b border-black/10 pb-4">
             <p className="font-bold">Filters</p>
-            <FilterIcon />
+            <div className="hidden md:block">
+              <FilterIcon />
+            </div>
+            <div>
+              <X
+                onClick={onClose}
+                size={20}
+                strokeWidth={2.8}
+                className="cursor-pointer"
+              />
+            </div>
           </div>
 
           {/* select category */}
@@ -320,9 +343,14 @@ const SearchFilter = () => {
             </AccordionItem>
           </Accordion>
 
-          <div onClick={()=>{router.push("/search")}} className="  text-black/80 gap-3 cursor-pointer flex items-center justify-center  py-[20px] mb-1">
-            <p className=" font-bold ">Clear Filters</p>
-            <X  size={20} strokeWidth={2.8} className=" mt-[2px]" />
+          <div
+            onClick={() => {
+              router.push("/search");
+            }}
+            className="mb-1 flex cursor-pointer items-center justify-center gap-3 py-6 text-black/80 md:py-[20px]"
+          >
+            <p className="font-bold">Clear Filters</p>
+            <X size={20} strokeWidth={2.8} className="mt-[2px]" />
           </div>
         </div>
       </div>
