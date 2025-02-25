@@ -13,7 +13,7 @@ interface TProps {
   toggleFilters: () => void;
 }
 
-const ProductsGrid: React.FC<TProps> = async ({
+const ProductsGrid: React.FC<TProps> =  ({
   total,
   totalPageSize,
   products,
@@ -62,7 +62,7 @@ const ProductsGrid: React.FC<TProps> = async ({
         })}
       </div>
 
-      {/* <ProductPagination totalPageSize={totalPageSize} /> */}
+      <ProductPagination totalPageSize={totalPageSize} />
     </div>
   );
 };

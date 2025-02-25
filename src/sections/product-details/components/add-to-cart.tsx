@@ -20,7 +20,7 @@ const AddToCart = ({
 
   const router = useRouter();
 
-// local states
+  // local states
   const [cartItems, setCartItems] = useState<string[] | null>(null);
   const [count, setCount] = useState(1);
   const [submitting, setSubmitting] = useState(false);
@@ -72,7 +72,7 @@ const AddToCart = ({
 
       toast.success(resp.message);
 
-      router.refresh()
+      router.refresh();
 
       setSubmitting(false);
     } catch (error) {
@@ -83,21 +83,21 @@ const AddToCart = ({
   };
 
   return (
-    <div className="flex gap-5 pt-6 text-lg text-black/60">
+    <div className="flex max-w-full gap-5 pt-6 text-lg text-black/60">
       <div className="flex items-center gap-3 rounded-full bg-ceramic px-3">
         <Button onClick={decrement} size={"icon"} variant={"ghost"}>
-          <MinusIcon />
+          <MinusIcon className=" size-4"   />
         </Button>
 
         <p>{count}</p>
 
         <Button size={"icon"} variant={"ghost"} onClick={increment}>
-          <PlusIcon />
+          <PlusIcon className=" size-4" />
         </Button>
       </div>
 
       <Button
-        className="max-w-80 grow rounded-full py-[28px] text-lg"
+        className="grow  h-full rounded-full lg:py-[28px]  text-sm lg:text-lg lg:max-w-80"
         onClick={handleAddToCart}
       >
         {(submitting || pending) && (

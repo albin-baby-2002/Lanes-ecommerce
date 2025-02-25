@@ -28,7 +28,7 @@ const AllReviews = (props: { variantId: string; reviews: TReview[] }) => {
   };
 
   return (
-    <div className="mb-8 mt-16">
+    <div className="mb-8 mt-16 max-w-full w-full">
       <div className="flex items-center justify-between">
         <p className="text-2xl font-bold">
           All Reviews{" "}
@@ -65,7 +65,7 @@ const AllReviews = (props: { variantId: string; reviews: TReview[] }) => {
         ))}
 
       <>
-        <div className="mt-10 grid grid-cols-2 gap-8">
+        <div className="mt-10 grid  lg:grid-cols-2 gap-8">
           {props.reviews.map((review, idx) => {
             return <TestimonialCard review={review} key={idx} />;
           })}

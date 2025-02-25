@@ -10,7 +10,7 @@ const ProductViewById = async ({ id }: { id: string }) => {
   const reviews = await findAllReviewByProductVariantId(id);
 
   return (
-    <div>
+    <div className=" px-5 lg:px-0 w-screen">
       <BreadCrumb routes={["Home", "Search", "T-shirts"]} />
 
       <ProductImgInfo variantDetails={variantDetails} />

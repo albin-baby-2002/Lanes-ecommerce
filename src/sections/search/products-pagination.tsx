@@ -68,11 +68,11 @@ const ProductPagination = ({ totalPageSize }: { totalPageSize: number }) => {
   };
 
   return (
-    <Pagination className="my-10 w-full">
+    <Pagination className="my-10 w-[90%] lg:w-full">
       <PaginationContent className="w-full">
         <PaginationItem
           onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-          className="w-24 justify-center rounded-md bg-ceramic"
+          className="justify-center rounded-md bg-ceramic lg:w-24"
         >
           <PaginationPrevious href="#" />
         </PaginationItem>
@@ -80,7 +80,7 @@ const ProductPagination = ({ totalPageSize }: { totalPageSize: number }) => {
         <div className="flex flex-grow items-center justify-center gap-2">
           {pageButtonsToRender.map((val, idx) => {
             if (val === "intialEllipsis" || val === "endEllipsis")
-              return <PaginationEllipsis />;
+              return <PaginationEllipsis key={idx} />;
 
             return (
               <PaginationItem
@@ -97,8 +97,10 @@ const ProductPagination = ({ totalPageSize }: { totalPageSize: number }) => {
         </div>
 
         <PaginationItem
-          onClick={() => currentPage < totalPageSize  && handlePageChange(currentPage + 1)}
-          className="flex w-24 justify-center rounded-md bg-ceramic"
+          onClick={() =>
+            currentPage < totalPageSize && handlePageChange(currentPage + 1)
+          }
+          className="flex justify-center rounded-md bg-ceramic lg:w-24"
         >
           <PaginationNext href="#" />
         </PaginationItem>

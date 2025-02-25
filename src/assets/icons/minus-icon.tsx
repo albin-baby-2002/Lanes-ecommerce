@@ -1,10 +1,9 @@
 import React from "react";
 
-const MinusIcon = () => {
+const MinusIcon = ({ className }: { className?: string }) => {
   return (
     <svg
-      width="18"
-      height="4"
+      className={className}
       viewBox="0 0 20 4"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

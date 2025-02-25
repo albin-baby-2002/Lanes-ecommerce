@@ -91,7 +91,9 @@ const SearchFilter = ({
       return prev.filter((item) => item !== val);
     });
   };
+
   const handleFilterChange = (val: string, filter: TFilters) => {
+    console.log("handle filter change called");
     const params = new URLSearchParams(searchParams.toString());
 
     switch (filter) {
@@ -151,7 +153,7 @@ const SearchFilter = ({
   return (
     <div
       className={cn(
-        "absolute left-0 top-0 z-50 md:z-0 block min-h-screen w-screen -translate-y-[100%] bg-white p-4 md:p-0 transition-all ease-in md:static md:w-auto md:translate-y-0",
+        "absolute left-0 top-0 z-50 block min-h-screen w-screen -translate-y-[100%] bg-white p-4 transition-all duration-300 ease-in md:static md:z-0 md:w-auto md:translate-y-0 md:p-0",
         {
           "translate-y-0": open,
         },
@@ -166,12 +168,12 @@ const SearchFilter = ({
             <div className="hidden md:block">
               <FilterIcon />
             </div>
-            <div>
+            <div className="md:hidden">
               <X
                 onClick={onClose}
                 size={20}
                 strokeWidth={2.8}
-                className="cursor-pointer"
+                className="cursor-pointer md:hidden"
               />
             </div>
           </div>
@@ -350,7 +352,11 @@ const SearchFilter = ({
             className="mb-1 flex cursor-pointer items-center justify-center gap-3 py-6 text-black/80 md:py-[20px]"
           >
             <p className="font-bold">Clear Filters</p>
-            <X size={20} strokeWidth={2.8} className="mt-[2px]" />
+            <X
+              size={20}
+              strokeWidth={2.8}
+              className="mt-[2px] hidden md:flex"
+            />
           </div>
         </div>
       </div>
