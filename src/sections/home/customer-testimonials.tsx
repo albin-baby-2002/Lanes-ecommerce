@@ -87,14 +87,14 @@ const CustomerTestimonials = () => {
   ];
 
   return (
-    <div className="mb-14">
-      <h2 className="px-10 text-center lg:text-left font-integral_cf text-3xl font-bold tracking-wide">
+    <div className="mb-14  lg:px-10">
+      <h2 className="text-center lg:text-left font-integral_cf text-3xl font-bold tracking-wide">
         OUR HAPPY CUSTOMERS
       </h2>
 
       <div ref={containerRef} className="mt-10 overflow-hidden">
-        <ul className="flex animate-scroll gap-10">
-          {data.map((review, idx) => {
+        <ul className="flex  animate-scroll  gap-10">
+          {[...data,...data,...data].map((review, idx) => {
             return <TestimonialCard key={idx} review={review} />;
           })}
         </ul>

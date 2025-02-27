@@ -25,14 +25,14 @@ const OrderItems = ({ items }: { items: TOrderItem[] }) => {
         ))}
 
       {items && items.length > 0 && (
-        <div className="grid h-max w-full grid-cols-2 gap-6 rounded-3xl">
+        <div className="grid h-max w-full grid-cols-1 gap-6 rounded-3xl sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
           {items?.map((item, idx) => (
             <div
               key={idx}
-              className="flex w-full justify-between rounded-2xl border border-black/10 p-6"
+              className="flex w-full flex-col justify-between rounded-2xl border border-black/10 p-6 sm:flex-row"
             >
-              <div className="flex gap-4">
-                <div className="relative size-32">
+              <div className="flex w-full flex-col gap-4">
+                <div className="relative h-[200px] w-full">
                   <Image
                     className="h-36 rounded-2xl object-cover"
                     fill
@@ -41,40 +41,39 @@ const OrderItems = ({ items }: { items: TOrderItem[] }) => {
                   />
                 </div>
 
-                <div className="flex flex-col text-black/60">
+                <div className="flex w-full flex-col justify-between gap-[4px] sm:flex-row">
                   <div className="space-y-[6px]">
-                    <p className="text-xl font-bold text-black">{item.name}</p>
-                    <p className="text-[17px] font-medium tracking-wide">
+                    <p className="text-lg font-bold text-black xl:text-xl">
+                      {item.name}
+                    </p>
+                    <p className="tracking-wide lg:text-[17px]">
                       Quantity: {item.quantity}
                     </p>
-                    <p className="text-[17px] font-medium tracking-wide">
+                    <p className="tracking-wide lg:text-[17px]">
                       Total: Rs.{item.total}
                     </p>
 
-                    <p className="text-[17px] tracking-wide">
-                      Order Date :{" "}
-                      {new Date(item.orderDate).toLocaleDateString()}{" "}
+                    <p className="tracking-wide lg:text-[17px]">
+                      Date : {new Date(item.orderDate).toLocaleDateString()}{" "}
                     </p>
                   </div>
-                  <div></div>
-                </div>
-              </div>
 
-              <div className="flex flex-col items-end justify-between font-bold text-black">
-                <div className="flex gap-1 pt-[3.2px]">
-                  <span className=" uppercase">Shipping : </span>{" "}
-                  <span className="pt-px] uppercase">
-                    {" "}
-                    {item.shippingStatus?.toLowerCase()}
-                  </span>
-                </div>
+                  <div className="flex items-center  justify-between sm:flex-col  gap-3 pt-2 font-bold text-black sm:items-end sm:justify-between sm:pt-0 lg:items-end">
+                    <div className="flex gap-1 pt-[3.2px]">
+                      <span className="uppercase">
+                        {" "}
+                        {item.shippingStatus?.toLowerCase()}
+                      </span>
+                    </div>
 
-                <Button
-                  className="rounded-full bg-ceramic px-8 py-5"
-                  variant={"outline"}
-                >
-                  Cancel
-                </Button>
+                    <Button
+                      className="rounded-full bg-ceramic px-8 py-5"
+                      variant={"outline"}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

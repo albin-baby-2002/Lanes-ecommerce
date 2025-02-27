@@ -30,7 +30,7 @@ const AllReviews = (props: { variantId: string; reviews: TReview[] }) => {
   return (
     <div className="mb-8 mt-16 max-w-full w-full">
       <div className="flex items-center justify-between">
-        <p className="text-2xl font-bold">
+        <p className=" text-xl md:text-2xl font-bold">
           All Reviews{" "}
           <span className="text-base font-normal text-black/60">
             ( {props?.reviews?.length} )
@@ -40,9 +40,9 @@ const AllReviews = (props: { variantId: string; reviews: TReview[] }) => {
         <div className="space-x-3">
           <Button
             onClick={handleOpen}
-            className="rounded-full bg-ceramic px-8 py-6 text-black hover:text-white"
+            className="rounded-full bg-ceramic md:px-8 md:py-6 text-black hover:text-white"
           >
-            Write a Review
+            Write Review
           </Button>
         </div>
       </div>
@@ -65,7 +65,7 @@ const AllReviews = (props: { variantId: string; reviews: TReview[] }) => {
         ))}
 
       <>
-        <div className="mt-10 grid  lg:grid-cols-2 gap-8">
+        <div className="mt-10 grid  md:grid-cols-2 xl:grid-cols-3  gap-8">
           {props.reviews.map((review, idx) => {
             return <TestimonialCard review={review} key={idx} />;
           })}

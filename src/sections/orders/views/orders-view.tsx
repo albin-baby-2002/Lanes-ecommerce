@@ -8,9 +8,9 @@ const OrdersView = async () => {
   const orders: TOrderItem[] = (await getAllOrders()).data;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen px-5  lg:px-10">
       <BreadCrumb routes={["Home", "Cart"]} />
-      <p className="font-integral_cf text-3xl font-bold tracking-wide">
+      <p className="font-integral_cf text-xl lg:text-2xl xl:text-3xl font-bold tracking-wide">
         YOUR ORDERS
       </p>
       <div className="my-6 flex gap-6">

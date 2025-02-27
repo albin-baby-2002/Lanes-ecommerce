@@ -89,7 +89,7 @@ const AddToCart = ({
           <MinusIcon className=" size-4"   />
         </Button>
 
-        <p>{count}</p>
+        <p className=" text-base">{count}</p>
 
         <Button size={"icon"} variant={"ghost"} onClick={increment}>
           <PlusIcon className=" size-4" />
@@ -97,7 +97,7 @@ const AddToCart = ({
       </div>
 
       <Button
-        className="grow  h-full rounded-full lg:py-[28px]  text-sm lg:text-lg lg:max-w-80"
+        className="  sm:px-8   rounded-full lg:py-[24px] 2xl:py-[28px]  text-base xl:text-lg lg:max-w-80"
         onClick={handleAddToCart}
       >
         {(submitting || pending) && (

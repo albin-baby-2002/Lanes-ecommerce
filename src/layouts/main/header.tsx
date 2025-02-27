@@ -57,7 +57,7 @@ const Header = () => {
           />
         </Link>
 
-        <div className="hidden items-center gap-8 text-sm lg:flex">
+        <div className="hidden items-center  gap-6 xl:gap-8 text-sm lg:flex">
           {links.map((link, idx) => {
             return (
               <Link href={link.href} key={idx} className="hover:underline">
