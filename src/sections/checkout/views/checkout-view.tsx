@@ -116,15 +116,15 @@ const CheckoutView = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-90px)]">
+    <div className="min-h-[calc(100vh-90px)] px-5 lg:px-10">
       <BreadCrumb routes={["Home", "Cart", "CheckOut"]} />
 
       <p className="font-integral_cf text-2xl font-bold tracking-wide">
         CHECKOUT
       </p>
 
-      <div className="mt-8 flex gap-6">
-        <div className="basis-[70%]">
+      <div className="mt-8 flex flex-col lg:flex-row gap-6">
+        <div className=" basis-[65%] xl:basis-[70%]">
           <Accordion
             className="space-y-4"
             defaultValue="item-1"
@@ -141,7 +141,7 @@ const CheckoutView = () => {
             <AddNewAddress />
           </Accordion>
         </div>
-        <div className="h-max min-h-[552px] basis-[30%] border bg-ceramic p-6">
+        <div className="h-max min-h-[552px] basis-[35%] xl:basis-[30%] border bg-ceramic p-6">
           {loadingCartItems ? (
             <LoadingSkeleton />
           ) : (
@@ -162,8 +162,8 @@ const CheckoutView = () => {
 
                 {cartItems?.map((item, idx) => {
                   return (
-                    <div key={idx} className="flex">
-                      <div className="basis-3/4">
+                    <div key={idx} className="text-[15px] flex">
+                      <div className= "  basis-3/4">
                         <p>
                           {item.name} ( {item.quantity} )
                         </p>
@@ -176,7 +176,7 @@ const CheckoutView = () => {
                 })}
               </div>
 
-              <div className="mt-4 flex">
+              <div className="mt-4 flex text-[15px] sm:text-base">
                 <div className="basis-2/3">
                   <p> Total</p>
                 </div>
@@ -185,7 +185,7 @@ const CheckoutView = () => {
                 </div>
               </div>
 
-              <div className="pb-4k mt-4 flex text-red-600">
+              <div className="pb-4k mt-4 flex text-red-600 text-[15px] sm:text-base">
                 <div className="basis-2/3">
                   <p> Discount</p>
                 </div>
@@ -194,7 +194,7 @@ const CheckoutView = () => {
                 </div>
               </div>
 
-              <div className="mt-4 flex border-b border-black/20 pb-4">
+              <div className="mt-4 flex border-b border-black/20 pb-4 text-[15px] sm:text-base">
                 <div className="basis-2/3">
                   <p> Shipping</p>
                 </div>

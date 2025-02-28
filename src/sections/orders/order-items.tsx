@@ -25,7 +25,7 @@ const OrderItems = ({ items }: { items: TOrderItem[] }) => {
         ))}
 
       {items && items.length > 0 && (
-        <div className="grid h-max w-full grid-cols-1 gap-6 rounded-3xl sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
+        <div className="grid h-max w-full grid-cols-1 gap-6 rounded-3xl sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {items?.map((item, idx) => (
             <div
               key={idx}
@@ -41,25 +41,25 @@ const OrderItems = ({ items }: { items: TOrderItem[] }) => {
                   />
                 </div>
 
-                <div className="flex w-full flex-col justify-between gap-[4px] sm:flex-row">
+                <div className="flex w-full flex-col justify-between gap-[4px]">
                   <div className="space-y-[6px]">
-                    <p className="text-lg font-bold text-black xl:text-xl">
-                      {item.name}
+                    <p className="text-lg font-bold text-black">{item.name}</p>
+                    <p className="tracking-wide">
+                       Quantity :{" "}
+                      <span className="text-black/40">{item.quantity}</span>
                     </p>
-                    <p className="tracking-wide lg:text-[17px]">
-                      Quantity: {item.quantity}
-                    </p>
-                    <p className="tracking-wide lg:text-[17px]">
-                      Total: Rs.{item.total}
+                    <p className="tracking-wide">
+                      Total :
+                      <span className="text-black/40">Rs.{item.total}</span>
                     </p>
 
-                    <p className="tracking-wide lg:text-[17px]">
-                      Date : {new Date(item.orderDate).toLocaleDateString()}{" "}
+                    <p className="tracking-wide">
+                      Date : <span className=" text-black/40">{new Date(item.orderDate).toLocaleDateString()}</span>{" "}
                     </p>
                   </div>
 
-                  <div className="flex items-center  justify-between sm:flex-col  gap-3 pt-2 font-bold text-black sm:items-end sm:justify-between sm:pt-0 lg:items-end">
-                    <div className="flex gap-1 pt-[3.2px]">
+                  <div className="flex items-center justify-between gap-3 pt-2 font-bold text-black    sm:pt-0">
+                    <div className="flex gap-1 pt-[3.2px] text-sm">
                       <span className="uppercase">
                         {" "}
                         {item.shippingStatus?.toLowerCase()}

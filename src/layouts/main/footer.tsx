@@ -44,7 +44,7 @@ const Footer = () => {
       <div className="relative">
         <div className="absolute inset-0 top-2/4 -z-10 bg-ceramic"></div>
 
-        <div className="mx-auto flex w-[90%] flex-col justify-between gap-6 rounded-3xl bg-black px-5 py-12 md:flex-row md:px-10 lg:gap-0 lg:px-16">
+        <div className="mx-auto flex w-[90%] flex-col justify-between gap-6 rounded-3xl bg-black px-8 py-12 md:flex-row md:px-10 lg:gap-0 lg:px-16">
           <p className="basis-3/5 font-integral_cf text-[36px] text-white md:text-[30px] lg:text-[36px]">
             STAY UPTO DATE ABOUT OUR LATEST OFFERS
           </p>

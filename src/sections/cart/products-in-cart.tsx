@@ -87,10 +87,10 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
           {items?.map((item, idx) => (
             <div
               key={idx}
-              className="flex justify-between border-black/10 [&:not(:first-of-type)]:pt-8 [&:not(:last-of-type)]:border-b [&:not(:last-of-type)]:pb-8"
+              className="flex flex-col sm:flex-row justify-between border-black/10 [&:not(:first-of-type)]:pt-6 [&:not(:last-of-type)]:border-b [&:not(:last-of-type)]:pb-6"
             >
-              <div className="flex gap-4">
-                <div className="relative size-32 rounded-2xl">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="relative w-full h-48 sm:size-32 rounded-2xl">
                   <Image
                     className="h-32 rounded-2xl object-cover"
                     fill
@@ -115,18 +115,19 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
                 </div>
               </div>
 
-              <div className="flex flex-col items-end justify-between">
+              <div className="flex flex-row-reverse items-center pt-4 sm:pt-0  sm:flex-col sm:items-end justify-between mt-1 sm:mt-0">
                 <FaTrashAlt
                   onClick={() => {
                     handleRemoveFromCart(item.productVariantId);
                   }}
-                  size={20}
-                  className="mt-2 cursor-pointer text-red-500"
+                  size={18}
+                  className="sm:mt-2 cursor-pointer text-red-500"
                 />
 
-                <div className="flex items-center gap-3 rounded-full bg-ceramic px-3">
+                <div className="flex py-1.5  text-black/80 text-sm font-bold md:text-base items-center gap-3 rounded-full bg-ceramic px-4">
                   <Button
                     size={"icon"}
+                    className="size-6"
                     variant={"ghost"}
                     onClick={() => {
                       if (item.quantity <= 1) return;
@@ -138,13 +139,14 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
                       );
                     }}
                   >
-                    <FaMinus size={12} />
+                    <FaMinus size={11} />
                   </Button>
                   <p>{item.quantity}</p>
 
                   <Button
                     size={"icon"}
                     variant={"ghost"}
+                    className="size-6"
                     onClick={() => {
                       if (item.quantity >= 5) return;
 
@@ -155,7 +157,7 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
                       );
                     }}
                   >
-                    <FaPlus size={12} />
+                    <FaPlus size={11} />
                   </Button>
                 </div>
               </div>

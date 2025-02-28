@@ -25,14 +25,14 @@ const CartView = async () => {
   const cartItems = resp.data as unknown as TcartItems[];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen px-5 lg:px-10">
       <BreadCrumb routes={["Home", "Cart"]} />
 
       <p className="font-integral_cf text-3xl font-bold tracking-wide">
         YOUR CART
       </p>
 
-      <div className="my-6 flex gap-6">
+      <div className="my-6  flex-col md:flex-row flex gap-6">
         <ProductsInCart items={cartItems} />
         {cartItems && cartItems.length > 0 && (
           <OrderSummary items={cartItems} />
