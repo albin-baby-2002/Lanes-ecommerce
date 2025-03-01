@@ -19,9 +19,9 @@ import {
 } from "@/drizzle/schema";
 import { and, eq, inArray } from "drizzle-orm";
 
-// server action to create a new product on admin req
+//-----------------------------------------------------------------------------------------
 
-// todo - authenticate to protect server action
+// server action to create a new product on admin req
 
 export const createProductWithVariantsAndCategory = async (
   product: TProductData,
@@ -127,11 +127,12 @@ export const createProductWithVariantsAndCategory = async (
   }
 };
 
+//-----------------------------------------------------------------------------------------
+
 // server action to edit existing product and variants
 
 export const EditProduct = async (product: TProductData) => {
   const response = { success: false, message: "" };
-
 
   try {
     // Check admin
@@ -371,6 +372,8 @@ export const EditProduct = async (product: TProductData) => {
   }
 };
 
+//-----------------------------------------------------------------------------------------
+
 // product action to delete a complete product with its variants
 
 export const DeleteProduct = async (productId: string) => {
@@ -400,13 +403,13 @@ export const DeleteProduct = async (productId: string) => {
     // Perform transaction
     try {
       await db.transaction(async (tx) => {
-        const details = await getProductsWithVariants({productId});
+        const details = await getProductsWithVariants({ productId });
 
         const {
           productVariants: productVariantsInfo,
           categories,
           ...rest
-        }  = details[0]
+        } = details[0];
 
         // Delete categories
         const categoriesToDelete = categories.map((cat) => cat.categoryId);

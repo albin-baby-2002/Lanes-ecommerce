@@ -9,7 +9,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import Link from "next/link";
 import { IoSearch } from "react-icons/io5";
-import { PiShoppingCart, PiShoppingCartBold } from "react-icons/pi";
+import { PiShoppingCartBold } from "react-icons/pi";
 import { FaRegUserCircle } from "react-icons/fa";
 import HeaderContainer from "./components/header-container";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -20,7 +20,7 @@ import {
   LogoutLink,
   RegisterLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
-import { Menu, SearchIcon, X } from "lucide-react";
+import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 //--------------------------------------------------------------------------------
@@ -32,21 +32,29 @@ const links = [
   { href: "/search", label: "Top Selling" },
 ];
 
+//--------------------------------------------------------------------------------
+
 const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
-  const { permissions, user, isAuthenticated } = useKindeBrowserClient();
+  const { permissions, isAuthenticated } = useKindeBrowserClient();
 
   const isAdmin = permissions?.permissions?.includes("admin:permission");
 
   const toggleMobileMenu = () => {
     setShowMobileMenu(!showMobileMenu);
-  }
+  };
+
+//--------------------------------------------------------------------------------
 
   return (
     <HeaderContainer>
       <div className="flex grow items-center gap-3 lg:gap-10">
-        <GiHamburgerMenu className="lg:hidden cursor-pointer" onClick={toggleMobileMenu} size={28} />
+        <GiHamburgerMenu
+          className="cursor-pointer lg:hidden"
+          onClick={toggleMobileMenu}
+          size={28}
+        />
         <Link href={"/"}>
           <Image
             src="/logos/lanes.svg"
@@ -57,7 +65,7 @@ const Header = () => {
           />
         </Link>
 
-        <div className="hidden items-center  gap-6 xl:gap-8 text-sm lg:flex">
+        <div className="hidden items-center gap-6 text-sm lg:flex xl:gap-8">
           {links.map((link, idx) => {
             return (
               <Link href={link.href} key={idx} className="hover:underline">
@@ -93,11 +101,19 @@ const Header = () => {
 
       {/* mobile nav menu */}
 
-      <div className={cn(" transition-all ease-in  bg-transparent  duration-300 -translate-x-[100%] lg:hidden absolute left-0 top-0 z-50 min-h-screen w-screen ",{
-        "translate-x-0 bg-black/30":showMobileMenu,
-      })}>
+      <div
+        className={cn(
+          "absolute left-0 top-0 z-50 min-h-screen w-screen -translate-x-[100%] bg-transparent transition-all duration-300 ease-in lg:hidden",
+          {
+            "translate-x-0 bg-black/30": showMobileMenu,
+          },
+        )}
+      >
         <div className="relative min-h-screen max-w-[80%] bg-white p-3">
-          <div onClick={toggleMobileMenu} className="absolute -right-12 top-[38px] flex justify-end text-white shadow-2xl">
+          <div
+            onClick={toggleMobileMenu}
+            className="absolute -right-12 top-[38px] flex justify-end text-white shadow-2xl"
+          >
             <X size={30} strokeWidth={3} className="cursor-pointer" />
           </div>
 

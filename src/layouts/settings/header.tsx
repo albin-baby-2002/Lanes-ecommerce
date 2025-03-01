@@ -3,9 +3,16 @@ import { Grip } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { GiHamburgerMenu } from "react-icons/gi";
 
-const Header = ({ toggleMenu }: { toggleMenu: () => void }) => {
+//--------------------------------------------------------------------------------
+
+interface TProps {
+  toggleMenu: () => void;
+}
+
+//--------------------------------------------------------------------------------
+
+const Header = ({ toggleMenu }: TProps) => {
   return (
     <div className="flex items-center justify-between border-b px-4 py-4 md:px-8">
       <div className="flex items-center gap-3">

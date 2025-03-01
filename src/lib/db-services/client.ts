@@ -4,9 +4,12 @@ import { cartItems, productReviews, users } from "@/drizzle/schema";
 import { TProfileFormData } from "@/sections/settings/view/user-profile";
 import { and, eq } from "drizzle-orm";
 
+//-----------------------------------------------------------------
+
 export type TCartItem = typeof cartItems.$inferInsert;
 export type TReviewItem = typeof productReviews.$inferInsert;
 
+//-----------------------------------------------------------------
 export const insertCartItem = async (cartItemValue: TCartItem) => {
   return await db
     .insert(cartItems)
@@ -17,12 +20,16 @@ export const insertCartItem = async (cartItemValue: TCartItem) => {
     });
 };
 
+//-----------------------------------------------------------------
+
 export const findCartItemsIdByUser = async (userId: string) => {
   return await db
     .select({ productId: cartItems.productVariantId })
     .from(cartItems)
     .where(eq(cartItems.userId, userId));
 };
+
+//-----------------------------------------------------------------
 
 export const findReviewByUserIdAndVariantId = async (
   userId: string,
@@ -39,9 +46,13 @@ export const findReviewByUserIdAndVariantId = async (
     );
 };
 
+//-----------------------------------------------------------------
+
 export const insertNewReview = async (reviewData: TReviewItem) => {
   return await db.insert(productReviews).values(reviewData);
 };
+
+//-----------------------------------------------------------------
 
 export const updateUser = async ({
   userDetails,

@@ -10,11 +10,15 @@ import { deleteCategory } from "@/lib/actions/admin/category-actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
+//------------------------------------------------------------------------------------
+
 export type TCategory = typeof categories.$inferSelect;
 
 interface TProps {
   categoriesData: TCategory[];
 }
+
+//------------------------------------------------------------------------------------
 
 const CategoryActionModals: React.FC<TProps> = ({ categoriesData }) => {
   const router = useRouter();
@@ -90,7 +94,6 @@ const CategoryActionModals: React.FC<TProps> = ({ categoriesData }) => {
         primaryActionPending={pendingDeleting}
         color="error"
       />
-
     </>
   );
 };

@@ -13,6 +13,8 @@ import Tab from "./components/tab";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
+//--------------------------------------------------------------------------------
+
 const Tabs = [
   {
     label: "User Profile",
@@ -41,7 +43,11 @@ const Navigation = [
     icon: <TbClipboardCheck size={22} />,
   },
 ];
+
+//--------------------------------------------------------------------------------
+
 const SideBar = ({ showMobileMenu }: { showMobileMenu: boolean }) => {
+
   return (
     <div
       className={cn(

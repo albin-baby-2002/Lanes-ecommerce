@@ -100,6 +100,8 @@ export const createUser = async (user: TParsedUser) => {
   }
 };
 
+//-----------------------------------------------------------------------------------------
+
 // server action to edit user info on admin req
 
 export const EditUser = async (user: TParsedUser) => {
@@ -180,6 +182,8 @@ export const EditUser = async (user: TParsedUser) => {
     };
   }
 };
+
+//-----------------------------------------------------------------------------------------
 
 // server action to delete a user
 

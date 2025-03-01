@@ -1,9 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import AddOrEditCategoryModal from "./add-edit-category-modal";
-import { FaSearch } from "react-icons/fa";
 import { exportToExcel } from "@/lib/helpers/export-to-excel";
 import DashboardSearch from "@/components/admin/search";
 

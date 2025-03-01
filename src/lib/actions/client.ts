@@ -39,9 +39,13 @@ import { db } from "@/drizzle/db";
 import { eq, inArray, sql } from "drizzle-orm";
 import { TProfileFormData } from "@/sections/settings/view/user-profile";
 
+//--------------------------------------------
+
 export type TUserSelect = typeof users.$inferSelect;
 
 export type TOrderItemsInsert = typeof orderItems.$inferInsert;
+
+//--------------------------------------------
 
 export const addToCart = async (productVariantId: string, quantity: number) => {
   const response = { success: false, message: "" };
@@ -94,6 +98,8 @@ export const addToCart = async (productVariantId: string, quantity: number) => {
   }
 };
 
+//--------------------------------------------
+
 interface TDataResponse {
   success: boolean;
   message: string;
@@ -136,6 +142,8 @@ export const getCartItemsId = async () => {
     return response;
   }
 };
+
+//--------------------------------------------
 
 export const addReview = async (
   productVariantId: string,
@@ -207,6 +215,8 @@ export const addReview = async (
   }
 };
 
+//--------------------------------------------
+
 export const getUserCartData = async () => {
   const response: TDataResponse = { success: false, message: "", data: null };
 
@@ -244,6 +254,8 @@ export const getUserCartData = async () => {
     return response;
   }
 };
+
+//--------------------------------------------
 
 export const deleteFromCart = async (productVariantId: string) => {
   const response = { success: false, message: "" };
@@ -295,6 +307,8 @@ export const deleteFromCart = async (productVariantId: string) => {
   }
 };
 
+//--------------------------------------------
+
 export const addNewBillingAddress = async (
   address: TBillingAddressFormData,
 ) => {
@@ -332,6 +346,8 @@ export const addNewBillingAddress = async (
   }
 };
 
+//--------------------------------------------
+
 export const getAllUserAddress = async () => {
   const response: TDataResponse = { success: false, message: "", data: null };
 
@@ -366,6 +382,8 @@ export const getAllUserAddress = async () => {
     return response;
   }
 };
+
+//--------------------------------------------
 
 export const placeOrder = async (addressId: string) => {
   const response = { success: false, message: "" };
@@ -521,6 +539,8 @@ export const getAllOrders = async () => {
   }
 };
 
+//--------------------------------------------
+
 export const cancelOrder = async (orderItemId: string) => {
   const response: TDataResponse = { success: false, message: "", data: null };
 
@@ -558,6 +578,8 @@ export const cancelOrder = async (orderItemId: string) => {
   }
 };
 
+//--------------------------------------------
+
 export const getUserProfileInfo = async () => {
   const response: TDataResponse = { success: false, message: "", data: null };
 
@@ -590,6 +612,8 @@ export const getUserProfileInfo = async () => {
     return response;
   }
 };
+
+//--------------------------------------------
 
 export const updateUserProfileInfo = async (
   updatedUserDetails: TProfileFormData,
@@ -629,6 +653,8 @@ export const updateUserProfileInfo = async (
     return response;
   }
 };
+
+//--------------------------------------------
 
 export const editBillingAddress = async ({
   address,
@@ -673,6 +699,8 @@ export const editBillingAddress = async ({
     };
   }
 };
+
+//--------------------------------------------
 
 export const resetPassword = async (newPassword: string) => {
   const response: TDataResponse = { success: false, message: "", data: null };

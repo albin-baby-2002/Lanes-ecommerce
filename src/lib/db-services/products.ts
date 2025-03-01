@@ -1,5 +1,5 @@
 "use server";
-import { TProductSearchParams } from "@/app/search/page";
+import { TProductSearchParams } from "@/app/(user-pages)/search/page";
 import { db } from "@/drizzle/db";
 import {
   cartItems,
@@ -13,6 +13,8 @@ import {
   users,
 } from "@/drizzle/schema";
 import { and, eq, ne, sql } from "drizzle-orm";
+
+//---------------------------------------------------------------------------------------
 
 type TProduct = typeof products.$inferInsert;
 
@@ -68,6 +70,8 @@ export interface TProductVariantData {
 
 export type TshippingStatus = (typeof shippingStatus.enumValues)[number];
 
+//---------------------------------------------------------------------------------------
+
 export const getAllProducts = async () => {
   return await db.select().from(products);
 };
@@ -88,6 +92,12 @@ export const insertProduct = async (product: TProduct) => {
   return await db.insert(products).values(product);
 };
 
+export const deleteProductById = async (id: string) => {
+  return await db.delete(products).where(eq(products.productId, id));
+};
+
+//---------------------------------------------------------------------------------------
+
 export const updateProductById = async (id: string, product: TProduct) => {
   return await db
     .update(products)
@@ -95,9 +105,7 @@ export const updateProductById = async (id: string, product: TProduct) => {
     .where(eq(products.productId, id));
 };
 
-export const deleteProductById = async (id: string) => {
-  return await db.delete(products).where(eq(products.productId, id));
-};
+//---------------------------------------------------------------------------------------
 
 export const getProductsWithVariants = async ({
   productId,
@@ -442,6 +450,8 @@ export const getProductVariantDetails = async (variantId: string) => {
   return variantDetails[0];
 };
 
+//---------------------------------------------------------------------------------------
+
 export const getProductVariantReviewInfo = async (productVariantId: string) => {
   return await db
     .select({
@@ -451,6 +461,8 @@ export const getProductVariantReviewInfo = async (productVariantId: string) => {
     .from(productVariants)
     .where(eq(productVariants.productVariantId, productVariantId));
 };
+
+//---------------------------------------------------------------------------------------
 
 export const updateProductVariantAvgReview = async (
   productVariantId: string,
@@ -462,6 +474,8 @@ export const updateProductVariantAvgReview = async (
     .set({ avgRating, ratingsCount })
     .where(eq(productVariants.productVariantId, productVariantId));
 };
+
+//---------------------------------------------------------------------------------------
 
 export const findAllReviewByProductVariantId = async (
   productVariantId: string,
@@ -479,6 +493,8 @@ export const findAllReviewByProductVariantId = async (
     .fullJoin(users, eq(users.userId, productReviews.userId))
     .where(eq(productReviews.productVariantId, productVariantId));
 };
+
+//---------------------------------------------------------------------------------------
 
 export const findAllUserCartItems = async (userId: string) => {
   return await db
@@ -530,6 +546,8 @@ export const findAllUserCartItems = async (userId: string) => {
     );
 };
 
+//---------------------------------------------------------------------------------------
+
 export const deleteCartItem = async ({
   productVariantId,
   userId,
@@ -546,6 +564,8 @@ export const deleteCartItem = async ({
       ),
     );
 };
+
+//---------------------------------------------------------------------------------------
 
 export interface TOrderItem {
   orderItemId: string;
@@ -610,6 +630,8 @@ export const findAllOrderItems = async (userId: string) => {
     );
 };
 
+//---------------------------------------------------------------------------------------
+
 export const updateOrderItemShippingStatus = async ({
   orderItemId,
   shippingStatus,
@@ -622,6 +644,8 @@ export const updateOrderItemShippingStatus = async ({
     .set({ shippingStatus })
     .where(eq(orderItems.orderItemId, orderItemId));
 };
+
+//---------------------------------------------------------------------------------------
 
 export const getTopSellingProducts = async () => {
   const productVariants = await db.execute(

@@ -4,9 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
+//--------------------------------------------------------------------------------
+
 interface TProps {
   tab: { label: string; path: string; icon: React.JSX.Element };
 }
+
+//--------------------------------------------------------------------------------
+
 const Tab: React.FC<TProps> = ({ tab }) => {
   const path = usePathname();
   return (

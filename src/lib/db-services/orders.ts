@@ -3,6 +3,8 @@ import { orderItems, productVariants } from "@/drizzle/schema";
 import { TOrderItemForm } from "@/sections/admin/orders/edit-order-modal";
 import { eq, ilike, sql } from "drizzle-orm";
 
+//-----------------------------------------------------------------
+
 export interface TOrderItemsSelect extends Record<string, unknown> {
   orderItemId: string;
   orderItemInternalId: number;
@@ -26,6 +28,8 @@ export interface TOrderItemsSelect extends Record<string, unknown> {
     | "CANCELLED";
   productVariantInternalId: number | null;
 }
+
+//-----------------------------------------------------------------
 
 export const findAllOrdersByAdmin = async (search?: string) => {
   return await db
@@ -53,6 +57,9 @@ export const findAllOrdersByAdmin = async (search?: string) => {
       ),
     );
 };
+
+//-----------------------------------------------------------------
+
 export const updateOrderItemById = async ({
   orderItemId,
   price,

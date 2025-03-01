@@ -14,8 +14,6 @@ export type TParsedUser = z.infer<typeof UserProfileSchema>;
 
 //-----------------------------------------------------------------------------------------
 
-// fn to validate category data using zod
-
 export const parseCatgoryData = async (category: TCategoryData) => {
   const result = CategorySchema.safeParse(category);
 
@@ -47,8 +45,6 @@ export const parseCatgoryData = async (category: TCategoryData) => {
 
 //-----------------------------------------------------------------------------------------
 
-//fn to validate product data using zod schema
-
 export const parseProductData = async (product: TProductData) => {
   const result = ProductSchema.safeParse(product);
 
@@ -78,10 +74,9 @@ export const parseProductData = async (product: TProductData) => {
   return parsedProduct;
 };
 
-// fn to validate user data using zod
+//-----------------------------------------------------------------------------------------
 
-export const parseOrderData = async (order :TOrderItemForm) => {
-
+export const parseOrderData = async (order: TOrderItemForm) => {
   const result = orderItemSchema.safeParse(order);
 
   // check for errors after parsing and give error resp
@@ -109,6 +104,8 @@ export const parseOrderData = async (order :TOrderItemForm) => {
 
   return parsedUser;
 };
+
+//-----------------------------------------------------------------------------------------
 
 export const parseUserData = async (user: TParsedUser) => {
   // validate the data using zod

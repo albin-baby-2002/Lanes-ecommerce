@@ -1,7 +1,8 @@
 import { db } from "@/drizzle/db";
 import { users } from "@/drizzle/schema";
 import { eq, like, or, sql } from "drizzle-orm";
-import { TParsedUser } from "../helpers/data-validation";
+
+//---------------------------------------------------------------------------------------
 
 type TUser = typeof users.$inferInsert;
 type TUserUpdatePaylod = {
@@ -11,6 +12,8 @@ type TUserUpdatePaylod = {
   phone: string;
   birthDate: string;
 };
+
+//---------------------------------------------------------------------------------------
 
 export const findUserByKindeId = async (kindeId: string) => {
   return await db.select().from(users).where(eq(users.kindeId, kindeId));

@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+//-----------------------------------------------------------------
+
 const datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d\d$/;
 
 export const PaymentStatusEnum = z.enum([
@@ -8,7 +10,7 @@ export const PaymentStatusEnum = z.enum([
   "FAILED",
   "REFUNDED",
   "CANCELLED",
-  "CASH_ON_DELIVERY"
+  "CASH_ON_DELIVERY",
 ]);
 
 export const ShippingStatusEnum = z.enum([
@@ -16,8 +18,10 @@ export const ShippingStatusEnum = z.enum([
   "SHIPPED",
   "DELIVERED",
   "RETURNED",
-  "CANCELLED"
+  "CANCELLED",
 ]);
+
+//-----------------------------------------------------------------
 
 export const BillingAddressSchema = z.object({
   fullName: z.string().min(2, {
@@ -46,6 +50,8 @@ export const BillingAddressSchema = z.object({
     ),
 });
 
+//-----------------------------------------------------------------
+
 export const UserProfileSchema = z.object({
   firstName: z.string().min(2, {
     message: "first_name should be alteast 2 char long",
@@ -68,6 +74,8 @@ export const UserProfileSchema = z.object({
     ),
 });
 
+//-----------------------------------------------------------------
+
 export const ResetPasswordSchema = z
   .object({
     new_password: z.string().min(8, {
@@ -79,6 +87,8 @@ export const ResetPasswordSchema = z
     message: "New password and confirm password must match",
     path: ["confirm_new_password"],
   });
+
+//-----------------------------------------------------------------
 
 export const CategorySchema = z.object({
   name: z.string().min(3, {
@@ -100,6 +110,8 @@ export const CategorySchema = z.object({
   offerDiscount: z.number().default(0),
 });
 
+//-----------------------------------------------------------------
+
 export const ProductVariantSchema = z.object({
   productVariantId: z.string().optional(),
   color: z.string().min(3, {
@@ -118,6 +130,8 @@ export const ProductVariantSchema = z.object({
     }),
 });
 
+//-----------------------------------------------------------------
+
 export const ProductSchema = z.object({
   productId: z.string().optional(),
   name: z.string().min(4, {
@@ -135,7 +149,7 @@ export const ProductSchema = z.object({
   productVariants: z.array(ProductVariantSchema),
 });
 
-
+//-----------------------------------------------------------------
 
 export const orderItemSchema = z.object({
   orderItemId: z.string(),
@@ -147,5 +161,5 @@ export const orderItemSchema = z.object({
   quantity: z.number(),
   paymentStatus: PaymentStatusEnum,
   shippingStatus: ShippingStatusEnum,
-  productVariantInternalId: z.number().nullable()
+  productVariantInternalId: z.number().nullable(),
 });
