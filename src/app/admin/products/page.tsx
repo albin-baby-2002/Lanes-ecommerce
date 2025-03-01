@@ -1,12 +1,12 @@
 import ProductsView from "@/sections/admin/products/views/products-view";
 
-const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+interface TProps {
+  searchParams: {
+    search?: string;
+  };
+}
 
-const ProductsPage = async ({
-  searchParams,
-}: {
-  searchParams: { search: string };
-}) => {
+const ProductsPage = async ({ searchParams }: TProps) => {
   return <ProductsView search={searchParams.search || ""} />;
 };
 

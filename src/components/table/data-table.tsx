@@ -17,17 +17,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+//--------------------------------------------------
+
 interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
   data: TData[];
   columnVisibility?: VisibilityState;
 }
 
+//--------------------------------------------------
+
 export function DataTable<TData>({
   columns,
   data,
   columnVisibility,
 }: DataTableProps<TData>) {
+  // hook
+
   const table = useReactTable({
     data,
     columns,
@@ -37,10 +43,12 @@ export function DataTable<TData>({
     },
   });
 
+  //--------------------------------------------------
+
   return (
-    <div className="h-full rounded-md overflow-y-auto border">
+    <div className="h-full overflow-y-auto rounded-md border">
       <Table style={{ tableLayout: "fixed" }} className="max-h-full bg-white">
-        <TableHeader className=" sticky top-0 border-b z-10  bg-white ">
+        <TableHeader className="sticky top-0 z-10 border-b bg-white">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -61,7 +69,7 @@ export function DataTable<TData>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody >
+        <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow

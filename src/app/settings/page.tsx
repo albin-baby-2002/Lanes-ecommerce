@@ -4,7 +4,7 @@ import React from "react";
 const Settings = () => {
   return (
     <div>
-      <p> User id not found</p>
+      <p> Page not found </p>
     </div>
   );
 };

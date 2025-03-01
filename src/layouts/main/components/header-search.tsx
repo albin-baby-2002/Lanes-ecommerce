@@ -5,11 +5,16 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { KeyboardEvent, useState } from "react";
 import { IoSearch } from "react-icons/io5";
 
-const Search = ({className}:{className?:string}) => {
+//----------------------------------------------------------------------------------
+
+const Search = ({ className }: { className?: string }) => {
+  // hooks
+
   const router = useRouter();
   const searchParams = useSearchParams();
-
   const [search, setSearch] = useState(searchParams.get("name") || "");
+
+  // functions
 
   const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     const isEnter = e.key === "Enter";
@@ -20,8 +25,15 @@ const Search = ({className}:{className?:string}) => {
     if (isEnter) router.push("/search?" + params.toString());
   };
 
+  //----------------------------------------------------------------------------------
+
   return (
-    <div className={cn(" flex max-w-[600px] grow items-center gap-4 rounded-3xl bg-slate-200 px-4 py-2.5",className)}>
+    <div
+      className={cn(
+        "flex max-w-[600px] grow items-center gap-4 rounded-3xl bg-slate-200 px-4 py-2.5",
+        className,
+      )}
+    >
       <IoSearch />
 
       <input

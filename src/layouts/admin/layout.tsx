@@ -10,6 +10,8 @@ import { IoExitSharp } from "react-icons/io5";
 import { MdSpaceDashboard } from "react-icons/md";
 import { PiShoppingBagFill } from "react-icons/pi";
 
+//----------------------------------------------------------------------------------
+
 interface TProps {
   children: React.ReactNode;
 }
@@ -19,6 +21,8 @@ interface TLink {
   icon: React.JSX.Element;
   path: string;
 }
+
+//----------------------------------------------------------------------------------
 
 const Links = [
   {
@@ -46,7 +50,6 @@ const Links = [
     icon: <FaCartShopping />,
     path: "/admin/orders",
   },
-
 ];
 
 const Navigation = [
@@ -71,18 +74,23 @@ const Navigation = [
     path: "/",
   },
 ];
+
+//----------------------------------------------------------------------------------
+
 const AdminLayout: React.FC<TProps> = ({ children }) => {
   return (
     <div className="flex h-screen max-h-screen overflow-hidden">
-      <div className=" bg-yellow-200 md:bg-white lg:min-w-[300px] border-r">
+      <div className="border-r bg-yellow-200 md:bg-white lg:min-w-[300px]">
         <div className="px-6 py-8">
-          <Image
-            src="/logos/lanes.svg"
-            height={1000}
-            width={1000}
-            alt="patient"
-            className="h-[25px] w-fit"
-          />
+          <Link href={"/"}>
+            <Image
+              src="/logos/lanes.svg"
+              height={1000}
+              width={1000}
+              alt="patient"
+              className="h-[25px] w-fit"
+            />
+          </Link>
         </div>
 
         {/* navigations */}
@@ -105,7 +113,7 @@ const AdminLayout: React.FC<TProps> = ({ children }) => {
         </div>
       </div>
 
-      <div className="grow max-h-screen overflow-auto">{children}</div>
+      <div className="max-h-screen grow overflow-auto">{children}</div>
     </div>
   );
 };

@@ -2,11 +2,19 @@ import { IoMdCheckmark } from "react-icons/io";
 import StarRating from "./star-rating";
 import { TReview } from "@/sections/product-details/all-reviews";
 
-const TestimonialCard = ({ review }: { review: TReview }) => {
+//----------------------------------------------------------
+
+type TProps = {
+  review: TReview;
+};
+
+//----------------------------------------------------------
+
+const TestimonialCard = ({ review }: TProps) => {
   return (
-    <div className="   lg:min-h-[220px] min-w-[400px] flex flex-col justify-between rounded-xl border border-black/10 p-8">
-      <div className=" mb-2 space-y-4">
-        <div className="flex items-center gap-3 ">
+    <div className="lg:min-h-[220px] min-w-[400px] flex flex-col justify-between rounded-xl border border-black/10 p-8">
+      <div className="mb-2 space-y-4">
+        <div className="flex items-center gap-3">
           <p className="text-xl font-bold">
             {review.firstName + " " + review.lastName}
           </p>

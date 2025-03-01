@@ -19,7 +19,6 @@ const config: Config = {
       fontFamily: {
         satoshi: ["var(--font-satoshi)"],
         integral_cf: ["var(--font-integral-cf)"],
-        Sen: ["var(--sen)"],
         Inter: ["var(--Inter)"],
       },
       backgroundImage: {

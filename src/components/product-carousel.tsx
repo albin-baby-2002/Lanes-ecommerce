@@ -1,20 +1,30 @@
 "use client";
 
+//--------------------------------------------------
+
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
+//--------------------------------------------------
+
 interface TProps {
   className?: string;
   images: string[];
 }
 
+//--------------------------------------------------
+
 const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
+  // states
+
   const [emblaRef, emblaApi] = useEmblaCarousel();
   const [scrollTrigger, setScrollTrigger] = useState(0);
   const length = images?.length;
+
+  // functions
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) {
@@ -30,6 +40,8 @@ const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
     }
   }, [emblaApi]);
 
+  // booleans
+
   const canScrollPrev = useMemo(() => {
     return scrollTrigger <= length && emblaApi?.canScrollPrev();
   }, [emblaApi, scrollTrigger, length]);
@@ -38,8 +50,10 @@ const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
     return scrollTrigger <= length && emblaApi?.canScrollNext();
   }, [emblaApi, scrollTrigger, length]);
 
+  //--------------------------------------------------
+
   return (
-    <div className="group relative ">
+    <div className="group relative">
       <div
         className={cn("overflow-hidden rounded-[8px]", className)}
         ref={emblaRef}
@@ -56,7 +70,7 @@ const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
                   alt={"image of product"}
                   width={1000}
                   height={"1000"}
-                  className=" h-[240px] object-cover"
+                  className="h-[240px] object-cover"
                 />
               </div>
             );

@@ -2,14 +2,11 @@ import { findUserByKindeId, insertUser } from "@/lib/db-services/users";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { NextResponse } from "next/server";
 
+//--------------------------------------------------
+
 export async function GET() {
   const { getUser } = getKindeServerSession();
   const kindeUser = await getUser();
-  const logoutUrl = `https://albin.kinde.com/logout?redirect='http://127.0.0.1:3000/'`;
-
-  if (!kindeUser || kindeUser == null || !kindeUser.id) {
-    return NextResponse.redirect(logoutUrl);
-  }
 
   try {
     let dbUser = await findUserByKindeId(kindeUser.id);
@@ -25,7 +22,7 @@ export async function GET() {
       await insertUser(newUser);
     }
   } catch (error) {
-    console.log("error \n", error);
+    console.log("error", error);
   }
 
   return NextResponse.redirect(process.env.KINDE_SITE_URL!);

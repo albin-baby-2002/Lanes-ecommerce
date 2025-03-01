@@ -14,7 +14,7 @@ import { Button } from "../ui/button";
 import { PiTrashBold } from "react-icons/pi";
 import { cn } from "@/lib/utils";
 
-//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------
 
 interface TProps {
   type: "add" | "edit";
@@ -44,7 +44,7 @@ type TProductVariantField = UseFieldArrayReturn<
   "id"
 >;
 
-//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------
 
 const AddEditProductForm: React.FC<TProps> = ({
   type,
@@ -53,13 +53,9 @@ const AddEditProductForm: React.FC<TProps> = ({
   currentPage,
   setCurrentPage,
 }) => {
-  // redux states and hooks
-
   const { categoryOptions } = useSelector((state: RootState) => state.products);
 
-  const HandleVariant = (type: "add" | "delete") => {
-    // add a new variant
-
+  const handleVariant = (type: "add" | "delete") => {
     if (type === "add") {
       return productVariantFields.append({
         color: "",
@@ -77,87 +73,24 @@ const AddEditProductForm: React.FC<TProps> = ({
     }
   };
 
-  //----------------------------------------------------------------------------------------------------
-
   return (
     <Form {...form}>
       <form className="grid w-full gap-4">
         {currentPage === 0 && (
-          <>
-            <CustomInputField
-              control={form.control}
-              fieldType={FormFieldType.INPUT}
-              name="name"
-              placeholder="Enter Product Name"
-              label="Product Name"
-            />
-
-            <CustomInputField
-              control={form.control}
-              fieldType={FormFieldType.TEXTAREA}
-              name="description"
-              placeholder="Type Your Description"
-              label="Description"
-            />
-
-            <div className="flex gap-3">
-              <CustomInputField<string>
-                control={form.control}
-                fieldType={FormFieldType.MULTI_SELECT}
-                options={categoryOptions}
-                name="categories"
-                placeholder="Select Category"
-                label="Categories"
-              />
-
-              <CustomInputField
-                control={form.control}
-                fieldType={FormFieldType.SELECT}
-                name="onDiscount"
-                placeholder="Select"
-                label="On Discount"
-                dataType="boolean"
-              >
-                {ON_DISCOUNT_OPTIONS.map((item) => (
-                  <SelectItem
-                    key={item.label}
-                    value={item.Value}
-                    className="cursor-pointer hover:bg-slate-600"
-                  >
-                    <div className="flex items-center gap-2">
-                      <p>{item.label}</p>
-                    </div>
-                  </SelectItem>
-                ))}
-              </CustomInputField>
-            </div>
-
-            <CustomInputField
-              control={form.control}
-              fieldType={FormFieldType.INPUT}
-              name="discount"
-              placeholder="10"
-              dataType="number"
-              label="Discount (%)"
-            />
-          </>
+          <ProductDetailsForm form={form} categoryOptions={categoryOptions!} />
         )}
 
-        {/*  product variant form  */}
-
         {currentPage >= 1 &&
-          productVariantFields?.fields?.map((val, idx) => {
-            return (
-              <ProductVariant
-                key={idx}
-                type={type}
-                HandleVariant={HandleVariant}
-                form={form}
-                currentPage={idx + 1}
-                className={cn({ hidden: idx !== currentPage - 1 })}
-              />
-            );
-          })}
+          productVariantFields?.fields?.map((val, idx) => (
+            <ProductVariant
+              key={idx}
+              type={type}
+              handleVariant={handleVariant}
+              form={form}
+              currentPage={idx + 1}
+              className={cn({ hidden: idx !== currentPage - 1 })}
+            />
+          ))}
       </form>
     </Form>
   );
@@ -165,7 +98,78 @@ const AddEditProductForm: React.FC<TProps> = ({
 
 export default AddEditProductForm;
 
-//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------
+
+interface ProductDetailsFormProps {
+  form: UseFormReturn<any>;
+  categoryOptions: { label: string; value: string }[];
+}
+
+const ProductDetailsForm: React.FC<ProductDetailsFormProps> = ({
+  form,
+  categoryOptions,
+}) => (
+  <>
+    <CustomInputField
+      control={form.control}
+      fieldType={FormFieldType.INPUT}
+      name="name"
+      placeholder="Enter Product Name"
+      label="Product Name"
+    />
+
+    <CustomInputField
+      control={form.control}
+      fieldType={FormFieldType.TEXTAREA}
+      name="description"
+      placeholder="Type Your Description"
+      label="Description"
+    />
+
+    <div className="flex gap-3">
+      <CustomInputField<string>
+        control={form.control}
+        fieldType={FormFieldType.MULTI_SELECT}
+        options={categoryOptions}
+        name="categories"
+        placeholder="Select Category"
+        label="Categories"
+      />
+
+      <CustomInputField
+        control={form.control}
+        fieldType={FormFieldType.SELECT}
+        name="onDiscount"
+        placeholder="Select"
+        label="On Discount"
+        dataType="boolean"
+      >
+        {ON_DISCOUNT_OPTIONS.map((item) => (
+          <SelectItem
+            key={item.label}
+            value={item.Value}
+            className="cursor-pointer hover:bg-slate-600"
+          >
+            <div className="flex items-center gap-2">
+              <p>{item.label}</p>
+            </div>
+          </SelectItem>
+        ))}
+      </CustomInputField>
+    </div>
+
+    <CustomInputField
+      control={form.control}
+      fieldType={FormFieldType.INPUT}
+      name="discount"
+      placeholder="10"
+      dataType="number"
+      label="Discount (%)"
+    />
+  </>
+);
+
+//----------------------------------------------------------------------
 
 interface HandleImageParams {
   operationType: "add" | "delete";
@@ -176,39 +180,30 @@ interface HandleImageParams {
 interface TProductVariantProps {
   currentPage: number;
   type: "add" | "edit";
-  HandleVariant: (type: "add" | "delete") => void;
+  handleVariant: (type: "add" | "delete") => void;
   form: UseFormReturn<TProductData>;
   className?: string;
 }
 
-//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------
 
 const ProductVariant = ({
   currentPage,
   form,
-  HandleVariant,
+  handleVariant,
   className,
   type,
 }: TProductVariantProps) => {
-  // react hooks
-
   const values = form.watch();
-
   const dispatch = useDispatch<AppDispatch>();
-
   const { showAddProduct, showEditProduct } = useSelector(
     (state: RootState) => state.products,
   );
 
   const productVariants = values.productVariants;
-
   const imageError =
     form?.formState?.errors?.productVariants?.[currentPage - 1]
       ?.productVariantImages?.message;
-
-  //----------------------------------------------------------------------------------------------------
-
-  // fn to handle image add or delete
 
   const handleImage = async ({
     operationType,
@@ -217,13 +212,9 @@ const ProductVariant = ({
   }: HandleImageParams) => {
     try {
       const currentVariant = productVariants[currentPage - 1];
-
       if (!currentVariant) return;
 
-      // Try direct assignment instead of callback
-
       const currentVariants = form.getValues("productVariants");
-
       const updatedVariants = currentVariants.map((variant, idx) => {
         if (idx !== currentPage - 1) return variant;
 
@@ -249,14 +240,11 @@ const ProductVariant = ({
         };
       });
 
-      // Try direct assignment
       form.setValue("productVariants", updatedVariants);
     } catch (error) {
       console.log(error, "error loading img");
     }
   };
-
-  //----------------------------------------------------------------------------------------------------
 
   return (
     <div className={cn("flex flex-col gap-3", className)}>
@@ -268,11 +256,11 @@ const ProductVariant = ({
 
         {productVariants?.length === currentPage && (
           <div className="flex gap-3">
-            <IconButton onClick={() => HandleVariant("add")}>
+            <IconButton onClick={() => handleVariant("add")}>
               <MdAdd size={"22px"} className="leading-[0]" />
             </IconButton>
             {currentPage !== 1 && (
-              <IconButton onClick={() => HandleVariant("delete")}>
+              <IconButton onClick={() => handleVariant("delete")}>
                 <PiTrashBold size={"18px"} />
               </IconButton>
             )}
@@ -343,11 +331,7 @@ const ProductVariant = ({
         </CustomInputField>
       </div>
 
-      {/* images  */}
-
       <div className="text-[15px] text-black/80">Product Images</div>
-
-      {/* image error */}
 
       {imageError && (
         <p className="text-sm font-medium text-destructive">{imageError}</p>
@@ -355,33 +339,31 @@ const ProductVariant = ({
 
       <div className="grid grid-cols-3 gap-2 gap-y-4">
         {values?.productVariants?.[currentPage - 1]?.productVariantImages?.map(
-          (img, idx) => {
-            return (
-              <ImageUploader
-                key={idx}
-                imageUrl={img}
-                handleDelete={() => {
-                  handleImage({
-                    operationType: "delete",
-                    image: "",
-                    imageIdx: idx,
-                  });
-                }}
-                onSuccessfullUpload={(image) =>
-                  handleImage({ operationType: "add", image })
+          (img, idx) => (
+            <ImageUploader
+              key={idx}
+              imageUrl={img}
+              handleDelete={() => {
+                handleImage({
+                  operationType: "delete",
+                  image: "",
+                  imageIdx: idx,
+                });
+              }}
+              onSuccessfullUpload={(image) =>
+                handleImage({ operationType: "add", image })
+              }
+              toggleModal={() => {
+                if (type === "add") {
+                  dispatch(productsReducers.toggleShowAddProduct());
                 }
-                toggleModal={() => {
-                  if (type === "add") {
-                    dispatch(productsReducers.toggleShowAddProduct());
-                  }
 
-                  if (type === "edit") {
-                    dispatch(productsReducers.toggleShowEditProduct());
-                  }
-                }}
-              />
-            );
-          },
+                if (type === "edit") {
+                  dispatch(productsReducers.toggleShowEditProduct());
+                }
+              }}
+            />
+          ),
         )}
 
         <ImageUploader
@@ -403,7 +385,7 @@ const ProductVariant = ({
   );
 };
 
-//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------
 
 const IconButton = ({
   onClick,
@@ -414,7 +396,7 @@ const IconButton = ({
 }) => {
   return (
     <Button
-      className="flex min-h-0 min-w-0 gap-1 bg-ceramic p-0 font-Sen font-semibold leading-[0] text-black/60 hover:bg-ceramic"
+      className="flex min-h-0 min-w-0 gap-1 bg-ceramic p-0  font-semibold leading-[0] text-black/60 hover:bg-ceramic"
       onClick={onClick}
       size={"sm"}
     >

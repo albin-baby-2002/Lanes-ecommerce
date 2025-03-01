@@ -5,12 +5,16 @@ import { FaTrashCan } from "react-icons/fa6";
 import { TbCameraPlus } from "react-icons/tb";
 import { toast } from "sonner";
 
+//--------------------------------------------------
+
 interface TImageUploaderProps {
   imageUrl?: string;
   onSuccessfullUpload: (image: string) => void;
   toggleModal: () => void;
   handleDelete?: () => void;
 }
+
+//--------------------------------------------------
 
 const ImageUploader: React.FC<TImageUploaderProps> = ({
   imageUrl,
@@ -33,7 +37,7 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
             croppingAspectRatio: 0.76 / 1,
             showCompletedButton: true,
             autoMinimize: true,
-            preBatch: (cb, _data) => {
+            preBatch: (cb: () => void, _data: any) => {
               cb();
               toggleModal();
             },
@@ -62,6 +66,8 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
       }
     }
   }, []);
+
+  //--------------------------------------------------
 
   return (
     <div

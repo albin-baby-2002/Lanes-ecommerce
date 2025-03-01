@@ -7,9 +7,7 @@ interface TProps {
 }
 
 const OrdersPage = async ({ searchParams }: TProps) => {
-  const searchValue = searchParams.search || '';
-
-  return <OrdersView  search={searchValue} />;
+  return <OrdersView search={searchParams.search || ""} />;
 };
 
 export default OrdersPage;

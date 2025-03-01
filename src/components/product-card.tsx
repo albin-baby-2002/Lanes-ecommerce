@@ -5,14 +5,18 @@ import StarRating from "./star-rating";
 import { Pricing } from "./pricing";
 import { useRouter } from "next/navigation";
 
+//--------------------------------------------------
+
 interface TProps {
   name: string;
   price: number;
   discount: number;
   rating: number;
   images: string[];
-  variantId:string;
+  variantId: string;
 }
+
+//--------------------------------------------------
 
 const ProductCard: React.FC<TProps> = ({
   name,
@@ -20,19 +24,18 @@ const ProductCard: React.FC<TProps> = ({
   discount,
   rating,
   images,
-  variantId
+  variantId,
 }) => {
   const router = useRouter();
+  const handleNavigate = () => {
+    router.push("/product-detail/" + variantId);
+  };
+
+  //--------------------------------------------------
 
   return (
-    <div
-      onClick={() => {
-        router.push('/product-detail/'+variantId)
-      }}
-    >
-
+    <div onClick={handleNavigate}>
       <ProductCarousel images={images} />
-      {/* product details */}
       <div className="my-3 grid text-sm">
         {/* text with animation */}
 

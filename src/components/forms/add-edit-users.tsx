@@ -2,20 +2,17 @@ import React from "react";
 import { Form } from "../ui/form";
 import CustomInputField, { FormFieldType } from "../custom-input";
 import { UseFormReturn } from "react-hook-form";
-//----------------------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
 
 interface TProps {
   type: "add" | "edit";
   form: UseFormReturn<any>;
 }
 
-//----------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 const AddEditUserForm: React.FC<TProps> = ({ type, form }) => {
-  // redux states and hooks
-
-  //----------------------------------------------------------------------------------------------------
-
   return (
     <Form {...form}>
       <form className="grid w-full gap-4">
@@ -68,4 +65,4 @@ const AddEditUserForm: React.FC<TProps> = ({ type, form }) => {
 
 export default AddEditUserForm;
 
-//----------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------

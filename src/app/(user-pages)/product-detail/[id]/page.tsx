@@ -1,6 +1,8 @@
 import ProductViewById from "@/sections/product-details/views/product-view-by-id";
 
-const ProductDetails = ({ params }: { params: { id: string } }) => {
+type TProps = { params: { id: string } };
+
+const ProductDetails = ({ params }: TProps) => {
   return <ProductViewById id={params.id} />;
 };
 
