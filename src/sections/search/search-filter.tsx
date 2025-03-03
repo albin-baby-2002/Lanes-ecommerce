@@ -140,7 +140,6 @@ const SearchFilter = ({
     params.set("sizes", sizes.join(","));
     params.set("page", "1");
     router.push("/search?" + params, { scroll: false });
-
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sizes]);
 
@@ -150,6 +149,7 @@ const SearchFilter = ({
     params.set("styles", styles.join(","));
     params.set("page", "1");
     router.push("/search?" + params, { scroll: false });
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [styles]);
 
   return (

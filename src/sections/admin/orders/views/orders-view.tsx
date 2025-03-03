@@ -1,14 +1,11 @@
 import React from "react";
 import SearchAndActions from "../search-and-actions";
-import { findAllOrdersByAdmin } from "@/lib/db-services/orders";
+import { findAllOrdersByAdmin, TOrderItemsSelect } from "@/lib/db-services/orders";
 import { DataTable } from "@/components/table/data-table";
 import { ordersColumns } from "../datatable-columns";
 
-const OrdersView = async ({search}:{search:string}) => {
-
-
-  const orders = await findAllOrdersByAdmin(search ||'');
-
+const OrdersView = async ({ search }: { search: string }) => {
+  const orders = await findAllOrdersByAdmin(search || "");
 
   return (
     <div className="h-full bg-slate-50 p-8">
@@ -18,17 +15,15 @@ const OrdersView = async ({search}:{search:string}) => {
 
       <SearchAndActions orders={orders} />
 
-      <div className="mt-8 h-[calc(100vh-200px)]">
-        <DataTable
-          data={orders}
-          columns={ordersColumns}
-          columnVisibility={{
-            orderItemId: false,
-            quantity:false,
-            price:false
-          }}
-        />
-      </div>
+      <DataTable<TOrderItemsSelect>
+        data={orders}
+        columns={ordersColumns}
+        columnVisibility={{
+          orderItemId: false,
+          quantity: false,
+          price: false,
+        }}
+      />
     </div>
   );
 };

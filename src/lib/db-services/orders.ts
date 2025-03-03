@@ -8,11 +8,11 @@ import { eq, ilike, sql } from "drizzle-orm";
 export interface TOrderItemsSelect extends Record<string, unknown> {
   orderItemId: string;
   orderItemInternalId: number;
+  price: number;
+  quantity: number;
   total: number;
   discount: number;
   totalDiscount: number;
-  price: number;
-  quantity: number;
   paymentStatus:
     | "PENDING"
     | "PAID"

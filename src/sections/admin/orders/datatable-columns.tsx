@@ -39,9 +39,9 @@ export const ordersColumns: ColumnDef<TOrderItemsSelect>[] = [
     },
   },
   {
-    accessorKey: "Total",
+    accessorKey: "total",
     header: "Total Order Value",
-    cell: ({ row }) => {
+    cell: ({ row })   => {
       const quantity = row.getValue("quantity") as number;
       const price = row.getValue("price") as number;
 
@@ -83,7 +83,7 @@ export const ordersColumns: ColumnDef<TOrderItemsSelect>[] = [
   },
   {
     header: () => <div className="text-center">Actions</div>,
-    accessorKey: "h",
+    accessorKey: "actions",
     cell: ({ row }) => <ActionsCell row={row} />,
   },
 ];
