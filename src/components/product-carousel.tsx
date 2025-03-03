@@ -67,6 +67,7 @@ const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
               >
                 <Image
                   src={` https://res.cloudinary.com/dfm8vhuea/image/upload/${image}`}
+                  unoptimized
                   alt={"image of product"}
                   width={1000}
                   height={"1000"}
