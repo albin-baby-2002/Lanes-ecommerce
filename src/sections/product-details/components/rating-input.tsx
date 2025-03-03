@@ -12,6 +12,7 @@ const RatingInput: React.FC<TProps> = ({ rating, setRating }) => {
       {new Array(5).fill(0).map((_, idx) => {
         return (
           <div
+          key={idx}
             onClick={() => setRating(idx + 1)}
             onMouseEnter={() => setRatingHover(idx + 1)}
             onMouseLeave={() => setRatingHover(0)}

@@ -41,6 +41,7 @@ const DashboardSearch = () => {
       router.replace(`${pathName}?${params.toString()}`);
     }, 300);
     return () => clearTimeout(timeOutId);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, router, pathName, searchParams]);
 
 //----------------------------------------------------------

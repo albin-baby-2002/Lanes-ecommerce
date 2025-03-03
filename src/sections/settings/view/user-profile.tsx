@@ -32,6 +32,8 @@ const UserProfileView = ({ userDetails }: { userDetails: TUserSelect }) => {
       gender: gender || "",
       phone: phone || "",
     });
+
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSubmit = async (values: TProfileFormData) => {

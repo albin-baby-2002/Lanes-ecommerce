@@ -65,6 +65,7 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
         console.log(error, "error cloudinary");
       }
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   //--------------------------------------------------
