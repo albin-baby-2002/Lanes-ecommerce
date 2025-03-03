@@ -94,6 +94,7 @@ const ProductsInCart = ({ items }: { items: TcartItems[] }) => {
                   <Image
                     className="h-32 rounded-2xl object-cover"
                     fill
+                    unoptimized
                     src={` https://res.cloudinary.com/dfm8vhuea/image/upload/${item.imgUrls[0]}`}
                     alt=" product"
                   />

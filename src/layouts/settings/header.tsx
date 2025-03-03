@@ -25,6 +25,7 @@ const Header = ({ toggleMenu }: TProps) => {
         <Link href={"/"}>
           <Image
             src="/logos/lanes.svg"
+            unoptimized
             height={1000}
             width={1000}
             alt="patient"

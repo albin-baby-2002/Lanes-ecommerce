@@ -149,6 +149,7 @@ const InputField = ({
       <Image
         width={24}
         height={24}
+        unoptimized
         src={props.iconSrc}
         alt={props.iconAlt || "icon"}
         className="ml-2 h-6"
@@ -286,6 +287,7 @@ const DatePickerField = ({
     <Image
       width={24}
       height={24}
+      unoptimized
       src="/assets/icons/calendar.svg"
       alt="calendar"
       className="ml-2 h-6"

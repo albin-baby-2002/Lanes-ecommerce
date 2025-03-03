@@ -84,6 +84,7 @@ const AdminLayout: React.FC<TProps> = ({ children }) => {
         <div className="px-6 py-8">
           <Link href={"/"}>
             <Image
+            unoptimized
               src="/logos/lanes.svg"
               height={1000}
               width={1000}

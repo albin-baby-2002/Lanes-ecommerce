@@ -80,6 +80,7 @@ const AddNewAddress = () => {
           {" "}
           {(submitting || pending) && (
             <Image
+            unoptimized
               height={24}
               width={24}
               className="mr-2"

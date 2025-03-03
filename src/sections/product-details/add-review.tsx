@@ -93,6 +93,7 @@ const AddReview: React.FC<TProps> = ({ open, variantId, handleClose }) => {
             >
               {(submitting || pending) && (
                 <Image
+                unoptimized
                   height={24}
                   width={24}
                   className="mr-2"

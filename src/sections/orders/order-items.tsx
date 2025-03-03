@@ -35,6 +35,7 @@ const OrderItems = ({ items }: { items: TOrderItem[] }) => {
                 <div className="relative h-[200px] w-full">
                   <Image
                     className="h-36 rounded-2xl object-cover"
+                    unoptimized
                     fill
                     src={` https://res.cloudinary.com/dfm8vhuea/image/upload/${item.imgUrls[0]}`}
                     alt=" product"

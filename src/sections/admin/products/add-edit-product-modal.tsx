@@ -285,6 +285,7 @@ const AddOrEditProductModal: React.FC<TProps> = ({
                       <Image
                         height={24}
                         width={24}
+                        unoptimized
                         className="mr-2"
                         alt="svg"
                         src={"/loaders/circular-loader.svg"}

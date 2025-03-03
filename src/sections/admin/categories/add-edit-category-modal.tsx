@@ -205,6 +205,7 @@ const AddOrEditCategoryModal: React.FC<TProps | TEditProps> = ({
               {(submitting || pending) && (
                 <Image
                   height={24}
+                  unoptimized
                   width={24}
                   className="mr-2"
                   alt="svg"

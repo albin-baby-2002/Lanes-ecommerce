@@ -61,6 +61,7 @@ const ConfirmationModal: React.FC<TProps> = ({
           >
             {primaryActionPending && (
               <Image
+              unoptimized
                 height={24}
                 width={24}
                 className="mr-2"

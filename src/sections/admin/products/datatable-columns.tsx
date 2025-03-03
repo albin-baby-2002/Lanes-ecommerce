@@ -42,6 +42,7 @@ export const productsColumns: ColumnDef<TProductsWithVariantsAndImages>[] = [
           <div className="relative h-10 z-0 w-10">
             <Image
               fill
+              unoptimized
               className="h-full w-full rounded-lg object-cover"
               src={` https://res.cloudinary.com/dfm8vhuea/image/upload/${imageUrl}`}
               alt=""

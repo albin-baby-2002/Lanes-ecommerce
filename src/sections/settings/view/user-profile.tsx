@@ -73,6 +73,7 @@ const UserProfileView = ({ userDetails }: { userDetails: TUserSelect }) => {
                   height={24}
                   width={24}
                   className="mr-2"
+                  unoptimized
                   alt="svg"
                   src={"/loaders/circular-loader.svg"}
                 />

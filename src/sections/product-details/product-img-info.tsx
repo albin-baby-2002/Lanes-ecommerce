@@ -40,6 +40,7 @@ const ProductImgInfo = ({
               >
                 <Image
                   fill
+                  unoptimized
                   className="object-cover"
                   src={` https://res.cloudinary.com/dfm8vhuea/image/upload/${img}`}
                   alt=""
@@ -52,6 +53,7 @@ const ProductImgInfo = ({
           <Image
             height={1000}
             width={1000}
+            unoptimized
             src={` https://res.cloudinary.com/dfm8vhuea/image/upload/${imgSelected}`}
             alt=""
             className="max-h-[300px] sm:max-h-[380px] md:max-h-[420px] w-[100%] rounded-xl object-cover  object-top lg:max-h-full sm:h-full"

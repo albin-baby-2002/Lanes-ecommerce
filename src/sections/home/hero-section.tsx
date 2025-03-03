@@ -43,6 +43,7 @@ const HeroSection = () => {
       <div className=" flex justify-center lg:block basis-full  lg:basis-1/2">
         <Image
           src="/images/hero-img.svg"
+          unoptimized
           height={760}
           width={1000}
           alt="patient"
@@ -51,6 +52,7 @@ const HeroSection = () => {
 
         <Image
           src="/images/hero-mobile.svg"
+          unoptimized
           height={448}
           width={390}
           alt="patient"

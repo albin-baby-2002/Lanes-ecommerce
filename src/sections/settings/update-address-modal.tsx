@@ -137,6 +137,7 @@ const UpdateAddressModal: React.FC<TProps> = ({
                   height={24}
                   width={24}
                   className="mr-2"
+                  unoptimized
                   alt="svg"
                   src={"/loaders/circular-loader.svg"}
                 />

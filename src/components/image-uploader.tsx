@@ -78,6 +78,7 @@ const ImageUploader: React.FC<TImageUploaderProps> = ({
         <>
           <div className="relative h-full w-full">
             <Image
+              unoptimized
               fill
               className="h-full w-full object-cover"
               src={` https://res.cloudinary.com/dfm8vhuea/image/upload/${imageUrl}`}

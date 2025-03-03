@@ -98,6 +98,7 @@ const Socials = () => (
       <Image
         src="/logos/lanes.svg"
         height={1000}
+        unoptimized
         width={1000}
         alt="lanes"
         className="h-6 w-fit"
@@ -159,6 +160,7 @@ const FooterLink = ({ label, href }: { label: string; href: string }) => (
 const PaymentImg = ({ val }: { val: string }) => (
   <Image
     src={`/logos/payments/${val}.svg`}
+    unoptimized
     height={1000}
     width={1000}
     alt="payment"

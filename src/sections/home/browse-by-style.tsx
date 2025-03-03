@@ -26,6 +26,7 @@ const BrowseByStyle = () => {
             src={"/images/dress-styles/casual.svg"}
             width={500}
             height={600}
+            unoptimized
             className="h-full w-full rounded-xl object-cover"
             alt="casual"
           />
@@ -40,6 +41,7 @@ const BrowseByStyle = () => {
             Formal
           </p>
           <Image
+          unoptimized
             src={"/images/dress-styles/formal.svg"}
             height={1000}
             width={1000}
@@ -57,6 +59,7 @@ const BrowseByStyle = () => {
             Party
           </p>
           <Image
+          unoptimized
             src={"/images/dress-styles/party.svg"}
             width={1000}
             height={1000}
@@ -72,6 +75,7 @@ const BrowseByStyle = () => {
         >
           <p className="absolute left-[5%] top-[5%] text-2xl font-bold">Gym</p>
           <Image
+          unoptimized
             src={"/images/dress-styles/gym.svg"}
             width={1000}
             height={1000}

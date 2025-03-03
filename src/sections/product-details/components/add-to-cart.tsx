@@ -106,6 +106,7 @@ const AddToCart = ({
             width={24}
             className="mr-2"
             alt="svg"
+            unoptimized
             src={"/loaders/circular-loader.svg"}
           />
         )}
