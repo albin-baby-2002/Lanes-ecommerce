@@ -53,11 +53,11 @@ const AllReviews = (props: { variantId: string; reviews: TReview[] }) => {
             <div className="flex  flex-col items-center justify-center gap-4">
               <MessageSquareText size={52} />
 
-              <p className="text-[28px] capitalize  font-bold">
+              <p className="text-[28px] capitalize  text-center font-bold">
                 No reviews available
               </p>
 
-              <p className="text-[20px] capitalize  font-semibold text-black/60">
+              <p className="text-[20px] capitalize  text-center font-semibold text-black/60">
                 Be the first to review this product and help others
               </p>
             </div>
@@ -65,7 +65,7 @@ const AllReviews = (props: { variantId: string; reviews: TReview[] }) => {
         ))}
 
       <>
-        <div className="mt-10 grid  md:grid-cols-2 xl:grid-cols-3  gap-8">
+        <div className="mt-10 grid   md:grid-cols-2 xl:grid-cols-3  gap-8">
           {props.reviews.map((review, idx) => {
             return <TestimonialCard review={review} key={idx} />;
           })}

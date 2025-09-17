@@ -23,11 +23,11 @@ const BrowseByStyle = () => {
             Casual
           </p>
           <Image
-            src={"/images/dress-styles/casual.svg"}
+            src={"/images/dress-styles/casual.avif"}
             width={500}
             height={600}
             unoptimized
-            className="h-full w-full rounded-xl object-cover"
+            className="h-full  w-full rounded-xl  object-cover"
             alt="casual"
           />
         </div>
@@ -42,7 +42,7 @@ const BrowseByStyle = () => {
           </p>
           <Image
           unoptimized
-            src={"/images/dress-styles/formal.svg"}
+            src={"/images/dress-styles/formal.avif"}
             height={1000}
             width={1000}
             className="object- h-full rounded-xl object-cover"
@@ -60,7 +60,7 @@ const BrowseByStyle = () => {
           </p>
           <Image
           unoptimized
-            src={"/images/dress-styles/party.svg"}
+            src={"/images/dress-styles/party.avif"}
             width={1000}
             height={1000}
             className="h-full w-full rounded-xl object-cover"
@@ -76,7 +76,7 @@ const BrowseByStyle = () => {
           <p className="absolute left-[5%] top-[5%] text-2xl font-bold">Gym</p>
           <Image
           unoptimized
-            src={"/images/dress-styles/gym.svg"}
+            src={"/images/dress-styles/gym.avif"}
             width={1000}
             height={1000}
             className="h-full w-full rounded-xl object-cover"

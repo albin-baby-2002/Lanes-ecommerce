@@ -30,15 +30,15 @@ const Search = ({ className }: { className?: string }) => {
   return (
     <div
       className={cn(
-        "flex max-w-[600px] grow items-center gap-4 rounded-3xl bg-slate-200 px-4 py-2.5",
+        "flex max-w-[600px] grow items-center gap-3 rounded-3xl bg-slate-200 px-4 py-2.5",
         className,
       )}
     >
-      <IoSearch />
+      <IoSearch  size={18}/>
 
       <input
-        className="bg-slate-200 text-sm outline-none placeholder:text-sm focus-within:bg-slate-200"
-        placeholder="Search for products..."
+        className="bg-slate-200 max-w-[calc(100%-30px)] text-sm outline-none placeholder:text-sm focus-within:bg-slate-200"
+        placeholder="Search for products"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         onKeyDown={handleEnter}
