@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "api/*.ts": { "runtime": "edge" }
+  },
+  "crons": [
+    {
+      "path": "/api/fetch-page",
+      "schedule": "30 20 * * *"
+    }
+  ]
+}
