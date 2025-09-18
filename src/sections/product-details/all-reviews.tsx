@@ -3,9 +3,7 @@ import React, { useState } from "react";
 
 import TestimonialCard from "@/components/testimonial-card";
 import { Button } from "@/components/ui/button";
-import { Combobox } from "@/components/ui/combobox";
 import AddReview from "./add-review";
-import { productReviews } from "@/drizzle/schema";
 import { MessageSquareText, ShoppingBag } from "lucide-react";
 
 export type TReview = {
@@ -65,7 +63,7 @@ const AllReviews = (props: { variantId: string; reviews: TReview[] }) => {
         ))}
 
       <>
-        <div className="mt-10 grid   md:grid-cols-2 xl:grid-cols-3  gap-8">
+        <div className="mt-10 grid md:grid-cols-2 xl:grid-cols-3  gap-8">
           {props.reviews.map((review, idx) => {
             return <TestimonialCard review={review} key={idx} />;
           })}

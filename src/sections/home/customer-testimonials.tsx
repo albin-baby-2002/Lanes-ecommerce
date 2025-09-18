@@ -95,7 +95,7 @@ const CustomerTestimonials = () => {
       <div ref={containerRef} className="mt-10 overflow-hidden">
         <ul className="flex  animate-scroll  gap-10">
           {[...data,...data,...data].map((review, idx) => {
-            return <TestimonialCard key={idx} review={review} />;
+            return <TestimonialCard className=" min-w-[400px]" key={idx} review={review} />;
           })}
         </ul>
       </div>

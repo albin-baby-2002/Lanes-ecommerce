@@ -1,18 +1,25 @@
 import { IoMdCheckmark } from "react-icons/io";
 import StarRating from "./star-rating";
 import { TReview } from "@/sections/product-details/all-reviews";
+import { cn } from "@/lib/utils";
 
 //----------------------------------------------------------
 
 type TProps = {
   review: TReview;
+  className?: string;
 };
 
 //----------------------------------------------------------
 
-const TestimonialCard = ({ review }: TProps) => {
+const TestimonialCard = ({ review, className }: TProps) => {
   return (
-    <div className="lg:min-h-[220px] max-w-full md:min-w-[400px] flex flex-col justify-between rounded-xl border border-black/10 p-8">
+    <div
+      className={cn(
+        "flex max-w-full flex-col justify-between rounded-xl border border-black/10 p-8 md:min-w-[400px] lg:min-h-[220px]",
+        className,
+      )}
+    >
       <div className="mb-2 space-y-4">
         <div className="flex items-center gap-3">
           <p className="text-xl font-bold">
