@@ -26,19 +26,29 @@ const ProductCarousel: React.FC<TProps> = ({ className, images }) => {
 
   // functions
 
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) {
-      emblaApi.scrollPrev();
-      setScrollTrigger((prev) => prev - 1);
-    }
-  }, [emblaApi]);
+  const scrollPrev = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (emblaApi) {
+        emblaApi.scrollPrev();
+        setScrollTrigger((prev) => prev - 1);
+      }
+    },
+    [emblaApi],
+  );
 
-  const scrollNext = useCallback(() => {
-    if (emblaApi) {
-      emblaApi.scrollNext();
-      setScrollTrigger((prev) => prev + 1);
-    }
-  }, [emblaApi]);
+  const scrollNext = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (emblaApi) {
+        emblaApi.scrollNext();
+        setScrollTrigger((prev) => prev + 1);
+      }
+    },
+    [emblaApi],
+  );
 
   // booleans
 
